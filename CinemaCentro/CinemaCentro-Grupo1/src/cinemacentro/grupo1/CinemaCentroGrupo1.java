@@ -5,8 +5,12 @@
  */
 package cinemacentro.grupo1;
 
+import Modelo.Comprador;
 import Modelo.Pelicula;
+import Modelo.Sala;
+import Persistencia.CompradorData;
 import Persistencia.PeliculaData;
+import Persistencia.SalaData;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -78,6 +82,123 @@ public class CinemaCentroGrupo1 {
 //       for (Pelicula peli : peliculaEnCartelera) {
 //            System.out.println(peli);
 //        }
-    }
+
+
+
+
+
+
+//-------------------------------<<======COMPRADOR DATA=====>>!!---------------
+
+//
+//    CompradorData compradorData = new CompradorData();
+//    
+//----------------creo comprador -----------------
+//    
+//    Comprador compra1 = new Comprador (41221751, "Gimenez Paula" , "123", "Mercado Pago", LocalDate.of(1998,06,06));
+//    
+//    compradorData.guardarComprador(compra1);
     
+    
+//    Comprador compra2 = new Comprador (42278291,"Arce Brayan", "231","Efectivo",LocalDate.of(1999,12,16));
+//    
+//    compradorData.guardarComprador(compra2);
+//    
+//    
+//      Comprador compra3 = new Comprador (39092552,"Aguero Jonatan", "789","Tarjeta",LocalDate.of(1995,9,10));
+//    compradorData.guardarComprador(compra3);
+//    
+//    
+//    //---------------buscar comprador por dni
+//    
+//    Comprador compraBuscar= compradorData.buscarComprador(41221751);
+//    
+//    System.out.println("Comprador Buscado: "+ compraBuscar);
+//    
+//    
+//    //buscamos uno q no este 
+//    
+//    Comprador BUSCAR = compradorData.buscarComprador(123456);
+//    
+//    
+//    
+//    //----------------------LISTAR COMPRADORES -----------
+//     List <Comprador> lista = compradorData.listarCompradores();
+//     
+//     System.out.println("Listado de compradores");
+//     
+//     
+//     for(Comprador c: lista){
+//         System.out.println(c);
+//     }
+    
+    //----------------ACTUALIZAR COMPRADOR--------------
+//    Comprador compraBuscar= compradorData.buscarComprador(41221751);
+//    
+//    compraBuscar.setMedioDePago("Debito");
+//    compradorData.actualizarComprador(compraBuscar);
+//    
+//     System.out.println("Comprador Actualizado "+ compraBuscar);
+//     
+//     
+//     
+//     compradorData.eliminarComprador(compraBuscar.getIdComprador());
+//    
+//    
+//      List <Comprador> lista = compradorData.listarCompradores();
+//     
+//     System.out.println("Listado de compradores");
+//     
+//     
+//     for(Comprador c: lista){
+//         System.out.println(c);
+//     }  
+
+
+
+
+
+       SalaData salaData = new SalaData();
+
+//        // -----------Guardar nueva sala--------
+//       Sala sala1 = new Sala(1, true, 200, true); 
+//       salaData.guardarSala(sala1);
+//       System.out.println("Sala guardada: " + sala1);
+//       Sala sala2 = new Sala(2, true, 180, true); 
+//       salaData.guardarSala(sala2);
+//       Sala sala3 = new Sala(3, true, 400, true); 
+//       salaData.guardarSala(sala3);
+
+       // ----- Buscar sala por ID-------------
+       Sala salaBuscada = salaData.buscarSala(4);
+       if (salaBuscada != null) {
+            System.out.println("Sala encontrada: " + salaBuscada);
+        }
+         Sala salaBuscada2 = salaData.buscarSala(8);
+         
+         
+       // ---------------- Listar todas las salas-----------------
+       List<Sala> todasSalas = salaData.listarSalas();
+       System.out.println("Listado de todas las salas:");
+       for (Sala s : todasSalas) {
+            System.out.println(s);
+       }
+
+        // ---------------Actualizar sala----------------
+        salaBuscada.setCapacidad(220);
+        salaBuscada.setApto3d(false);
+        salaData.actualizarSala(salaBuscada);
+        System.out.println("Sala actualizada: " + salaData.buscarSala(salaBuscada.getIdSala()));
+
+        // -----------------Eliminar sala -----------------
+        salaData.eliminarSala(salaBuscada.getIdSala());
+        
+        System.out.println("Sala eliminada");
+        
+         List<Sala> todasSalas2 = salaData.listarSalas();
+       System.out.println("Listado de todas las salas:");
+       for (Sala s : todasSalas2) {
+            System.out.println(s);
+       }
+    }    
 }

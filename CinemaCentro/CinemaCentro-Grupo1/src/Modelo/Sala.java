@@ -73,6 +73,11 @@ public class Sala {
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
+
+    @Override
+    public String toString() {
+        return "Sala{" + "idSala=" + idSala + ", nroSala=" + nroSala + ", apto3d=" + apto3d + ", capacidad=" + capacidad + ", estado=" + estado + '}';
+    }
     
     
     
