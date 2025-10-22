@@ -21,14 +21,14 @@ public class Funcion {
     private boolean subtitulado;
     private LocalTime horaInicio;
     private LocalTime horaFin;
-    private List listaLugaresDisp;
+    private int listaLugaresDisp;
     private Sala salaProyeccion;
     private double precio;
 
     public Funcion() {
     }
 
-    public Funcion(Pelicula pelicula, String idioma, boolean es3d, boolean subtitulado, LocalTime horaInicio, LocalTime horaFin, List listaLugaresDisp, Sala salaProyeccion, double precio) {
+    public Funcion(Pelicula pelicula, String idioma, boolean es3d, boolean subtitulado, LocalTime horaInicio, LocalTime horaFin, int listaLugaresDisp, Sala salaProyeccion, double precio) {
         this.pelicula = pelicula;
         this.idioma = idioma;
         this.es3d = es3d;
@@ -40,7 +40,7 @@ public class Funcion {
         this.precio = precio;
     }
 
-    public Funcion(int idFuncion, Pelicula pelicula, String idioma, boolean es3d, boolean subtitulado, LocalTime horaInicio, LocalTime horaFin, List listaLugaresDisp, Sala salaProyeccion, double precio) {
+    public Funcion(int idFuncion, Pelicula pelicula, String idioma, boolean es3d, boolean subtitulado, LocalTime horaInicio, LocalTime horaFin, int listaLugaresDisp, Sala salaProyeccion, double precio) {
         this.idFuncion = idFuncion;
         this.pelicula = pelicula;
         this.idioma = idioma;
@@ -109,11 +109,11 @@ public class Funcion {
         this.horaFin = horaFin;
     }
 
-    public List getListaLugaresDisp() {
+    public int getListaLugaresDisp() {
         return listaLugaresDisp;
     }
 
-    public void setListaLugaresDisp(List listaLugaresDisp) {
+    public void setListaLugaresDisp(int listaLugaresDisp) {
         this.listaLugaresDisp = listaLugaresDisp;
     }
 
@@ -137,6 +137,8 @@ public class Funcion {
     public String toString() {
         return "Funcion{" + "pelicula=" + pelicula + ", idioma=" + idioma + ", es3d=" + es3d + ", subtitulado=" + subtitulado + ", horaInicio=" + horaInicio + ", horaFin=" + horaFin + ", listaLugaresDisp=" + listaLugaresDisp + ", salaProyeccion=" + salaProyeccion + ", precio=" + precio + '}';
     }
+
+    
     
     
     

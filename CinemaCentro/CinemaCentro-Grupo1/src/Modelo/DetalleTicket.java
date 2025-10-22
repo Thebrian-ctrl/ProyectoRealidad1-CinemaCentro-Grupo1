@@ -15,21 +15,21 @@ public class DetalleTicket {
     
     private int idDetalleTicket;
     private Funcion funcion;
-    private List<Lugar> lugar;
+    private Lugar lugar;
     private int cantidad;
     private double subtotal;
 
     public DetalleTicket() {
     }
 
-    public DetalleTicket(Funcion funcion, List<Lugar> lugar, int cantidad, double subtotal) {
+    public DetalleTicket(Funcion funcion, Lugar lugar, int cantidad, double subtotal) {
         this.funcion = funcion;
         this.lugar = lugar;
         this.cantidad = cantidad;
         this.subtotal = subtotal;
     }
 
-    public DetalleTicket(int idDetalleTicket, Funcion funcion, List<Lugar> lugar, int cantidad, double subtotal) {
+    public DetalleTicket(int idDetalleTicket, Funcion funcion, Lugar lugar, int cantidad, double subtotal) {
         this.idDetalleTicket = idDetalleTicket;
         this.funcion = funcion;
         this.lugar = lugar;
@@ -53,11 +53,11 @@ public class DetalleTicket {
         this.funcion = funcion;
     }
 
-    public List<Lugar> getLugar() {
+    public Lugar getLugar() {
         return lugar;
     }
 
-    public void setLugar(List<Lugar> lugar) {
+    public void setLugar(Lugar lugar) {
         this.lugar = lugar;
     }
 
