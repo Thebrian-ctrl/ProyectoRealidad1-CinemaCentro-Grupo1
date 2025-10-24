@@ -6,12 +6,19 @@
 package cinemacentro.grupo1;
 
 import Modelo.Comprador;
+import Modelo.Funcion;
+import Modelo.Lugar;
 import Modelo.Pelicula;
 import Modelo.Sala;
 import Persistencia.CompradorData;
+import Persistencia.DetalleTicketData;
+import Persistencia.FuncionData;
+import Persistencia.LugarData;
 import Persistencia.PeliculaData;
 import Persistencia.SalaData;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +36,15 @@ public class CinemaCentroGrupo1 {
         // TODO code application logic here
         
         
-        //Pelicula peli1 = new Pelicula("El señor de los anillos", "Chritopher Nolan", "Brad pitt", "Estado Unidos", "Aventuras", LocalDate.of(2005, Month.MARCH, 15), true);
-        
-        PeliculaData pelidata = new PeliculaData();
-        
-        //pelidata.guardarPelicula(peli1);
-        
-        //Pelicula peli2 = new Pelicula("Troya", "Arce Brayan", "Brad pitt, Orlando blum", "Estados Unidos", "Historia", LocalDate.of(2000, Month.MARCH, 16), true);
-        
-        //pelidata.guardarPelicula(peli2);
+          // Pelicula peli1 = new Pelicula("El señor de los anillos", "Chritopher Nolan", "Brad pitt", "Estado Unidos", "Aventuras", LocalDate.of(2005, Month.MARCH, 15), true);
+//        
+//        PeliculaData pelidata = new PeliculaData();
+//        
+//        pelidata.guardarPelicula(peli1);
+//        
+         // Pelicula peli2 = new Pelicula("Troya", "Arce Brayan", "Brad pitt, Orlando blum", "Estados Unidos", "Historia", LocalDate.of(2000, Month.MARCH, 16), true);
+//        
+//        pelidata.guardarPelicula(peli2);
         
         //-------------Probamos el metodo para buscar la pelicula por el nombre-------------------
         
@@ -158,47 +165,111 @@ public class CinemaCentroGrupo1 {
 
 
 
-       SalaData salaData = new SalaData();
-
-//        // -----------Guardar nueva sala--------
-//       Sala sala1 = new Sala(1, true, 200, true); 
+//       SalaData salaData = new SalaData();
+//
+////        // -----------Guardar nueva sala--------
+       // Sala sala1 = new Sala(1, true, 200, true); 
 //       salaData.guardarSala(sala1);
-//       System.out.println("Sala guardada: " + sala1);
+//      System.out.println("Sala guardada: " + sala1);
 //       Sala sala2 = new Sala(2, true, 180, true); 
-//       salaData.guardarSala(sala2);
+//      salaData.guardarSala(sala2);
 //       Sala sala3 = new Sala(3, true, 400, true); 
 //       salaData.guardarSala(sala3);
 
-       // ----- Buscar sala por ID-------------
-       Sala salaBuscada = salaData.buscarSala(4);
-       if (salaBuscada != null) {
-            System.out.println("Sala encontrada: " + salaBuscada);
+//       // ----- Buscar sala por ID-------------
+//       Sala salaBuscada = salaData.buscarSala(4);
+//       if (salaBuscada != null) {
+//            System.out.println("Sala encontrada: " + salaBuscada);
+//        }
+//         Sala salaBuscada2 = salaData.buscarSala(8);
+//         
+//         
+//       // ---------------- Listar todas las salas-----------------
+//       List<Sala> todasSalas = salaData.listarSalas();
+//       System.out.println("Listado de todas las salas:");
+//       for (Sala s : todasSalas) {
+//            System.out.println(s);
+//       }
+//
+//        // ---------------Actualizar sala----------------
+//        salaBuscada.setCapacidad(220);
+//        salaBuscada.setApto3d(false);
+//        salaData.actualizarSala(salaBuscada);
+//        System.out.println("Sala actualizada: " + salaData.buscarSala(salaBuscada.getIdSala()));
+//
+//        // -----------------Eliminar sala -----------------
+//        salaData.eliminarSala(salaBuscada.getIdSala());
+//        
+//        System.out.println("Sala eliminada");
+//        
+//         List<Sala> todasSalas2 = salaData.listarSalas();
+//       System.out.println("Listado de todas las salas:");
+//       for (Sala s : todasSalas2) {
+//            System.out.println(s);
+//       }
+       
+        FuncionData funcionData = new FuncionData();
+        
+        LugarData lugarData = new LugarData();
+        //---------------Prueba de cargar una funcion-----------------
+//        Pelicula pelicula = new Pelicula();
+//        
+//        pelicula.setIdPelicula(1);
+//        
+//        Sala sala = new Sala();
+//        
+//        sala.setIdSala(1);
+//        
+//        List<Lugar> lugars = new ArrayList();
+//        
+//       
+//        
+//        Funcion funcion1 = new Funcion(pelicula, "espanol", false, true, LocalDateTime.of(2025, 12, 16, 16, 30), LocalDateTime.of(2025, 12, 16, 18, 30), lugars, sala, 8000);
+//       
+//        
+//        
+//         funcionData.guardarFuncion(funcion1);
+//        
+//    char[] filas = {'A', 'B', 'C'};
+//       int asientosPorFila = 3;
+//       
+//        for (char f : filas) {
+//            for (int i = 1; i <= asientosPorFila; i++) {
+//                Lugar lugui = new Lugar();
+//                lugui.setFila(f);
+//                lugui.setNum(i);
+//                lugui.setEstado(true);
+//                lugui.setFuncion(funcion1);
+//                
+//                lugarData.guardarLugar(lugui);
+//                lugars.add(lugui);
+//            }
+//        }
+        
+        
+       
+       
+       Funcion funcion2 = funcionData.buscarFuncion(12);
+       
+        System.out.println("Lugares asignados");
+        
+        for (Lugar lugar : funcion2.getListaLugaresDisp()) {
+            System.out.println("Fila: " + lugar.getFila() + " num: " + lugar.getNum() + " estado: " + (lugar.isEstado() ? "Libre" : "Ocupado"));
+            
         }
-         Sala salaBuscada2 = salaData.buscarSala(8);
-         
-         
-       // ---------------- Listar todas las salas-----------------
-       List<Sala> todasSalas = salaData.listarSalas();
-       System.out.println("Listado de todas las salas:");
-       for (Sala s : todasSalas) {
-            System.out.println(s);
-       }
-
-        // ---------------Actualizar sala----------------
-        salaBuscada.setCapacidad(220);
-        salaBuscada.setApto3d(false);
-        salaData.actualizarSala(salaBuscada);
-        System.out.println("Sala actualizada: " + salaData.buscarSala(salaBuscada.getIdSala()));
-
-        // -----------------Eliminar sala -----------------
-        salaData.eliminarSala(salaBuscada.getIdSala());
-        
-        System.out.println("Sala eliminada");
-        
-         List<Sala> todasSalas2 = salaData.listarSalas();
-       System.out.println("Listado de todas las salas:");
-       for (Sala s : todasSalas2) {
-            System.out.println(s);
-       }
-    }    
+       
+//       //--------------------Prueba de actualizar una funcion------------------
+//       
+//       Funcion funcion = new Funcion();
+//       
+//       funcion.setIdFuncion(6);
+//       
+//       funcion.setIdioma("Ingles");
+//       
+//       funcionData.actualizarFuncion(funcion);
+//       
+       
+       
+    }
+   
 }

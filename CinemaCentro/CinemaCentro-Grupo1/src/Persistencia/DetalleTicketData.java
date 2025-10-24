@@ -5,11 +5,9 @@
  */
 package Persistencia;
 
-import Modelo.Comprador;
 import Modelo.DetalleTicket;
 import Modelo.MyConexion;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
@@ -27,7 +25,8 @@ public class DetalleTicketData {
     }
 
     public void guardarDetalleTicket(DetalleTicket detalle) {
-        String query = "INSERT INTO DetalleTicket (idFuncion, idLugar, cantidad, subtotal) VALUES(?, ?, ?, ?)";
+        String query = "INSERT INTO DetalleTicket (idFuncion, idLugar, cantidad, subtotal)"
+                + " VALUES(?, ?, ?, ?)";
 
         try {
             PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);

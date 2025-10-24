@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -19,16 +20,16 @@ public class Funcion {
     private String idioma;
     private boolean es3d;
     private boolean subtitulado;
-    private LocalTime horaInicio;
-    private LocalTime horaFin;
-    private int listaLugaresDisp;
+    private LocalDateTime horaInicio;
+    private LocalDateTime horaFin;
+    private List<Lugar> listaLugaresDisp;
     private Sala salaProyeccion;
     private double precio;
 
     public Funcion() {
     }
 
-    public Funcion(Pelicula pelicula, String idioma, boolean es3d, boolean subtitulado, LocalTime horaInicio, LocalTime horaFin, int listaLugaresDisp, Sala salaProyeccion, double precio) {
+    public Funcion(Pelicula pelicula, String idioma, boolean es3d, boolean subtitulado, LocalDateTime horaInicio, LocalDateTime horaFin, List<Lugar> listaLugaresDisp, Sala salaProyeccion, double precio) {
         this.pelicula = pelicula;
         this.idioma = idioma;
         this.es3d = es3d;
@@ -40,7 +41,7 @@ public class Funcion {
         this.precio = precio;
     }
 
-    public Funcion(int idFuncion, Pelicula pelicula, String idioma, boolean es3d, boolean subtitulado, LocalTime horaInicio, LocalTime horaFin, int listaLugaresDisp, Sala salaProyeccion, double precio) {
+    public Funcion(int idFuncion, Pelicula pelicula, String idioma, boolean es3d, boolean subtitulado, LocalDateTime horaInicio, LocalDateTime horaFin, List<Lugar> listaLugaresDisp, Sala salaProyeccion, double precio) {
         this.idFuncion = idFuncion;
         this.pelicula = pelicula;
         this.idioma = idioma;
@@ -93,27 +94,27 @@ public class Funcion {
         this.subtitulado = subtitulado;
     }
 
-    public LocalTime getHoraInicio() {
+    public LocalDateTime getHoraInicio() {
         return horaInicio;
     }
 
-    public void setHoraInicio(LocalTime horaInicio) {
+    public void setHoraInicio(LocalDateTime horaInicio) {
         this.horaInicio = horaInicio;
     }
 
-    public LocalTime getHoraFin() {
+    public LocalDateTime getHoraFin() {
         return horaFin;
     }
 
-    public void setHoraFin(LocalTime horaFin) {
+    public void setHoraFin(LocalDateTime horaFin) {
         this.horaFin = horaFin;
     }
 
-    public int getListaLugaresDisp() {
+    public List<Lugar> getListaLugaresDisp() {
         return listaLugaresDisp;
     }
 
-    public void setListaLugaresDisp(int listaLugaresDisp) {
+    public void setListaLugaresDisp(List<Lugar> listaLugaresDisp) {
         this.listaLugaresDisp = listaLugaresDisp;
     }
 

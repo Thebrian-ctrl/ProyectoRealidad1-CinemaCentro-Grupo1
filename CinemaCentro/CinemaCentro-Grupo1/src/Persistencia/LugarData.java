@@ -10,6 +10,7 @@ import Modelo.MyConexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Types;
 import javax.swing.JOptionPane;
 
 /**
@@ -33,6 +34,7 @@ public class LugarData {
             ps.setString(1, String.valueOf(lugar.getFila()));
             ps.setInt(2, lugar.getNum());
             ps.setBoolean(3, lugar.isEstado());
+            
             ps.setInt(4, lugar.getFuncion().getIdFuncion());
 
             ps.executeUpdate();
@@ -45,8 +47,10 @@ public class LugarData {
             } else {
                 JOptionPane.showMessageDialog(null, "Error al guardar el Lugar");
             }
+            ps.close();
+            rs.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla...: " + e.getMessage());
         }
 
     }
