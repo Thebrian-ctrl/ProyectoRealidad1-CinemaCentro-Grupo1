@@ -212,5 +212,50 @@ public class TicketCompraData {
     }
   
     // listo los tickets por pelicula 
+    
+    public List <TicketCompra> ListarTicketsPorPelicula (int idPelicula ) {
+        List <TicketCompra> tickets = new ArrayList <> ();
+        String query = "SELECT DISTINCT t. * FROM ticketcompra t"
+                + "INNER JOIN detalleticket d ON t.idDetalleTicket = d.idDetalleTicket"
+                + "INNER JOIN funcion f ON d.idFuncion = f.idFuncion "
+                + "WHERE f.idPelicula= ?";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement (query);
+            ps.setInt (1,idPelicula);
+            
+            ResultSet rs = ps.executeQuery();
+            
+             while (rs.next()) {
+                TicketCompra ticket = new TicketCompra();
+                ticket.setIdTicket(rs.getInt("idTicket"));
+                ticket.setFechaCompra(rs.getDate("fechaCompra").toLocalDate());
+                ticket.setFechaFuncion(rs.getTimestamp("fechaFuncion").toLocalDateTime());
+                ticket.setMonto(rs.getDouble("monto"));
+                
+                Comprador comprador = new Comprador();
+                comprador.setIdComprador(rs.getInt("idComprador"));
+                ticket.setComprador(comprador);
+                
+                int idDetalle = rs.getInt("idDetalleTicket");
+                if (!rs.wasNull()) {
+                    DetalleTicket detalle = new DetalleTicket();
+                    detalle.setIdDetalleTicket(idDetalle);
+                    ticket.setDetalleticket(detalle);
+                }
+                tickets.add(ticket);
+             }
+             rs.close();
+             ps.close ();
+             
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al listar tickets por película: " + e.getMessage());
+        }
+            
+            return tickets;
+        }
+                
+    // seguir listando tickets x comprador 
+    
   
 }
