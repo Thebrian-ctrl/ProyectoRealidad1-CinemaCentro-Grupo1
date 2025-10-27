@@ -10,6 +10,12 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import java.util.ArrayList; 
+import java.time.LocalDate;
+import java.util.List;
+
+
+
 /**
  *
  * @author camila biarnes
@@ -49,19 +55,19 @@ public class TicketCompraData {
                 ticket.setIdTicket(rs.getInt(1));
                 JOptionPane.showMessageDialog(null, "Ticket de compra guardado correctamente");
             } else {
-                JOptionPane.showMessageDialog(null, "Error al guardar el ticket de compra");
+                JOptionPane.showMessageDialog(null, "Error al guardar el Ticket de compra");
             }
             
             rs.close();
             ps.close();
             
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla " + e.getMessage());
         }
     }
     
  
-    public TicketCompra buscarTicketPorId(int idTicket) {
+    public TicketCompra buscarTickerporId (int idTicket) {
         TicketCompra ticket = null;
         String query = "SELECT * FROM ticketcompra WHERE idTicket = ?";
         
@@ -137,10 +143,74 @@ public class TicketCompraData {
             ps.close();
             
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar el ticket: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al actualizar el Ticket " + e.getMessage());
         }
     }
     
-  //seguir con anular los tickets y dsp listar 
+    
+    public void anularTicket (int idTicket) {
+     String query = "DELETE FROM ticketcompra WHERE idTicket = ?";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, idTicket);
+            
+            int eliminado = ps.executeUpdate();
+            
+            if (eliminado == 1) {
+                JOptionPane.showMessageDialog(null, "Ticket anulado correctamente");
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró ticket con ese ID");
+            }
+            
+            ps.close ();
+         
+       } catch (Exception e) {
+           JOptionPane.showMessageDialog(null, "Error al anular el ticket" + e.getMessage());
+       }
+    }
+    
+    // listo los tickets por fecha 
+    
+    public List<TicketCompra> listarTicketsPorFecha (LocalDate fecha) {
+        List <TicketCompra> tickets = new ArrayList <> ();
+        String query = "SELECT * FROM ticketcompra WHERE fechacompra = ?" ;
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement (query) ;
+            ps.setDate (1, Date.valueOf(fecha));
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                TicketCompra ticket = new TicketCompra();
+                ticket.setIdTicket(rs.getInt("idTicket"));
+                ticket.setFechaCompra(rs.getDate("fechaCompra").toLocalDate());
+                ticket.setFechaFuncion(rs.getTimestamp("fechaFuncion").toLocalDateTime());
+                ticket.setMonto(rs.getDouble("monto"));
+                
+                Comprador comprador = new Comprador ();
+                comprador.setIdComprador(rs.getInt("idComprador"));
+                
+                int idDetalle = rs.getInt ("IdDetalleTicket");
+                if (!rs.wasNull()) {
+                    DetalleTicket detalle = new DetalleTicket ();
+                    detalle.setIdDetalleTicket(idDetalle);
+                    ticket.setDetalleticket(detalle);
+                }
+                
+                tickets.add (ticket);
+            }
+            
+            rs.close ();
+            ps.close();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al listar tickets"+ e.getMessage());
+        }
+        return tickets;
+    }
+  
+    // listo los tickets por pelicula 
   
 }
