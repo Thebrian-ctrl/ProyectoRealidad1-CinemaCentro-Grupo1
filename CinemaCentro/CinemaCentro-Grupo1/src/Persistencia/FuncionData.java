@@ -30,9 +30,12 @@ import javax.swing.JOptionPane;
 public class FuncionData {
     
     private final Connection conn;
+    
+    private LugarData lugarData;
 
     public FuncionData() {
         conn = MyConexion.buscarConexion();
+        this.lugarData = new LugarData();
     }
     
      public void guardarFuncion(Funcion funcion) {
@@ -140,24 +143,74 @@ public class FuncionData {
       
   }
     
-    public List<Funcion> listarFuncion(int idFuncion) {
+    public List<Funcion> listarFuncion() {
         List<Funcion> funcion = new ArrayList<>();
-        String query = "SELECT * FROM funcion";
+        
+        //Seleccion de los elementos de la tabla funcion haciendo un JOIN con lugar y pelicula 
+        String query = "SELECT f.idFuncion, f.idioma, f.es3d, f.subtitulado, f.horarioInicio, f.horarioFin, f.precio, "
+                + "p.idPelicula, p.titulo, p.director, p.actores, p.origen, p.genero, p.estreno, p.cartelera, "
+                + "s.idSala, s.nroSala, s.apta3d, s.capacidad, s.estado "
+                + "FROM funcion f "
+                + "LEFT JOIN pelicula p ON (f.idPelicula = p.idPelicula)"
+                + "LEFT JOIN sala s ON (f.idSala = s.idSala)";
          try {
-            PreparedStatement ps= conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps= conn.prepareStatement(query);
+            
+            
+            
             ResultSet rs = ps.executeQuery();
             
             
             
             while(rs.next()) {
+                Pelicula p = new Pelicula();
+                p.setIdPelicula(rs.getInt("idPelicula"));
+                p.setTitulo(rs.getString("titulo"));
+                p.setDirector(rs.getString("director"));
+                p.setActores(rs.getString("actores"));
+                p.setOrigen(rs.getString("origen"));
+                p.setGenero(rs.getString("genero"));
+                p.setEstreno(rs.getDate("estreno").toLocalDate());
+                p.setCartelera(rs.getBoolean("cartelera"));
                 
+                Sala s = new Sala();
+                s.setIdSala(rs.getInt("idSala"));
+                s.setNroSala(rs.getInt("nroSala"));
+                s.setApto3d(rs.getBoolean("apta3d"));
+                s.setCapacidad(rs.getInt("capacidad"));
+                s.setEstado(rs.getBoolean("estado"));
                 
+                Funcion f = new Funcion();
+                f.setIdFuncion(rs.getInt("idFuncion"));
+                f.setIdioma(rs.getString("idioma"));
+                f.setEs3d(rs.getBoolean("es3d"));
+                f.setSubtitulado(rs.getBoolean("subtitulado"));
+                f.setHoraInicio(rs.getTimestamp("horarioinicio").toLocalDateTime());
+                f.setHoraFin(rs.getTimestamp("horariofin").toLocalDateTime());
+                f.setPrecio(rs.getDouble("precio"));
                 
+                //se guardan los datos obstenidos de las tablas de pelicula y sala en sus correspondientes valores de la funcion
+                f.setPelicula(p);
+                f.setSalaProyeccion(s);                           
+                
+                //obtenemos la lista de los lugares disponibles
+                List<Lugar> lugaresDisponibles = lugarData.buscarLugaresPorFuncion(f.getIdFuncion());
+                //se recorre la lista
+                for (Lugar lugar : lugaresDisponibles) {
+                    lugar.setFuncion(f);
+                }
+                
+                //se guarda la lista en la LIST de FUNCION 
+                f.setListaLugaresDisp(lugaresDisponibles);
+                
+                funcion.add(f);
             }
             
+            ps.close();
+            rs.close();
             
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al listar funcion: " + e.getMessage());
+        } catch(SQLException e){
+            JOptionPane.showMessageDialog(null, "error de tabla");
         }
         return funcion;
     }

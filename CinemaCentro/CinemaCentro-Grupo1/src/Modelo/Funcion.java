@@ -7,6 +7,7 @@ package Modelo;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class Funcion {
         this.subtitulado = subtitulado;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-        this.listaLugaresDisp = listaLugaresDisp;
+        this.listaLugaresDisp = listaLugaresDisp = new ArrayList<>();
         this.salaProyeccion = salaProyeccion;
         this.precio = precio;
     }

@@ -249,14 +249,14 @@ public class CinemaCentroGrupo1 {
         
        
        
-       Funcion funcion2 = funcionData.buscarFuncion(12);
-       
-        System.out.println("Lugares asignados");
-        
-        for (Lugar lugar : funcion2.getListaLugaresDisp()) {
-            System.out.println("Fila: " + lugar.getFila() + " num: " + lugar.getNum() + " estado: " + (lugar.isEstado() ? "Libre" : "Ocupado"));
-            
-        }
+//       Funcion funcion2 = funcionData.buscarFuncion(13);
+//       
+//        System.out.println("Lugares asignados");
+//        
+//        for (Lugar lugar : funcion2.getListaLugaresDisp()) {
+//            System.out.println("Fila: " + lugar.getFila() + " num: " + lugar.getNum() + " estado: " + (lugar.isEstado() ? "Libre" : "Ocupado"));
+//            
+//        }
        
 //       //--------------------Prueba de actualizar una funcion------------------
 //       
@@ -269,7 +269,33 @@ public class CinemaCentroGrupo1 {
 //       funcionData.actualizarFuncion(funcion);
 //       
        
-       
+       //-------------Prueba para probar el listar funciones---------------
+//        System.out.println("Lista de funciones: ");
+//        List<Funcion> listaFunciones = funcionData.listarFuncion();
+//        
+//        
+//        for (Funcion f : listaFunciones) {
+//            System.out.println("--- Función ID: " + f.getIdFuncion() + " ---");
+//            System.out.println("Película: " + f.getPelicula().getTitulo());
+//            System.out.println("Sala: " + f.getSalaProyeccion().getNroSala());
+//            System.out.println("Horario: " + f.getHoraInicio());
+//            System.out.println("Precio: $" + f.getPrecio());
+//            System.out.println("Lugares disponibles: " + f.getListaLugaresDisp().size());
+//            System.out.println("--------------------------------------\n");
+//        }
+//        
+//    }
+    
+        
+        
+        List<Lugar> buscaLugares = lugarData.buscarLugaresPorFuncion(12);
+        
+        for (Lugar busca : buscaLugares) {
+            System.out.print("Numero " + busca.getNum());
+            System.out.print(" fila: " + busca.getFila());
+            System.out.println(" disponible: " + busca.isEstado());
+        }
+
     }
    
 }
