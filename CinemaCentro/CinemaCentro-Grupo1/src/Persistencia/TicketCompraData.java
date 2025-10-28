@@ -256,6 +256,86 @@ public class TicketCompraData {
         }
                 
     // seguir listando tickets x comprador 
+     public List<TicketCompra> listarTicketsPorComprador(int idComprador) {
+        List<TicketCompra> tickets = new ArrayList<>();
+        String query = "SELECT * FROM ticketcompra WHERE idComprador = ?";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, idComprador);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                TicketCompra ticket = new TicketCompra();
+                ticket.setIdTicket(rs.getInt("idTicket"));
+                ticket.setFechaCompra(rs.getDate("fechaCompra").toLocalDate());
+                ticket.setFechaFuncion(rs.getTimestamp("fechaFuncion").toLocalDateTime());
+                ticket.setMonto(rs.getDouble("monto"));
+                
+                Comprador comprador = new Comprador();
+                comprador.setIdComprador(rs.getInt("idComprador"));
+                ticket.setComprador(comprador);
+                
+                int idDetalle = rs.getInt("idDetalleTicket");
+                if (!rs.wasNull()) {
+                    DetalleTicket detalle = new DetalleTicket();
+                    detalle.setIdDetalleTicket(idDetalle);
+                    ticket.setDetalleticket(detalle);
+                }
+                
+                tickets.add(ticket);
+            }
+            
+            rs.close();
+            ps.close();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al listar tickets por comprador: " + e.getMessage());
+        }
+        
+        return tickets;
+    }
+    
+   
+    public List<TicketCompra> listarTodosTickets() {
+        List<TicketCompra> tickets = new ArrayList<>();
+        String query = "SELECT * FROM ticketcompra";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                TicketCompra ticket = new TicketCompra();
+                ticket.setIdTicket(rs.getInt("idTicket"));
+                ticket.setFechaCompra(rs.getDate("fechaCompra").toLocalDate());
+                ticket.setFechaFuncion(rs.getTimestamp("fechaFuncion").toLocalDateTime());
+                ticket.setMonto(rs.getDouble("monto"));
+                
+                Comprador comprador = new Comprador();
+                comprador.setIdComprador(rs.getInt("idComprador"));
+                ticket.setComprador(comprador);
+                
+                int idDetalle = rs.getInt("idDetalleTicket");
+                if (!rs.wasNull()) {
+                    DetalleTicket detalle = new DetalleTicket();
+                    detalle.setIdDetalleTicket(idDetalle);
+                    ticket.setDetalleticket(detalle);
+                }
+                
+                tickets.add(ticket);
+            }
+            
+            rs.close();
+            ps.close();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al listar todos los tickets: " + e.getMessage());
+        }
+        
+        return tickets;
+    }
     
   
 }
