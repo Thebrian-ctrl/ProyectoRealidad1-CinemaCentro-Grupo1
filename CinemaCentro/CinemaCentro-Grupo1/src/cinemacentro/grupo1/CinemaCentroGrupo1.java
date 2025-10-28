@@ -208,9 +208,9 @@ public class CinemaCentroGrupo1 {
 //            System.out.println(s);
 //       }
        
-        FuncionData funcionData = new FuncionData();
+       // FuncionData funcionData = new FuncionData();
         
-        LugarData lugarData = new LugarData();
+       // LugarData lugarData = new LugarData();
         //---------------Prueba de cargar una funcion-----------------
 //        Pelicula pelicula = new Pelicula();
 //        
@@ -229,6 +229,9 @@ public class CinemaCentroGrupo1 {
 //        
 //        
 //         funcionData.guardarFuncion(funcion1);
+
+
+//------------------------PROBAMOS GUARDAR UN LUGAR --------------
 //        
 //    char[] filas = {'A', 'B', 'C'};
 //       int asientosPorFila = 3;
@@ -287,15 +290,58 @@ public class CinemaCentroGrupo1 {
 //    }
     
         
-        
-        List<Lugar> buscaLugares = lugarData.buscarLugaresPorFuncion(12);
-        
-        for (Lugar busca : buscaLugares) {
-            System.out.print("Numero " + busca.getNum());
-            System.out.print(" fila: " + busca.getFila());
-            System.out.println(" disponible: " + busca.isEstado());
-        }
+//        
+//        List<Lugar> buscaLugares = lugarData.buscarLugaresPorFuncion(12);
+//        
+//        for (Lugar busca : buscaLugares) {
+//            System.out.print("Numero " + busca.getNum());
+//            System.out.print(" fila: " + busca.getFila());
+//            System.out.println(" disponible: " + busca.isEstado());
+//        }
 
+
+
+
+
+//------------ PRUEBA DE LUGAR SIN ASOCIAR UNA FUNCION -------------
+  LugarData lugarData = new LugarData();  
+//    
+//    
+//    Lugar lugar = new Lugar();
+//    lugar.setFila('P');
+//    lugar.setNum(6);
+//    lugar.setEstado(true);
+//    lugar.setFuncion(null);
+//    
+//    
+//    lugarData.guardarLugar(lugar);
+//    
+//    System.out.println("Lugar guardado"+lugar);
+//    
+
+
+    //-------------- actualizar un lugar-----------
+    
+    Lugar lugar = new Lugar();
+//   lugar=lugarData.buscarLugarPorId(4);
+//     lugar.setEstado(false);
+//   ------------ dar de baja y alta un ligar------------
+//    lugarData.actualizarLugar(lugar);
+//    lugarData.darBajaLugar(4);
+//    lugarData.darAltaLugar(7);
+
+//------------ Listar lugares------------
+//        List<Lugar> lugares = lugarData.listarLugares();
+//            for (Lugar l : lugares) {
+//                System.out.println("ID: " + l.getIdLugar() +
+//                           " | Fila: " + l.getFila() +
+//                           " | N°: " + l.getNum() +
+//                           " | Estado: " + (l.isEstado() ? "Libre" : "Ocupado"));
+//        }
+//
+
+//-------------- eliminar un lugar----------------
+    //lugarData.eliminarlugar(4);
     }
    
 }
