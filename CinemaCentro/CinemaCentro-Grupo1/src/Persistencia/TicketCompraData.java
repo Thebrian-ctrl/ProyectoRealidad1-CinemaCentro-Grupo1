@@ -30,7 +30,7 @@ public class TicketCompraData {
     
 
     public void guardarTicketCompra(TicketCompra ticket) {
-        String query = "INSERT INTO ticketcompra (fechaCompra, fechaFuncion, monto, idComprador, idDetalleTicket) "
+        String query = "INSERT INTO ticket (fechaCompra, fechaFuncion, monto, idComprador, idDetalleTicket) "
                 + "VALUES(?, ?, ?, ?, ?)";
         
         try {
@@ -67,9 +67,9 @@ public class TicketCompraData {
     }
     
  
-    public TicketCompra buscarTickerporId (int idTicket) {
+    public TicketCompra buscarTicketporId (int idTicket) {
         TicketCompra ticket = null;
-        String query = "SELECT * FROM ticketcompra WHERE idTicket = ?";
+        String query = "SELECT * FROM ticket WHERE idTicket = ?";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -113,7 +113,7 @@ public class TicketCompraData {
     
 
     public void actualizarTicket(TicketCompra ticket) {
-        String query = "UPDATE ticketcompra SET fechaCompra = ?, fechaFuncion = ?, monto = ?, "
+        String query = "UPDATE ticket SET fechaCompra = ?, fechaFuncion = ?, monto = ?, "
                 + "idComprador = ?, idDetalleTicket = ? WHERE idTicket = ?";
         
         try {
@@ -148,8 +148,8 @@ public class TicketCompraData {
     }
     
     
-    public void anularTicket (int idTicket) {
-     String query = "DELETE FROM ticketcompra WHERE idTicket = ?";
+    public void eliminarTicket (int idTicket) {
+     String query = "DELETE FROM ticket WHERE idTicket = ?";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -174,7 +174,7 @@ public class TicketCompraData {
     
     public List<TicketCompra> listarTicketsPorFecha (LocalDate fecha) {
         List <TicketCompra> tickets = new ArrayList <> ();
-        String query = "SELECT * FROM ticketcompra WHERE fechacompra = ?" ;
+        String query = "SELECT * FROM ticket WHERE fechacompra = ?" ;
         
         try {
             PreparedStatement ps = conn.prepareStatement (query) ;
@@ -215,7 +215,7 @@ public class TicketCompraData {
     
     public List <TicketCompra> ListarTicketsPorPelicula (int idPelicula ) {
         List <TicketCompra> tickets = new ArrayList <> ();
-        String query = "SELECT DISTINCT t. * FROM ticketcompra t"
+        String query = "SELECT DISTINCT t. * FROM ticket t"
                 + "INNER JOIN detalleticket d ON t.idDetalleTicket = d.idDetalleTicket"
                 + "INNER JOIN funcion f ON d.idFuncion = f.idFuncion "
                 + "WHERE f.idPelicula= ?";
@@ -258,7 +258,7 @@ public class TicketCompraData {
     // seguir listando tickets x comprador 
      public List<TicketCompra> listarTicketsPorComprador(int idComprador) {
         List<TicketCompra> tickets = new ArrayList<>();
-        String query = "SELECT * FROM ticketcompra WHERE idComprador = ?";
+        String query = "SELECT * FROM ticket WHERE idComprador = ?";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -300,7 +300,7 @@ public class TicketCompraData {
    
     public List<TicketCompra> listarTodosTickets() {
         List<TicketCompra> tickets = new ArrayList<>();
-        String query = "SELECT * FROM ticketcompra";
+        String query = "SELECT * FROM ticket";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);

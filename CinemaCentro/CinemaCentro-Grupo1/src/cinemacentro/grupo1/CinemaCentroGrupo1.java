@@ -39,9 +39,9 @@ public class CinemaCentroGrupo1 {
         // TODO code application logic here
 
 //        Pelicula peli1 = new Pelicula("El señor de los anillos", "Chritopher Nolan", "Brad pitt", "Estado Unidos", "Aventuras", LocalDate.of(2005, Month.MARCH, 15), true);
-//        
+////        
 //        PeliculaData pelidata = new PeliculaData();
-//        
+////        
 //        pelidata.guardarPelicula(peli1);
 //        
         // Pelicula peli2 = new Pelicula("Troya", "Arce Brayan", "Brad pitt, Orlando blum", "Estados Unidos", "Historia", LocalDate.of(2000, Month.MARCH, 16), true);
@@ -84,12 +84,12 @@ public class CinemaCentroGrupo1 {
 //-------------------------------<<======COMPRADOR DATA=====>>!!---------------
 //
 //    CompradorData compradorData = new CompradorData();
-//    
-//----------------creo comprador -----------------
-//    
+////    
+////----------------creo comprador -----------------
+////    
 //    Comprador compra1 = new Comprador (41221751, "Gimenez Paula" , "123", "Mercado Pago", LocalDate.of(1998,06,06));
-//    
-//    compradorData.guardarComprador(compra1);
+////    
+//   compradorData.guardarComprador(compra1);
 //    Comprador compra2 = new Comprador (42278291,"Arce Brayan", "231","Efectivo",LocalDate.of(1999,12,16));
 //    
 //    compradorData.guardarComprador(compra2);
@@ -143,8 +143,8 @@ public class CinemaCentroGrupo1 {
 //         System.out.println(c);
 //     }  
 //        SalaData salaData = new SalaData();
-//
-////        // -----------Guardar nueva sala--------
+////
+//////        // -----------Guardar nueva sala--------
 //        Sala sala1 = new Sala(1, true, 200, true);
 //        salaData.guardarSala(sala1);
 //      System.out.println("Sala guardada: " + sala1);
@@ -184,24 +184,24 @@ public class CinemaCentroGrupo1 {
 //            System.out.println(s);
 //       }
 //        FuncionData funcionData = new FuncionData();
-//
+////
 //        LugarData lugarData = new LugarData();
-//        //---------------Prueba de cargar una funcion-----------------
+////        //---------------Prueba de cargar una funcion-----------------
 //        Pelicula pelicula = new Pelicula();
-//
-//        pelicula.setIdPelicula(1);
-//
+////
+//        pelicula.setIdPelicula(3);
+////
 //        Sala sala = new Sala();
-//
-//        sala.setIdSala(1);
-//
+////
+//        sala.setIdSala(3);
+////
 //        List<Lugar> lugars = new ArrayList();
-//
+////
 //        Funcion funcion1 = new Funcion(pelicula, "espanol", false, true, LocalDateTime.of(2025, 12, 16, 16, 30), LocalDateTime.of(2025, 12, 16, 18, 30), lugars, sala, 8000);
-//
+////
 //        funcionData.guardarFuncion(funcion1);
-//
-////------------------------PROBAMOS GUARDAR UN LUGAR --------------
+////
+//////------------------------PROBAMOS GUARDAR UN LUGAR --------------
 //        char[] filas = {'A', 'B', 'C'};
 //        int asientosPorFila = 3;
 //
@@ -218,10 +218,10 @@ public class CinemaCentroGrupo1 {
 //            }
 //        }
 //       Funcion funcion2 = funcionData.buscarFuncion(13);
-//       
+////       
 //        System.out.println("Lugares asignados");
-//        
-//        for (Lugar lugar : funcion2.getListaLugaresDisp()) {
+////        
+//       for (Lugar lugar : funcion2.getListaLugaresDisp()) {
 //            System.out.println("Fila: " + lugar.getFila() + " num: " + lugar.getNum() + " estado: " + (lugar.isEstado() ? "Libre" : "Ocupado"));
 //            
 //        }
@@ -273,9 +273,9 @@ public class CinemaCentroGrupo1 {
 //    lugarData.guardarLugar(lugar);
 //    
 //    System.out.println("Lugar guardado"+lugar);
-//    
+    
         //-------------- actualizar un lugar-----------
-        Lugar lugar = new Lugar();
+        
 //   lugar=lugarData.buscarLugarPorId(4);
 //     lugar.setEstado(false);
 //   ------------ dar de baja y alta un ligar------------
@@ -306,9 +306,9 @@ public class CinemaCentroGrupo1 {
 //        Funcion f = new Funcion();
 ////    
 //        Lugar l = new Lugar();
-//        l.setIdLugar(10);
+//        l.setIdLugar(46);
 ////    
-//        f.setIdFuncion(2);
+//        f.setIdFuncion(5);
 ////    
 //        dticket.setFuncion(f);
 ////    
@@ -320,8 +320,13 @@ public class CinemaCentroGrupo1 {
 //    
 //        detalleticketdata.guardarDetalleTicket(dticket);
 //        dticket.setSubtotal(3000);
+
+
 //    --------Para actualizar el detalleticket tenemos que pasar la funcion y el lugar parciandola----------
 //        detalleticketdata.actualizarDetalleTicket(dticket);
+
+
+
 // ------------- Se probo el eliminar
 //        detalleticketdata.eliminarDetalleTicket(1);
 
@@ -333,9 +338,38 @@ public class CinemaCentroGrupo1 {
 //          Comprador comprador = new Comprador();
           
           
-          
+        
 
+//        CompradorData compradorData = new CompradorData();
+//        FuncionData funciondata = new FuncionData();
+//        LugarData lugarData = new LugarData();
+//        
+//        DetalleTicketData  detalleTicketData = new DetalleTicketData();
+//        
+//        DetalleTicket detalleTicket = detalleTicketData.buscarDetalleTicket(2);
+//        TicketCompraData ticketCompraData = new TicketCompraData();
+////        Comprador comprador = compradorData.buscarComprador(41221751);
+//        
+////        TicketCompra ticket = new TicketCompra(LocalDate.now(), LocalDateTime.now().plusDays(1), 12.00, comprador, detalleTicket);
+//        
+////        ticketCompraData.guardarTicketCompra(ticket);
+//        
+//        
+//        TicketCompra buscado = ticketCompraData.buscarTicketporId(1);
+//        
+//        System.out.println(buscado);
+//        
+//        System.out.println(buscado.getComprador().getNombre());
+//        
+//        buscado.setMonto(15.00);
+//        
+//        ticketCompraData.actualizarTicket(buscado);
+        
+        
+        
 
+       
     }
+    
 
 }

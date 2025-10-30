@@ -43,7 +43,6 @@ public class PantallaRegistro extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextNombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jDateNacimiento = new com.toedter.calendar.JDateChooser();
         jLabel5 = new javax.swing.JLabel();
         jContrasenia = new javax.swing.JPasswordField();
         jLabel6 = new javax.swing.JLabel();
@@ -96,13 +95,12 @@ public class PantallaRegistro extends javax.swing.JInternalFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jTextDni, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                                 .addComponent(jTextNombre, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(jDateNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jComboMedioDePago, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(114, 114, 114)
                         .addComponent(jLabel1)))
-                .addContainerGap(115, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jBatras)
@@ -125,9 +123,7 @@ public class PantallaRegistro extends javax.swing.JInternalFrame {
                 .addComponent(jTextDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jDateNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,7 +200,6 @@ public class PantallaRegistro extends javax.swing.JInternalFrame {
     private javax.swing.JButton jBatras;
     private javax.swing.JComboBox<String> jComboMedioDePago;
     private javax.swing.JPasswordField jContrasenia;
-    private com.toedter.calendar.JDateChooser jDateNacimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
