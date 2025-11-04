@@ -3,18 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/LugarData.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/DetalleTicketData.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/FuncionData.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Modelo/Funcion.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/PeliculaData.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/SalaData.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Modelo/Sala.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/CompradorData.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Modelo/DetalleTicket.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Modelo/Pelicula.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/cinemacentro/grupo1/CinemaCentroGrupo1.java</file>
-            <file>file:/D:/Desarrollo%20de%20software/Laboratorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Modelo/Lugar.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/SalaData.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/TicketCompraData.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/cinemacentro/grupo1/CinemaCentroGrupo1.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/PantallaPrincipal.java</file>
         </group>
     </open-files>
 </project-private>

@@ -33,7 +33,6 @@
                               <Component id="jTextDni" alignment="0" pref="196" max="32767" attributes="0"/>
                               <Component id="jTextNombre" alignment="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jDateNacimiento" alignment="0" min="-2" pref="220" max="-2" attributes="0"/>
                           <Component id="jContrasenia" alignment="0" min="-2" pref="197" max="-2" attributes="0"/>
                           <Component id="jComboMedioDePago" alignment="0" min="-2" pref="168" max="-2" attributes="0"/>
                       </Group>
@@ -43,7 +42,7 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="115" max="32767" attributes="0"/>
+              <EmptySpace pref="138" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
@@ -69,9 +68,7 @@
               <Component id="jTextDni" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jDateNacimiento" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jContrasenia" min="-2" max="-2" attributes="0"/>
@@ -113,8 +110,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Fecha de nacimiento:"/>
       </Properties>
-    </Component>
-    <Component class="com.toedter.calendar.JDateChooser" name="jDateNacimiento">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
