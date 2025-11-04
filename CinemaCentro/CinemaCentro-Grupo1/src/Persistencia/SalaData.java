@@ -196,6 +196,48 @@ public class SalaData {
             JOptionPane.showMessageDialog(null, "Error al eliminar sala ");
         }
     }
+    
+    
+    public boolean existeNumeroSala(int nroSala) {
+        
+        
+    String query = "SELECT COUNT(*) FROM sala WHERE nroSala = ?";
+    
+    
+    try  {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, nroSala);
+        ResultSet rs = ps.executeQuery();
+        
+        
+        if (rs.next()) {
+            int cantidad = rs.getInt(1);
+            return cantidad > 0; // Si existe al menos una, devuelve true
+        }
+        
+        
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al verificar número de sala: " + e.getMessage());
+    }
+    return false;
+    }
+    
+    
+    public boolean existeNumeroSalaExcluyendoId(int nroSala, int idSala) {
+    String query = "SELECT COUNT(*) FROM sala WHERE nroSala = ? AND idSala <> ?";
+    try (PreparedStatement ps = conn.prepareStatement(query)) {
+        ps.setInt(1, nroSala);
+        ps.setInt(2, idSala);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0; // true si existe otra sala con ese número
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al verificar número de sala: " + e.getMessage());
+    }
+    return false;
+    }
 
     
       
