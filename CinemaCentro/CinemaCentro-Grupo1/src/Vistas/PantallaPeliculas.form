@@ -19,18 +19,13 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="labelTitulo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
-          </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jPImagen" max="32767" attributes="0"/>
-                          <Component id="jbSeleccionarArchivo" min="-2" pref="150" max="-2" attributes="0"/>
+                          <Component id="jbSeleccionarArchivo" pref="150" max="32767" attributes="0"/>
+                          <Component id="jLabelImagen" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
@@ -42,42 +37,49 @@
                           <Component id="jlabelTitulo" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelCartelera" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="jbActualizar" min="-2" pref="101" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jtfActores" max="32767" attributes="0"/>
-                                  <Component id="jdchooseEstreno" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-                          </Group>
+                  </Group>
+                  <Component id="jbGuardar2" alignment="0" min="-2" pref="101" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="89" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jtfTitulo" min="-2" pref="295" max="-2" attributes="0"/>
-                                  <Component id="jtfOrigen" alignment="0" min="-2" pref="295" max="-2" attributes="0"/>
-                                  <Component id="jtfGenero" alignment="0" min="-2" pref="295" max="-2" attributes="0"/>
-                                  <Component id="jtfDirector" alignment="0" min="-2" pref="295" max="-2" attributes="0"/>
-                                  <Component id="jRadioButtonCartelera" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace pref="14" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jButtonBuscar" min="-2" pref="48" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jbActualizar" min="-2" pref="101" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="jtfActores" max="32767" attributes="0"/>
+                          <Component id="jdchooseEstreno" max="32767" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="jbGuardar2" min="-2" pref="101" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jtfTitulo" min="-2" pref="295" max="-2" attributes="0"/>
+                          <Component id="jtfOrigen" alignment="0" min="-2" pref="295" max="-2" attributes="0"/>
+                          <Component id="jtfGenero" alignment="0" min="-2" pref="295" max="-2" attributes="0"/>
+                          <Component id="jtfDirector" alignment="0" min="-2" pref="295" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                              <Component id="jRadioButtonCartelera" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="labelTitulo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="labelTitulo" min="-2" pref="26" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
@@ -112,24 +114,23 @@
                           <Component id="jdchooseEstreno" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jRadioButtonCartelera" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="41" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabelCartelera" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jRadioButtonCartelera" alignment="1" min="-2" pref="16" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jPImagen" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="62" pref="62" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                          <Component id="jbSeleccionarArchivo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelCartelera" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="jLabelImagen" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jbSeleccionarArchivo" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="57" max="32767" attributes="0"/>
+              <EmptySpace pref="55" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jbGuardar2" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
                   <Component id="jbActualizar" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+                  <Component id="jButtonBuscar" alignment="1" min="-2" pref="45" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
           </Group>
@@ -145,25 +146,13 @@
         <Property name="text" type="java.lang.String" value="Administracion de Peliculas"/>
       </Properties>
     </Component>
-    <Container class="javax.swing.JPanel" name="jPImagen">
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="226" max="32767" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-    </Container>
     <Component class="javax.swing.JButton" name="jbSeleccionarArchivo">
       <Properties>
         <Property name="text" type="java.lang.String" value="Seleccionar archivo"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbSeleccionarArchivoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jlabelTitulo">
       <Properties>
@@ -214,6 +203,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Actualizar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbActualizarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbGuardar2">
       <Properties>
@@ -229,6 +221,30 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JRadioButton" name="jRadioButtonCartelera">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButtonCarteleraActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelImagen">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder>
+              <Color PropertyName="color" blue="66" green="66" red="66" type="rgb"/>
+            </LineBorder>
+          </Border>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonBuscar">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/img/lupa.png"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonBuscarActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

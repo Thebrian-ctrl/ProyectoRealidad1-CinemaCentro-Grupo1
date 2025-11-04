@@ -17,11 +17,12 @@ public class Pelicula {
     private String director, actores, origen, genero;
     private LocalDate estreno;
     private boolean cartelera;
+    private String rutaImagen;
 
     public Pelicula() {
     }
 
-    public Pelicula(String titulo, String director, String actores, String origen, String genero, LocalDate estreno, boolean cartelera) {
+    public Pelicula(String titulo, String director, String actores, String origen, String genero, LocalDate estreno, boolean cartelera, String rutaImagen) {
         this.titulo = titulo;
         this.director = director;
         this.actores = actores;
@@ -29,9 +30,10 @@ public class Pelicula {
         this.genero = genero;
         this.estreno = estreno;
         this.cartelera = cartelera;
+        this.rutaImagen = rutaImagen;
     }
 
-    public Pelicula(int idPelicula, String titulo, String director, String actores, String origen, String genero, LocalDate estreno, boolean cartelera) {
+    public Pelicula(int idPelicula, String titulo, String director, String actores, String origen, String genero, LocalDate estreno, boolean cartelera, String rutaImagen) {
         this.idPelicula = idPelicula;
         this.titulo = titulo;
         this.director = director;
@@ -40,6 +42,7 @@ public class Pelicula {
         this.genero = genero;
         this.estreno = estreno;
         this.cartelera = cartelera;
+        this.rutaImagen = rutaImagen;
     }
 
     public int getIdPelicula() {
@@ -104,6 +107,14 @@ public class Pelicula {
 
     public void setCartelera(boolean cartelera) {
         this.cartelera = cartelera;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
     }
 
     @Override

@@ -7,10 +7,20 @@ package Vistas;
 
 import Modelo.Pelicula;
 import Persistencia.PeliculaData;
+import java.awt.Image;
+import java.io.File;
+import static java.lang.System.out;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -24,6 +34,7 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
     
     PeliculaData peliData = new PeliculaData();
     
+    private String rutaImagenSelec;
     
     public PantallaPeliculas() {
         initComponents();
@@ -39,7 +50,6 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         labelTitulo = new javax.swing.JLabel();
-        jPImagen = new javax.swing.JPanel();
         jbSeleccionarArchivo = new javax.swing.JButton();
         jlabelTitulo = new javax.swing.JLabel();
         jtfTitulo = new javax.swing.JTextField();
@@ -57,22 +67,18 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
         jbGuardar2 = new javax.swing.JButton();
         jLabelCartelera = new javax.swing.JLabel();
         jRadioButtonCartelera = new javax.swing.JRadioButton();
+        jLabelImagen = new javax.swing.JLabel();
+        jButtonBuscar = new javax.swing.JButton();
 
         labelTitulo.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         labelTitulo.setText("Administracion de Peliculas");
 
-        javax.swing.GroupLayout jPImagenLayout = new javax.swing.GroupLayout(jPImagen);
-        jPImagen.setLayout(jPImagenLayout);
-        jPImagenLayout.setHorizontalGroup(
-            jPImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPImagenLayout.setVerticalGroup(
-            jPImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 226, Short.MAX_VALUE)
-        );
-
         jbSeleccionarArchivo.setText("Seleccionar archivo");
+        jbSeleccionarArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSeleccionarArchivoActionPerformed(evt);
+            }
+        });
 
         jlabelTitulo.setText("Titulo:");
 
@@ -93,6 +99,11 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
         jLabel1.setText("Estreno:");
 
         jbActualizar.setText("Actualizar");
+        jbActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbActualizarActionPerformed(evt);
+            }
+        });
 
         jbGuardar2.setText("Guardar");
         jbGuardar2.addActionListener(new java.awt.event.ActionListener() {
@@ -103,21 +114,32 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
 
         jLabelCartelera.setText("En cartelera?:");
 
+        jRadioButtonCartelera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonCarteleraActionPerformed(evt);
+            }
+        });
+
+        jLabelImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
+
+        jButtonBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/lupa.png"))); // NOI18N
+        jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelTitulo)
-                .addGap(93, 93, 93))
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jbSeleccionarArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jbSeleccionarArchivo, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(jLabelImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(57, 57, 57)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jlabelDirector)
@@ -126,32 +148,38 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
                             .addComponent(jLabel1)
                             .addComponent(jLabelActores)
                             .addComponent(jlabelTitulo)
-                            .addComponent(jLabelCartelera))
-                        .addGap(41, 41, 41)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jbActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jtfActores)
-                                    .addComponent(jdchooseEstreno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(43, 43, 43))
+                            .addComponent(jLabelCartelera)))
+                    .addComponent(jbGuardar2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(89, 89, 89)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jtfTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jtfOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jtfGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jtfDirector, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jRadioButtonCartelera))
-                                .addContainerGap(14, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jbActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jtfActores)
+                            .addComponent(jdchooseEstreno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(14, 14, 14))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jbGuardar2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtfTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfDirector, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(jRadioButtonCartelera)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(labelTitulo)
+                .addGap(93, 93, 93))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(labelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
@@ -180,19 +208,19 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jdchooseEstreno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jRadioButtonCartelera))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jPImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(62, 62, 62))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jbSeleccionarArchivo)
-                            .addComponent(jLabelCartelera))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelCartelera, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jRadioButtonCartelera, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbSeleccionarArchivo)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbGuardar2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jbActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(63, 63, 63))
         );
 
@@ -217,11 +245,13 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
             LocalDate fechaEstreno = estreno.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             Boolean cartelera = jRadioButtonCartelera.isSelected();
             
-            Pelicula peli = new Pelicula(titulo, director, title, origen, genero, fechaEstreno, cartelera);
             
+            Pelicula peli = new Pelicula(titulo, director, actores, origen, genero, fechaEstreno, cartelera, rutaImagenSelec);
+            
+            peli.setRutaImagen(this.rutaImagenSelec);
             peliData.guardarPelicula(peli);
                        
-            
+            this.rutaImagenSelec = null;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "ERROR al guardar la pelicula: " + e.getMessage());
         }
@@ -229,14 +259,114 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jbGuardar2ActionPerformed
 
+    private void jRadioButtonCarteleraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonCarteleraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButtonCarteleraActionPerformed
+
+    private void jbSeleccionarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSeleccionarArchivoActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Imagenes (jpg, png, jpeg)", "jpg", "png", "jpeg");
+        fileChooser.setFileFilter(filter);
+        
+        int resultado = fileChooser.showOpenDialog(this);
+        
+        if(resultado == JFileChooser.APPROVE_OPTION){
+            try{
+            File archivoOriginal = fileChooser.getSelectedFile();
+            
+            Path destino = Paths.get("src/img/" + archivoOriginal.getName());
+            
+            Files.copy(archivoOriginal.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
+            
+            this.rutaImagenSelec = "src/img/" + archivoOriginal.getName();
+            
+            JOptionPane.showMessageDialog(this, "Imagen seleccionada y copiada");
+            
+                ImageIcon icon = new ImageIcon(destino.toString());
+                Image img = icon.getImage().getScaledInstance(jLabelImagen.getWidth(), jLabelImagen.getHeight(), Image.SCALE_SMOOTH);
+                jLabelImagen.setIcon(new ImageIcon(img));
+            
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Error al copiar la imagen" + e.getMessage());
+            
+            }
+        }
+    }//GEN-LAST:event_jbSeleccionarArchivoActionPerformed
+
+    private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
+        // TODO add your handling code here:
+        try{
+        String peli = jtfTitulo.getText();
+        
+       Pelicula pelicula = peliData.buscarPelicula(peli);
+        
+        if(peli != null){
+            jtfDirector.setText(pelicula.getDirector());
+            jtfGenero.setText(pelicula.getGenero());
+            jtfOrigen.setText(pelicula.getOrigen());
+            jtfActores.setText(pelicula.getActores());
+            jdchooseEstreno.setDate(java.sql.Date.valueOf(pelicula.getEstreno()));
+            jRadioButtonCartelera.setSelected(pelicula.isCartelera());
+            
+        }else{
+            JOptionPane.showMessageDialog(this, "No se encontro pelicula con ese nombre");
+        }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Error al buscar la pelicula");
+        
+        }
+    }//GEN-LAST:event_jButtonBuscarActionPerformed
+
+    private void jbActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbActualizarActionPerformed
+        // TODO add your handling code here:
+      try{  
+     
+        String titulo = jtfTitulo.getText();
+        
+        Pelicula peli = peliData.buscarPelicula(titulo);
+        
+        String nombre = jtfTitulo.getText();
+        String director = jtfDirector.getText();
+        String genero = jtfGenero.getText();
+        String origen = jtfOrigen.getText();
+        String actores = jtfActores.getText();
+        java.util.Date estreno = jdchooseEstreno.getDate();
+        LocalDate fechaEstreno = estreno.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Boolean cartelera = jRadioButtonCartelera.isSelected();
+        
+        Pelicula p = peliData.buscarPelicula(titulo);
+            
+            if (p == null) {
+            JOptionPane.showMessageDialog(this, "No se encontro pelicula con ese nombre");
+        }
+            
+            p.setTitulo(nombre);
+            p.setDirector(director);
+            p.setGenero(genero);
+            p.setOrigen(origen);
+            p.setActores(actores);
+            p.setEstreno(fechaEstreno);
+            p.setRutaImagen(rutaImagenSelec);
+            
+            peliData.actualizarPelicula(p);
+            
+      }catch(Exception e){
+          JOptionPane.showMessageDialog(this, "Error al actualizar la pelicula" + e.getMessage());
+      }
+            
+    }//GEN-LAST:event_jbActualizarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonBuscar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelActores;
     private javax.swing.JLabel jLabelCartelera;
     private javax.swing.JLabel jLabelGenero;
+    private javax.swing.JLabel jLabelImagen;
     private javax.swing.JLabel jLabelOrigen;
-    private javax.swing.JPanel jPImagen;
     private javax.swing.JRadioButton jRadioButtonCartelera;
     private javax.swing.JButton jbActualizar;
     private javax.swing.JButton jbGuardar2;

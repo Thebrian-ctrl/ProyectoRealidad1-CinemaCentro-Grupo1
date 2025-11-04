@@ -29,8 +29,8 @@ public class PeliculaData {
     }
     
     public void guardarPelicula(Pelicula p){
-        String query = "INSERT INTO pelicula(titulo, director, actores, origen, genero, estreno, cartelera)"
-                + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO pelicula(titulo, director, actores, origen, genero, estreno, cartelera, rutaImagen)"
+                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps= conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             
@@ -41,6 +41,7 @@ public class PeliculaData {
             ps.setString(5, p.getGenero());
             ps.setDate(6, Date.valueOf(p.getEstreno()));
             ps.setBoolean(7, p.isCartelera());
+            ps.setString(8, p.getRutaImagen());
             
             ps.executeUpdate();
             
@@ -86,6 +87,7 @@ public class PeliculaData {
               peli.setGenero(rs.getString("genero"));
               peli.setEstreno(rs.getDate("estreno").toLocalDate());
               peli.setCartelera(rs.getBoolean("cartelera"));
+              peli.setRutaImagen(rs.getString("rutaImagen"));
         
         
             }else{
@@ -123,6 +125,7 @@ public class PeliculaData {
                     peli.setGenero(rs.getString("genero"));
                     peli.setEstreno(rs.getDate("estreno").toLocalDate());
                     peli.setCartelera(rs.getBoolean("cartelera"));
+                    peli.setRutaImagen(rs.getString("rutaImagen"));
                     
                     peliculas.add(peli);
                 
@@ -205,7 +208,7 @@ public class PeliculaData {
     }
     
     public void actualizarPelicula(Pelicula p){
-        String query = "UPDATE pelicula SET titulo = ?, director = ?, actores = ?, origen = ?, genero = ?, estreno = ?, cartelera = ?"
+        String query = "UPDATE pelicula SET titulo = ?, director = ?, actores = ?, origen = ?, genero = ?, estreno = ?, cartelera = ?, rutaImagen = ?"
                 + "WHERE idPelicula = ?";
     
         try {
@@ -218,6 +221,9 @@ public class PeliculaData {
             ps.setString(5, p.getGenero());
             ps.setDate(6, Date.valueOf(p.getEstreno()));
             ps.setBoolean(7, p.isCartelera());
+            ps.setString(8, p.getRutaImagen());
+            
+            ps.setInt(9, p.getIdPelicula());
             
             int actualizado = ps.executeUpdate();
             
