@@ -44,6 +44,9 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
         initComponents();
         cargarPeliculas();
         cargarSalas();
+       limpiarCampos();
+        jButtonActualizar.setEnabled(false);
+        jButtonEliminar.setEnabled(false);
         
         SpinnerNumberModel  horaModel = new SpinnerNumberModel(12, 0, 23, 1);
         jSpinnerHora.setModel(horaModel); 
@@ -104,6 +107,7 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
         jButtonBuscar = new javax.swing.JButton();
         jTextFieldID = new javax.swing.JTextField();
         jButtonEliminar = new javax.swing.JButton();
+        jButtoncerrar = new javax.swing.JButton();
 
         jLabel1.setText("Seleccionar pelicula");
 
@@ -129,9 +133,15 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
         });
 
         jButtonActualizar.setText("Actualizar");
+        jButtonActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonActualizarActionPerformed(evt);
+            }
+        });
 
         jLabel9.setText("Id Funcion");
 
+        jButtonBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/lupa.png"))); // NOI18N
         jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBuscarActionPerformed(evt);
@@ -139,6 +149,18 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
         });
 
         jButtonEliminar.setText("Eliminar");
+        jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEliminarActionPerformed(evt);
+            }
+        });
+
+        jButtoncerrar.setText("Cerrar");
+        jButtoncerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtoncerrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -193,92 +215,152 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
                                     .addComponent(jRadioButtonSub, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(76, 76, 76)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(jButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(23, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButtonActualizar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonCrear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(77, 77, 77))))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonActualizar)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jButtonCrear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtonEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)))
+                        .addGap(77, 77, 77))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtoncerrar))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(70, 70, 70)
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                                .addComponent(jButtonBuscar)))
+                        .addGap(17, 17, 17))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addGap(68, 68, 68)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jComboPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jComboPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addComponent(jButtonCrear)
+                    .addComponent(jtfIdioma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(51, 51, 51)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jRadioButton3d, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jButtonActualizar)
-                        .addGap(60, 60, 60))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtfIdioma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jRadioButton3d, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(47, 47, 47)))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButtonSub, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(jSpinnerHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jSpinnerMinutos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonCrear))
+                    .addComponent(jdcHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonEliminar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel5)
-                                .addComponent(jSpinnerHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jSpinnerMinutos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jdcHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(51, 51, 51)
+                        .addGap(54, 54, 54)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(jSpinnerHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jSpinnerMinutosFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(jComboBoxSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(46, 46, 46)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(jTextFieldPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButtonSub, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(33, 33, 33))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonActualizar)
+                        .addGap(45, 45, 45)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jComboBoxSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonEliminar))
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jTextFieldPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtoncerrar))
+                .addGap(16, 16, 16))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
-        // TODO add your handling code here:
+       
+        
+        try{
+         if (jTextFieldID.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar la Funcion.");
+            return;
+        }
+        
+         
+         
+         int id = Integer.parseInt(jTextFieldID.getText());
+         Funcion funcion = funcionData.buscarFuncion(id);
+         
+         
+         if (funcion == null) {
+            
+            JOptionPane.showMessageDialog(this, "No se encontró ninguna función con ese ID.");
+            return;
+           
+        } 
+           jComboPeliculas.setSelectedItem(funcion.getPelicula());
+            jtfIdioma.setText(funcion.getIdioma());
+            jRadioButton3d.setSelected(funcion.isEs3d());
+            jRadioButtonSub.setSelected(funcion.isSubtitulado());
+            LocalDate fecha = funcion.getHoraInicio().toLocalDate();
+            jdcHoraInicio.setDate(java.sql.Date.valueOf(fecha));
+            jSpinnerHora.setValue(funcion.getHoraInicio().getHour());
+            jSpinnerMinutos.setValue(funcion.getHoraInicio().getMinute());
+            jSpinnerHoraFin.setValue(funcion.getHoraFin().getHour());
+            jSpinnerMinutosFin.setValue(funcion.getHoraFin().getMinute());
+            jComboBoxSala.setSelectedItem(funcion.getSalaProyeccion());
+            jTextFieldPrecio.setText(String.valueOf(funcion.getPrecio()));
+        
+            jButtonActualizar.setEnabled(true);
+            jButtonEliminar.setEnabled(true);
+       }catch(NumberFormatException e){
+            
+              JOptionPane.showMessageDialog(this, "El campo ID debe contener solo números.");
+        }
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jButtonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearActionPerformed
         // TODO add your handling code here:
         try {
-            
+            // filtro q no esten vacios los campos 
+            if (jComboPeliculas.getSelectedItem() == null || jComboBoxSala.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una película y una sala.");
+            return;
+            }
+        
+            if (jtfIdioma.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar un idioma.");
+            return;
+            }
+        
+            if (jdcHoraInicio.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha.");
+            return;
+            }
+        
+            if (jTextFieldPrecio.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar un precio.");
+            return;
+            }
+
             Funcion funcion = new Funcion();
             
             funcion.setPelicula((Pelicula)jComboPeliculas.getSelectedItem());
@@ -315,7 +397,7 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
             
             funcionData.guardarFuncion(funcion);
             
-            
+            limpiarCampos();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al cargar la funcion");
         }
@@ -323,12 +405,95 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jButtonCrearActionPerformed
 
+    private void jButtoncerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtoncerrarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButtoncerrarActionPerformed
+
+    private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
+       try{
+        if (jTextFieldID.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar la Funcion.");
+            return;
+        }
+        
+         
+         
+         int id = Integer.parseInt(jTextFieldID.getText()); 
+        
+        Funcion funcion = new Funcion();
+        funcion.setIdFuncion(id);
+        funcion.setPelicula((Pelicula) jComboPeliculas.getSelectedItem());
+        funcion.setIdioma(jtfIdioma.getText());
+        funcion.setEs3d(jRadioButton3d.isSelected());
+        funcion.setSubtitulado(jRadioButtonSub.isSelected());
+
+        Date fechaSeleccionada = jdcHoraInicio.getDate();
+        LocalDate fecha = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        int horaInicio = (Integer) jSpinnerHora.getValue();
+        int minutoInicio = (Integer) jSpinnerMinutos.getValue();
+        int horaFin = (Integer) jSpinnerHoraFin.getValue();
+        int minutoFin = (Integer) jSpinnerMinutosFin.getValue();
+
+        LocalDateTime inicio = LocalDateTime.of(fecha, java.time.LocalTime.of(horaInicio, minutoInicio));
+        LocalDateTime fin = LocalDateTime.of(fecha, java.time.LocalTime.of(horaFin, minutoFin));
+
+        if (fin.isBefore(inicio)) {
+            JOptionPane.showMessageDialog(this, "La hora de fin no puede ser anterior al inicio.");
+            return;
+        }
+
+        funcion.setHoraInicio(inicio);
+        funcion.setHoraFin(fin);
+        funcion.setSalaProyeccion((Sala) jComboBoxSala.getSelectedItem());
+        funcion.setPrecio(Double.parseDouble(jTextFieldPrecio.getText()));
+
+        funcionData.actualizarFuncion(funcion);
+        limpiarCampos(); 
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El ID y el precio deben ser valores numéricos válidos.");
+    } 
+     
+   
+   
+    }//GEN-LAST:event_jButtonActualizarActionPerformed
+
+    private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
+       
+        
+        try {
+        if (jTextFieldID.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un ID para eliminar la función.");
+            return;
+        }
+
+        int id = Integer.parseInt(jTextFieldID.getText());
+
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Seguro que desea eliminar la función con ID " + id + "?", 
+            "Confirmar eliminación", 
+            JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            funcionData.eliminarFuncion(id);
+            limpiarCampos(); 
+        }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El ID debe ser un número válido.");
+    }
+        
+        
+    }//GEN-LAST:event_jButtonEliminarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonActualizar;
     private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonCrear;
     private javax.swing.JButton jButtonEliminar;
+    private javax.swing.JButton jButtoncerrar;
     private javax.swing.JComboBox<Sala> jComboBoxSala;
     private javax.swing.JComboBox<Pelicula> jComboPeliculas;
     private javax.swing.JLabel jLabel1;
@@ -367,4 +532,29 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
         }
     
     }
+    
+    
+    private void limpiarCampos() {
+  
+    jTextFieldID.setText("");
+    jtfIdioma.setText("");
+    jTextFieldPrecio.setText("");
+
+   
+    jComboPeliculas.setSelectedIndex(-1); 
+    jComboBoxSala.setSelectedIndex(-1);
+
+   
+    jRadioButton3d.setSelected(false);
+    jRadioButtonSub.setSelected(false);
+
+   
+    jdcHoraInicio.setDate(null);
+
+   
+    jSpinnerHora.setValue(0);
+    jSpinnerMinutos.setValue(0);
+    jSpinnerHoraFin.setValue(0);
+    jSpinnerMinutosFin.setValue(0);
+}
 }

@@ -89,10 +89,10 @@ public class FuncionData {
             ps.setBoolean(4, f.isSubtitulado());
             ps.setTimestamp(5, java.sql.Timestamp.valueOf(f.getHoraInicio()));
             ps.setTimestamp(6, java.sql.Timestamp.valueOf(f.getHoraFin()));        
-            ps.setInt(8, f.getSalaProyeccion().getIdSala());
-            ps.setDouble(9, f.getPrecio());
+            ps.setInt(7, f.getSalaProyeccion().getIdSala());
+            ps.setDouble(8, f.getPrecio());
             
-            ps.setInt(10, f.getIdFuncion());
+            ps.setInt(9, f.getIdFuncion());
 
             int actualizado = ps.executeUpdate();
 
@@ -109,21 +109,30 @@ public class FuncionData {
     }
     
     public void eliminarFuncion(int idFuncion){
+        
        String query = "DELETE FROM funcion WHERE idFuncion = ?";
-       
+       String deleteLugares = "DELETE FROM lugar WHERE idFuncion = ?";
        
         try {
+             // Primero borramos los lugares asociados
+            PreparedStatement ps1 = conn.prepareStatement(deleteLugares);
+            ps1.setInt(1, idFuncion);
+            ps1.executeUpdate();
+            ps1.close();
+            
+            
             PreparedStatement ps= conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             
             ps.setInt(1, idFuncion);
             int eliminado = ps.executeUpdate();
             
             
-            if(eliminado == 1) {
+            if(eliminado > 1) {
                 JOptionPane.showMessageDialog(null, "Funcion eliminado correctamente");
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontró la funcion con ese ID");
             }
+            ps.close();
             
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "Error al eliminar la funcion");
@@ -220,10 +229,12 @@ public class FuncionData {
                 funcion = new Funcion();
                 
                 funcion.setIdFuncion(rs.getInt("idFuncion"));
-                Pelicula pelicula = new Pelicula();
                 
-                pelicula.setIdPelicula(rs.getInt("idPelicula"));
+                int idPelicula = rs.getInt("idPelicula");
+                PeliculaData peliculaData = new PeliculaData();
+                Pelicula pelicula = peliculaData.buscarPeliculaPorId(idPelicula);
                 funcion.setPelicula(pelicula);
+                
                 funcion.setIdioma(rs.getString("idioma"));
                 funcion.setEs3d(rs.getBoolean("es3d"));
                 funcion.setSubtitulado(rs.getBoolean("subtitulado"));
@@ -231,10 +242,9 @@ public class FuncionData {
                 funcion.setHoraFin(rs.getTimestamp("horarioFin").toLocalDateTime());
                 funcion.setPrecio(rs.getDouble("precio"));
                 
-                
-                Sala sala = new Sala();
-                sala.setIdSala(rs.getInt("idsala"));
-                
+                int idSala = rs.getInt("idSala");
+                SalaData salaData = new SalaData();
+                 Sala sala = salaData.buscarSala(idSala);
                 funcion.setSalaProyeccion(sala);
                 
                String query2 = "SELECT * FROM lugar WHERE idFuncion = ?";
