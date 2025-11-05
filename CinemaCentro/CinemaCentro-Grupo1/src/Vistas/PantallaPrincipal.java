@@ -36,6 +36,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         menuListaPelis = new javax.swing.JMenuItem();
         jmFunciones = new javax.swing.JMenu();
+        jMenuFuncion = new javax.swing.JMenuItem();
+        jMenuSala = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -102,6 +104,23 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jmenuBar.add(jmPeliculas);
 
         jmFunciones.setText("Funciones");
+
+        jMenuFuncion.setText("Funciones");
+        jMenuFuncion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuFuncionActionPerformed(evt);
+            }
+        });
+        jmFunciones.add(jMenuFuncion);
+
+        jMenuSala.setText("Sala");
+        jMenuSala.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuSalaActionPerformed(evt);
+            }
+        });
+        jmFunciones.add(jMenuSala);
+
         jmenuBar.add(jmFunciones);
 
         setJMenuBar(jmenuBar);
@@ -149,6 +168,20 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jDesktopPane1.add(list);
     }//GEN-LAST:event_menuListaPelisActionPerformed
 
+    private void jMenuFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFuncionActionPerformed
+        // TODO add your handling code here:
+        VistaFuncion fun = new VistaFuncion();
+        fun.setVisible(true);
+        jDesktopPane1.add(fun);        
+    }//GEN-LAST:event_jMenuFuncionActionPerformed
+
+    private void jMenuSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSalaActionPerformed
+        // TODO add your handling code here:
+        vistaSala sala = new vistaSala();
+        sala.setVisible(true);
+        jDesktopPane1.add(sala);
+    }//GEN-LAST:event_jMenuSalaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -178,7 +211,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnAdministrar;
     private javax.swing.JButton btnComprar;
     private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JMenuItem jMenuFuncion;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuSala;
     private javax.swing.JMenu jmFunciones;
     private javax.swing.JMenu jmPeliculas;
     private javax.swing.JMenuBar jmenuBar;

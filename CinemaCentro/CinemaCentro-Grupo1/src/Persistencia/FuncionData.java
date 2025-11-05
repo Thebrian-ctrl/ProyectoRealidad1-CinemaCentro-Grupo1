@@ -63,19 +63,7 @@ public class FuncionData {
             if (rs.next()) {
                 funcion.setIdFuncion(rs.getInt(1));
             
-                for (Lugar l : funcion.getListaLugaresDisp()) {
-                    
-                    String query2 = "UPDATE lugar SET idFuncion = ? WHERE idLugar = ? AND idFuncion = null";
-                    
-                        PreparedStatement ps2 = conn.prepareStatement(query2);
-                        ps2.setInt(1, funcion.getIdFuncion());
-                        ps2.setInt(2, l.getIdLugar());
-                       
-                        ps2.executeUpdate();
-                        
-                        ps2.close();
-                    
-                }
+                crearLugaresParaFuncion(funcion);
                 
                 ps.close();
                 rs.close();
@@ -283,5 +271,36 @@ public class FuncionData {
         }
         
         return funcion;
+    }
+    
+    public void crearLugaresParaFuncion (Funcion funcion){
+        
+        LugarData lugarData = new LugarData();
+        
+        int capacidad = funcion.getSalaProyeccion().getCapacidad();
+        
+        int asientosPorFila = 4;
+        
+        int totalFilas = (int)Math.ceil((double)capacidad/asientosPorFila);
+        
+        char fila = 'A';
+        
+        int asientoEnFila = 1;
+        
+        for (int i = 1; i <= capacidad; i++) {
+            Lugar lugar = new Lugar();
+            lugar.setFila(fila);
+            lugar.setNum(asientoEnFila);
+            lugar.setEstado(true);
+            lugar.setFuncion(funcion);
+            lugarData.guardarLugar(lugar);
+            asientoEnFila++;
+            
+            if(asientoEnFila > asientosPorFila){
+                fila ++;
+                asientoEnFila = 1;
+            }
+        }
+    
     }
 }
