@@ -9,7 +9,7 @@ package Vistas;
  * @author franco
  */
 public class PantallaPrincipal extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName());
 
     /**
@@ -31,6 +31,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         btnComprar = new javax.swing.JButton();
         btnAdministrar = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jmenuBar = new javax.swing.JMenuBar();
         jmPeliculas = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -55,8 +56,16 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("dticket");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         jDesktopPane1.setLayer(btnComprar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnAdministrar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -67,7 +76,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(334, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(35, 35, 35)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAdministrar)
                 .addGap(14, 14, 14))
         );
@@ -76,9 +87,15 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap(263, Short.MAX_VALUE)
                 .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(251, 251, 251)
-                .addComponent(btnAdministrar)
-                .addGap(24, 24, 24))
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addGap(251, 251, 251)
+                        .addComponent(btnAdministrar)
+                        .addGap(24, 24, 24))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addGap(16, 16, 16))))
         );
 
         jmenuBar.setEnabled(false);
@@ -140,12 +157,12 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
-      jDesktopPane1.removeAll();
-      jDesktopPane1.repaint();
-      InicioDeSesion sesion = new InicioDeSesion();
-      sesion.setVisible(true);
-      jDesktopPane1.add(sesion);
-      
+        jDesktopPane1.removeAll();
+        jDesktopPane1.repaint();
+        InicioDeSesion sesion = new InicioDeSesion();
+        sesion.setVisible(true);
+        jDesktopPane1.add(sesion);
+
     }//GEN-LAST:event_btnComprarActionPerformed
 
     private void btnAdministrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdministrarActionPerformed
@@ -158,7 +175,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         PantallaPeliculas pelis = new PantallaPeliculas();
         pelis.setVisible(true);
         jDesktopPane1.add(pelis);
-        
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void menuListaPelisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuListaPelisActionPerformed
@@ -172,7 +189,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         VistaFuncion fun = new VistaFuncion();
         fun.setVisible(true);
-        jDesktopPane1.add(fun);        
+        jDesktopPane1.add(fun);
     }//GEN-LAST:event_jMenuFuncionActionPerformed
 
     private void jMenuSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSalaActionPerformed
@@ -181,6 +198,13 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         sala.setVisible(true);
         jDesktopPane1.add(sala);
     }//GEN-LAST:event_jMenuSalaActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        DetalleTicket dticket = new DetalleTicket();
+        dticket.setVisible(true);
+        jDesktopPane1.add(dticket);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -210,6 +234,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdministrar;
     private javax.swing.JButton btnComprar;
+    private javax.swing.JButton jButton2;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenuItem jMenuFuncion;
     private javax.swing.JMenuItem jMenuItem1;
