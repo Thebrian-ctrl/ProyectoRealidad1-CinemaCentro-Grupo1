@@ -35,7 +35,7 @@ public class DetalleTicketData {
 
             ps.setInt(1, detalle.getFuncion().getIdFuncion());
             ps.setInt(2, detalle.getLugar().getIdLugar());
-            ps.setInt(3, detalle.getCantidad().getIdLugar());
+            ps.setInt(3, detalle.getCantidad());
             ps.setDouble(4, detalle.getSubtotal());
 
             ps.executeUpdate();
@@ -64,7 +64,7 @@ public class DetalleTicketData {
 
             ps.setInt(1, d.getFuncion().getIdFuncion());
             ps.setInt(2, d.getLugar().getIdLugar());
-            ps.setInt(3, d.getCantidad().getIdLugar());
+            ps.setInt(3, d.getCantidad());
             ps.setDouble(4, d.getSubtotal());
             ps.setInt(5, d.getIdDetalleTicket());
 
