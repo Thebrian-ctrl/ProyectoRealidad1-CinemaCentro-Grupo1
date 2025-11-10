@@ -144,4 +144,8 @@ public class DetalleTicketData {
         }
         return detalle;
     }
+
+    public void guardarDetalleTicket(Vistas.DetalleTicket detalle) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

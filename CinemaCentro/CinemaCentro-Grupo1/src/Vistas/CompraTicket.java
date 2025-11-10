@@ -10,12 +10,18 @@ import javax.swing.DefaultListModel;
 import java.time.LocalDateTime;
 import Modelo.*;          
 import Persistencia.*;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 /**
  *
  * @author camila biarnes
  */
+
+
+
 public class CompraTicket extends javax.swing.JInternalFrame {
+    
+    
 
      private PeliculaData peliculaData;
     private FuncionData funcionData;
@@ -30,15 +36,25 @@ public class CompraTicket extends javax.swing.JInternalFrame {
     private List<Lugar> lugaresSeleccionados;
     
     private DefaultListModel<String> modeloLista;
+    
+private Comprador compradorActual;
 
     public CompraTicket() {
         initComponents();
+         Comprador comprador = null;
+         this.compradorActual = comprador;
          inicializar();
         
     
 }
+
+    CompraTicket(Comprador comprador) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
    
      private void inicializar() {
+         
+          
          peliculaData = new PeliculaData();
         funcionData = new FuncionData();
         lugarData = new LugarData();
@@ -49,6 +65,7 @@ public class CompraTicket extends javax.swing.JInternalFrame {
          lugaresSeleccionados = new ArrayList<>();
         modeloLista = new DefaultListModel<>();
         jList2.setModel(modeloLista);
+        
         
          jSpinField1.setMinimum(1);
         jSpinField1.setMaximum(10);
@@ -62,6 +79,7 @@ public class CompraTicket extends javax.swing.JInternalFrame {
                 seleccionarLugares();
             }
         });
+       
      }
      
       private void cargarPeliculas() {
@@ -260,23 +278,96 @@ public class CompraTicket extends javax.swing.JInternalFrame {
    
     
     private void BtnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnComprarActionPerformed
-if (jComboBox1.getSelectedIndex() < 0) {
+ try {
+    
+        if (jComboBox1.getSelectedIndex() < 0) {
             JOptionPane.showMessageDialog(this, "Seleccione una película");
             return;
         }
-
-if (jComboBox2.getSelectedIndex() < 0) {
+        
+        if (jComboBox2.getSelectedIndex() < 0) {
             JOptionPane.showMessageDialog(this, "Seleccione una función");
             return;
         }
-int cantidad = jSpinField1.getValue();
+        
+        int cantidad = jSpinField1.getValue();
         if (cantidad <= 0) {
             JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0");
             return;
         }
+        
+        if (lugaresSeleccionados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar al menos un asiento");
+            return;
+        }
+        
+        if (lugaresSeleccionados.size() != cantidad) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe seleccionar exactamente " + cantidad + " asiento(s)");
+            return;
+        }
+        
+       
+        double subtotal = funcionSeleccionada.getPrecio() * cantidad;
+        
+
+        Lugar lugarPrincipal = lugaresSeleccionados.get(0);
+        
+        DetalleTicket detalle = new DetalleTicket(
+            funcionSeleccionada,
+            lugarPrincipal,
+            cantidad,
+            subtotal
+        );
+        
+      
+        detalleData.guardarDetalleTicket(detalle);
+        
+     
+        TicketCompra ticket = new TicketCompra(
+            LocalDate.now(),
+            funcionSeleccionada.getHoraInicio(),
+            subtotal,
+            compradorActual,
+            detalle
+        );
+        
+    
+        ticketData.guardarTicketCompra(ticket);
+        
+     
+        for (Lugar lugar : lugaresSeleccionados) {
+            lugarData.darBajaLugar(lugar.getIdLugar());
+        }
+        
+      
+        StringBuilder resumen = new StringBuilder();
+        resumen.append("¡COMPRA EXITOSA!\n\n");
+        resumen.append("Ticket #").append(ticket.getIdTicket()).append("\n");
+        resumen.append("Película: ").append(funcionSeleccionada.getPelicula().getTitulo()).append("\n");
+        resumen.append("Función: ").append(funcionSeleccionada.getHoraInicio()).append("\n");
+        resumen.append("Sala: ").append(funcionSeleccionada.getSalaProyeccion().getNroSala()).append("\n");
+        resumen.append("Asientos: ");
+        for (Lugar l : lugaresSeleccionados) {
+            resumen.append(l.getFila()).append(l.getNum()).append(" ");
+        }
+        resumen.append("\n");
+        resumen.append("Total: $").append(String.format("%.2f", subtotal));
+        
+        JOptionPane.showMessageDialog(this, resumen.toString(), 
+            "Compra Exitosa", JOptionPane.INFORMATION_MESSAGE);
+        
+        limpiarFormulario();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al procesar la compra: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+    
+    
                                       
     }//GEN-LAST:event_BtnComprarActionPerformed
-
+    }
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
        int opcion = JOptionPane.showConfirmDialog(
             this, 
@@ -310,6 +401,8 @@ int cantidad = jSpinField1.getValue();
         funcionSeleccionada = null;
     }
   
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCancelar;
     private javax.swing.JButton BtnComprar;
@@ -330,16 +423,113 @@ int cantidad = jSpinField1.getValue();
     private com.toedter.components.JSpinField jSpinField1;
     // End of variables declaration//GEN-END:variables
 
-    private void cargarFunciones() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+ private void cargarFunciones() {
+    jComboBox2.removeAllItems();
+    
+    if (jComboBox1.getSelectedIndex() < 0) {
+        return;
     }
+    
 
-    private void cargarLugares() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    String tituloSeleccionado = (String) jComboBox1.getSelectedItem();
+    
+   
+    funciones = funcionData.listarFuncion();
+    
+    
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    
+    for (Funcion f : funciones) {
+        if (f.getPelicula().getTitulo().equals(tituloSeleccionado)) {
+            String formato3d = f.isEs3d() ? "3D" : "2D";
+            String formatoSub = f.isSubtitulado() ? "SUB" : "DUB";
+            String texto = f.getHoraInicio().format(formatter) + " - " + 
+                          formato3d + " " + formatoSub + " - Sala " + 
+                          f.getSalaProyeccion().getNroSala();
+            jComboBox2.addItem(texto);
+        }
     }
+}
 
-    private void seleccionarLugares() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+private void cargarLugares() {
+    modeloLista.clear();
+    
+    if (jComboBox2.getSelectedIndex() < 0) {
+        return;
     }
+    
+
+    int indiceFuncion = jComboBox2.getSelectedIndex();
+    String tituloSeleccionado = (String) jComboBox1.getSelectedItem();
+    
+   
+    int contador = 0;
+    for (Funcion f : funciones) {
+        if (f.getPelicula().getTitulo().equals(tituloSeleccionado)) {
+            if (contador == indiceFuncion) {
+                funcionSeleccionada = f;
+                break;
+            }
+            contador++;
+        }
+    }
+    
+    if (funcionSeleccionada != null) {
+    
+        List<Lugar> lugaresDisponibles = lugarData.buscarLugaresPorFuncion(
+            funcionSeleccionada.getIdFuncion()
+        );
+        
+        for (Lugar lugar : lugaresDisponibles) {
+            modeloLista.addElement("Fila " + lugar.getFila() + " - Asiento " + lugar.getNum());
+        }
+        
+    
+        jLabelPrecio.setText("Precio por entrada: $" + 
+            String.format("%.2f", funcionSeleccionada.getPrecio()));
+        
+    
+        actualizarTotal();
+    }
+}
+
+private void seleccionarLugares() {
+    lugaresSeleccionados.clear();
+    
+    if (funcionSeleccionada == null) {
+        return;
+    }
+    
+    List<String> seleccionados = jList2.getSelectedValuesList();
+    List<Lugar> lugaresDisponibles = lugarData.buscarLugaresPorFuncion(
+        funcionSeleccionada.getIdFuncion()
+    );
+    
+    for (String seleccion : seleccionados) {
+  
+        String[] partes = seleccion.split(" - ");
+        char fila = partes[0].replace("Fila ", "").charAt(0);
+        int num = Integer.parseInt(partes[1].replace("Asiento ", ""));
+        
+    
+        for (Lugar lugar : lugaresDisponibles) {
+            if (lugar.getFila() == fila && lugar.getNum() == num) {
+                lugaresSeleccionados.add(lugar);
+                break;
+            }
+        }
+    }
+    
+    actualizarTotal();
+}
+    
+    private void actualizarTotal() {
+    if (funcionSeleccionada != null) {
+        int cantidad = jSpinField1.getValue();
+        double precio = funcionSeleccionada.getPrecio();
+        double total = cantidad * precio;
+        jLabelTotal.setText("TOTAL: $" + String.format("%.2f", total));
+    }
+}
 }
 

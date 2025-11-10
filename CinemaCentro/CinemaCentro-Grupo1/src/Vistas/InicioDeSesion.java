@@ -4,6 +4,11 @@
  */
 package Vistas;
 
+import Modelo.Comprador;
+import Persistencia.CompradorData;
+import javax.swing.JOptionPane;
+
+
 /**
  *
  * @author franco
@@ -40,6 +45,11 @@ public class InicioDeSesion extends javax.swing.JInternalFrame {
         jtfContraseña = new javax.swing.JPasswordField();
 
         btnIngresar.setText("Ingresar");
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Iniciar sesión:");
 
@@ -181,6 +191,54 @@ public class InicioDeSesion extends javax.swing.JInternalFrame {
       registro.setVisible(true);
       jPanel1.add(registro);
     }//GEN-LAST:event_btnRegistrarseActionPerformed
+
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        // TODO add your handling code here:
+        
+         try {
+       
+        if (jtfDNI.getText().isEmpty() || jtfContraseña.getPassword().length == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
+            return;
+        }
+        
+
+        int dni = Integer.parseInt(jtfDNI.getText());
+        String password = new String(jtfContraseña.getPassword());
+        
+  
+        CompradorData compradorData = new CompradorData();
+        Comprador comprador = compradorData.buscarComprador(dni);
+        
+
+        if (comprador != null && comprador.getPassword().equals(password)) {
+            JOptionPane.showMessageDialog(this, "¡Bienvenido " + comprador.getNombre() + "!");
+            
+  
+            this.dispose();
+            
+
+            CompraTicket compraTicket = new CompraTicket(comprador);
+            compraTicket.setVisible(true);
+            
+        
+            this.getDesktopPane().add(compraTicket);
+            
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "DNI o contraseña incorrectos", 
+                "Error de autenticación", 
+                JOptionPane.ERROR_MESSAGE);
+            jtfContraseña.setText("");
+        }
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El DNI debe ser un número válido");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al iniciar sesión: " + e.getMessage());
+    }
+
+    }//GEN-LAST:event_btnIngresarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

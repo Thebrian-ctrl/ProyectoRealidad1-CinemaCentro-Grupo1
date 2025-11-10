@@ -5,9 +5,13 @@
  */
 package Vistas;
 
+import Modelo.Funcion;
+import Modelo.Lugar;
 import Persistencia.DetalleTicketData;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
+import Persistencia.FuncionData;
+import Persistencia.LugarData;
 
 /**
  *
@@ -26,6 +30,10 @@ public class DetalleTicket extends javax.swing.JInternalFrame {
         nm.setMinimum(0);
         nm.setStepSize(1);
         jSpinnerCantidad.setModel(nm);
+    }
+
+    DetalleTicket(Funcion funcionSeleccionada, Lugar lugarPrincipal, int cantidad, double subtotal) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -85,10 +93,25 @@ public class DetalleTicket extends javax.swing.JInternalFrame {
         jLabel7.setText("Subtotal:");
 
         jButtonEliminar.setText("Eliminar");
+        jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEliminarActionPerformed(evt);
+            }
+        });
 
         jButtonGuardar.setText("Guardar");
+        jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGuardarActionPerformed(evt);
+            }
+        });
 
         jButtonActualizar.setText("Actualizar");
+        jButtonActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonActualizarActionPerformed(evt);
+            }
+        });
 
         jButtonNuevo.setText("Nuevo");
         jButtonNuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -193,43 +216,165 @@ public class DetalleTicket extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButtonNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevoActionPerformed
-        // TODO add your handling code here:
+
+
+ limpiarCampos();
+    jTextField1.setEnabled(false); 
+    JOptionPane.showMessageDialog(this, 
+        "Para crear un nuevo detalle de ticket, use la pantalla de Compra de Tickets");
+
     }//GEN-LAST:event_jButtonNuevoActionPerformed
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         // TODO add your handling code here:
-        DetalleTicketData dticket = new DetalleTicketData();
-
-        try {
-            // 🔹 El campo para ingresar el ID es jTextField2, no el botón jbBuscarId
-            if (jButtonBuscar.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar el detalle ticket.");
-                return;
-            }
-
-            // 🔹 Convertir el texto a número
-            int id = Integer.parseInt(jButtonBuscar.getText());
-
-            // 🔹 Buscar el detalle ticket
-            Modelo.DetalleTicket detalle = dticket.buscarDetalleTicket(id);
-
-            if (detalle != null) {
-                // 🔹 Cargar los datos en los componentes del formulario
-                jComboBoxFuncion.setSelectedItem(detalle.getFuncion().getNombre());
-                jComboBoxLugar.setSelectedItem(detalle.getLugar().getNombre());
-                jSpinnerCantidad.setValue(detalle.getCantidad());
-                jTextFieldSubtotal.setText(String.valueOf(detalle.getSubtotal()));
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró ningún detalle de ticket con ese ID.");
-                limpiarCampos();
-            }
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El campo ID debe contener solo números.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al buscar el detalle de ticket: " + e.getMessage());
+    DetalleTicketData dticket = new DetalleTicketData();
+    
+    try {
+       
+        if (jTextField1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar el detalle ticket.");
+            return;
         }
+        
+        int id = Integer.parseInt(jTextField1.getText());
+        
+        Modelo.DetalleTicket detalle = dticket.buscarDetalleTicket(id);
+        
+        if (detalle != null) {
+        
+            FuncionData funcionData = new FuncionData();
+            Modelo.Funcion funcion = funcionData.buscarFuncion(detalle.getFuncion().getIdFuncion());
+            
+            if (funcion != null) {
+                jComboBoxFuncion.removeAllItems();
+                jComboBoxFuncion.addItem(funcion.getPelicula().getTitulo() + " - " + 
+                    funcion.getHoraInicio());
+            }
+            
+          
+            LugarData lugarData = new LugarData();
+            Modelo.Lugar lugar = lugarData.buscarLugarPorId(detalle.getLugar().getIdLugar());
+            
+            if (lugar != null) {
+                jComboBoxLugar.removeAllItems();
+                jComboBoxLugar.addItem("Fila " + lugar.getFila() + " - Asiento " + lugar.getNum());
+            }
+            
+            jSpinnerCantidad.setValue(detalle.getCantidad());
+            jTextFieldSubtotal.setText(String.valueOf(detalle.getSubtotal()));
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró ningún detalle de ticket con ese ID.");
+            limpiarCampos();
+        }
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El campo ID debe contener solo números.");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al buscar el detalle de ticket: " + e.getMessage());
+    }
+
     }//GEN-LAST:event_jButtonBuscarActionPerformed
+
+    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
+        // TODO add your handling code here:
+        try {
+      
+        if (jComboBoxFuncion.getSelectedIndex() < 0 || jComboBoxLugar.getSelectedIndex() < 0) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar función y lugar");
+            return;
+        }
+        
+        if (jTextFieldSubtotal.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El subtotal no puede estar vacío");
+            return;
+        }
+        
+   
+        JOptionPane.showMessageDialog(this, 
+            "Para guardar un nuevo detalle, use la pantalla de Compra de Tickets.\n" +
+            "Esta pantalla es principalmente para consultas y modificaciones.");
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage());
+    }
+
+        
+    }//GEN-LAST:event_jButtonGuardarActionPerformed
+
+    private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
+        // TODO add your handling code here:
+        
+         try {
+        if (jTextField1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Primero busque un detalle por ID");
+            return;
+        }
+        
+        int id = Integer.parseInt(jTextField1.getText());
+        
+        if (jTextFieldSubtotal.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El subtotal no puede estar vacío");
+            return;
+        }
+        
+      
+        DetalleTicketData dticket = new DetalleTicketData();
+        Modelo.DetalleTicket detalle = dticket.buscarDetalleTicket(id);
+        
+        if (detalle != null) {
+          
+            detalle.setCantidad((Integer) jSpinnerCantidad.getValue());
+            detalle.setSubtotal(Double.parseDouble(jTextFieldSubtotal.getText()));
+            
+          
+            dticket.actualizarDetalleTicket(detalle);
+            
+            JOptionPane.showMessageDialog(this, "Detalle actualizado correctamente");
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró el detalle a actualizar");
+        }
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Verifique que los campos numéricos sean válidos");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage());
+    }
+
+    }//GEN-LAST:event_jButtonActualizarActionPerformed
+
+    private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
+        // TODO add your handling code here:
+        
+         try {
+        if (jTextField1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un ID para eliminar");
+            return;
+        }
+        
+        int id = Integer.parseInt(jTextField1.getText());
+        
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Está seguro de eliminar este detalle?\n" +
+            "ADVERTENCIA: Esto puede afectar tickets de compra asociados.",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            DetalleTicketData dticket = new DetalleTicketData();
+            dticket.eliminarDetalleTicket(id);
+            limpiarCampos();
+        }
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El ID debe ser numérico");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage());
+    }
+
+    }//GEN-LAST:event_jButtonEliminarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

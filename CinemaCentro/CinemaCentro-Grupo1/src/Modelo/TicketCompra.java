@@ -41,6 +41,10 @@ public class TicketCompra {
         this.detalleticket = detalleticket;
     }
 
+    public TicketCompra(LocalDate now, LocalDateTime horaInicio, double subtotal, Comprador compradorActual, Vistas.DetalleTicket detalle) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public DetalleTicket getDetalleticket() {
         return detalleticket;
     }
