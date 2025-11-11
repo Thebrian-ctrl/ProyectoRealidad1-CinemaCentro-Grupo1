@@ -12,6 +12,11 @@ import Modelo.*;
 import Persistencia.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Cursor;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 /**
  *
  * @author camila biarnes
@@ -44,12 +49,104 @@ private Comprador compradorActual;
          Comprador comprador = null;
          this.compradorActual = comprador;
          inicializar();
+          aplicarEstilos();
         
     
 }
+private void aplicarEstilos() {
+  
+    Color colorPrimario = new Color(41, 128, 185);      
+    Color colorSecundario = new Color(52, 73, 94);      
+    Color colorExito = new Color(39, 174, 96);         
+    Color colorPeligro = new Color(231, 76, 60);        
+    Color colorFondo = new Color(236, 240, 241);        
+    
+ 
+    jPanel1.setBackground(Color.WHITE);
+    jPanel1.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorPrimario, 2),
+        BorderFactory.createEmptyBorder(20, 20, 20, 20)
+    ));
+    
+  
+    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
+    jLabel1.setForeground(colorPrimario);
+    
+   
+    Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 14);
+    jLabelPelicula.setFont(fuenteLabel);
+    jLabelFuncion.setFont(fuenteLabel);
+    jLabel2.setFont(new Font("Segoe UI", Font.BOLD, 16));
+    jLabel2.setForeground(colorSecundario);
+    jLabelCantEntradas.setFont(fuenteLabel);
+    jLabelSelecAsientos.setFont(fuenteLabel);
+    
+  
+    jLabelPrecio.setFont(new Font("Segoe UI", Font.BOLD, 16));
+    jLabelPrecio.setForeground(colorPrimario);
+    
+    jLabelTotal.setFont(new Font("Segoe UI", Font.BOLD, 20));
+    jLabelTotal.setForeground(colorExito);
+    
 
+    jComboBox1.setFont(fuenteLabel);
+    jComboBox1.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorPrimario, 1),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+    
+    jComboBox2.setFont(fuenteLabel);
+    jComboBox2.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorPrimario, 1),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+    
+
+    jList2.setFont(fuenteLabel);
+    jList2.setSelectionBackground(colorPrimario);
+    jList2.setSelectionForeground(Color.WHITE);
+    jList2.setBorder(BorderFactory.createLineBorder(colorPrimario, 1));
+    
+  
+    jSpinField1.setFont(fuenteLabel);
+    
+  
+    configurarBoton(BtnComprar, colorExito, Color.WHITE, new Font("Segoe UI", Font.BOLD, 14));
+    configurarBoton(BtnCancelar, colorPeligro, Color.WHITE, new Font("Segoe UI", Font.BOLD, 14));
+    configurarBoton(BtnLimpiar, colorSecundario, Color.WHITE, new Font("Segoe UI", Font.BOLD, 14));
+    
+
+    agregarEfectoHover(BtnComprar, colorExito, new Color(46, 204, 113));
+    agregarEfectoHover(BtnCancelar, colorPeligro, new Color(192, 57, 43));
+    agregarEfectoHover(BtnLimpiar, colorSecundario, new Color(44, 62, 80));
+}
+
+private void configurarBoton(JButton boton, Color colorFondo, Color colorTexto, Font fuente) {
+    boton.setFont(fuente);
+    boton.setBackground(colorFondo);
+    boton.setForeground(colorTexto);
+    boton.setFocusPainted(false);
+    boton.setBorderPainted(false);
+    boton.setOpaque(true);
+    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    boton.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorFondo.darker(), 1),
+        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+    ));
+}
+
+private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHover) {
+    boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorHover);
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorNormal);
+        }
+    });
+}
     CompraTicket(Comprador comprador) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
    
      private void inicializar() {
