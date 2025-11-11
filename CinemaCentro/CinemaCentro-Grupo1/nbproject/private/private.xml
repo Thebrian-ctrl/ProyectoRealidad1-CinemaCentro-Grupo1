@@ -3,10 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Usuario/OneDrive/Documentos/NetBeansProjects/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/CompraTicket.java</file>
-            <file>file:/C:/Users/Usuario/OneDrive/Documentos/NetBeansProjects/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/CompraTickets.java</file>
-            <file>file:/C:/Users/Usuario/OneDrive/Documentos/NetBeansProjects/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/DetalleTicket.java</file>
-            <file>file:/C:/Users/Usuario/OneDrive/Documentos/NetBeansProjects/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/PantallaPrincipal.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/TicketCompraData.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/PantallaRegistro.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/DetalleTicket.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/vistaSala.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/DetalleTicketData.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/VistaFuncion.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/PantallaPeliculas.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Modelo/TicketCompra.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/InicioDeSesion.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/SalaData.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/ListarPeliculas.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/CompraTicket.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Persistencia/LugarData.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/CompraTickets.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/cinemacentro/grupo1/CinemaCentroGrupo1.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/PanelItemPelicula.java</file>
+            <file>file:/C:/Users/camila%20biarnes/OneDrive/Escritorio/ProyectoRealidad1-CinemaCentro-Grupo1/CinemaCentro/CinemaCentro-Grupo1/src/Vistas/PantallaPrincipal.java</file>
         </group>
     </open-files>
 </project-private>
