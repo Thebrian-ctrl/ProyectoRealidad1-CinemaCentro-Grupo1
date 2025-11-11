@@ -12,6 +12,11 @@ import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import Persistencia.FuncionData;
 import Persistencia.LugarData;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Cursor;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 
 /**
  *
@@ -30,12 +35,99 @@ public class DetalleTicket extends javax.swing.JInternalFrame {
         nm.setMinimum(0);
         nm.setStepSize(1);
         jSpinnerCantidad.setModel(nm);
+        aplicarEstilos();
     }
 
     DetalleTicket(Funcion funcionSeleccionada, Lugar lugarPrincipal, int cantidad, double subtotal) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+private void aplicarEstilos() {
+  
+    Color colorPrimario = new Color(52, 152, 219);     
+    Color colorSecundario = new Color(149, 165, 166);   
+    Color colorExito = new Color(46, 204, 113);        
+    Color colorPeligro = new Color(231, 76, 60);        
+    Color colorAdvertencia = new Color(241, 196, 15);  
+    
+  
+    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 22));
+    jLabel1.setForeground(colorPrimario);
 
+    jLabel2.setFont(new Font("Segoe UI", Font.BOLD, 18));
+    jLabel2.setForeground(colorSecundario);
+    
+  
+    Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 13);
+    jLabel3.setFont(fuenteLabel);
+    jLabel4.setFont(fuenteLabel);
+    jLabel5.setFont(fuenteLabel);
+    jLabel6.setFont(fuenteLabel);
+    jLabel7.setFont(fuenteLabel);
+    
+  
+    jTextField1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    jTextField1.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorPrimario, 1),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+    
+
+    jTextFieldSubtotal.setFont(new Font("Segoe UI", Font.BOLD, 14));
+    jTextFieldSubtotal.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorExito, 2),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+    
+
+    jComboBoxFuncion.setFont(fuenteLabel);
+    jComboBoxFuncion.setBorder(BorderFactory.createLineBorder(colorPrimario, 1));
+    
+    jComboBoxLugar.setFont(fuenteLabel);
+    jComboBoxLugar.setBorder(BorderFactory.createLineBorder(colorPrimario, 1));
+    
+
+    jSpinnerCantidad.setFont(fuenteLabel);
+    
+
+    configurarBotonDetalle(jButtonBuscar, colorPrimario, Color.WHITE);
+    configurarBotonDetalle(jButtonNuevo, colorSecundario, Color.WHITE);
+    configurarBotonDetalle(jButtonGuardar, colorExito, Color.WHITE);
+    configurarBotonDetalle(jButtonActualizar, colorAdvertencia, Color.WHITE);
+    configurarBotonDetalle(jButtonEliminar, colorPeligro, Color.WHITE);
+    
+ 
+    agregarEfectoHoverDetalle(jButtonBuscar, colorPrimario);
+    agregarEfectoHoverDetalle(jButtonNuevo, colorSecundario);
+    agregarEfectoHoverDetalle(jButtonGuardar, colorExito);
+    agregarEfectoHoverDetalle(jButtonActualizar, colorAdvertencia);
+    agregarEfectoHoverDetalle(jButtonEliminar, colorPeligro);
+}
+
+private void configurarBotonDetalle(JButton boton, Color colorFondo, Color colorTexto) {
+    boton.setFont(new Font("Segoe UI", Font.BOLD, 12));
+    boton.setBackground(colorFondo);
+    boton.setForeground(colorTexto);
+    boton.setFocusPainted(false);
+    boton.setBorderPainted(false);
+    boton.setOpaque(true);
+    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    boton.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorFondo.darker(), 1),
+        BorderFactory.createEmptyBorder(8, 15, 8, 15)
+    ));
+}
+
+private void agregarEfectoHoverDetalle(JButton boton, Color colorBase) {
+    Color colorHover = colorBase.brighter();
+    boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorHover);
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorBase);
+        }
+    });
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
