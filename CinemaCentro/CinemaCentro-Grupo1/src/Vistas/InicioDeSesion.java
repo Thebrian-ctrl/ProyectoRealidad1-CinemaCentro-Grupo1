@@ -259,16 +259,32 @@ public class InicioDeSesion extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtfDNIActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        // TODO add your handling code here:
+       
+          int confirm = JOptionPane.showConfirmDialog(this,
+        "¿Está seguro que desea salir?",
+        "Confirmar Salida",
+        JOptionPane.YES_NO_OPTION);
+    
+    if (confirm == JOptionPane.YES_OPTION) {
+        this.dispose(); 
+    }
+
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
           // TODO add your handling code here:
-      jPanel1.removeAll();
-      jPanel1.repaint();   
-      PantallaRegistro registro = new PantallaRegistro();
-      registro.setVisible(true);
-      jPanel1.add(registro);
+     this.dispose();
+  
+    PantallaRegistro registro = new PantallaRegistro();
+    registro.setVisible(true);
+    
+    this.getDesktopPane().add(registro);
+    
+    try {
+        registro.setMaximum(true); 
+    } catch (Exception e) {
+      
+    }
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
@@ -321,6 +337,12 @@ public class InicioDeSesion extends javax.swing.JInternalFrame {
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         // TODO add your handling code here:
+        
+         if (jRadioButton1.isSelected()) {
+        jtfContraseña.setEchoChar((char)0); 
+    } else {
+        jtfContraseña.setEchoChar('•');
+    }
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
 

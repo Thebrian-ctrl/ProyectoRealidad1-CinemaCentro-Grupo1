@@ -357,19 +357,18 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void BtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelarActionPerformed
-  int opcion = JOptionPane.showConfirmDialog(
-            this, 
-            "¿Está seguro que desea cancelar la compra?", 
-            "Confirmar Cancelación", 
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-        );
-        
-        if (opcion == JOptionPane.YES_OPTION) {
-            limpiarFormulario();
-            this.dispose();
-        }
+   int opcion = JOptionPane.showConfirmDialog(
+        this, 
+        "¿Está seguro que desea cancelar la compra?", 
+        "Confirmar Cancelación", 
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE
+    );
     
+    if (opcion == JOptionPane.YES_OPTION) {
+        limpiarFormulario();
+        this.dispose(); 
+    }
     }//GEN-LAST:event_BtnCancelarActionPerformed
 
    
@@ -466,19 +465,21 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
     }//GEN-LAST:event_BtnComprarActionPerformed
     }
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
-       int opcion = JOptionPane.showConfirmDialog(
-            this, 
-            "¿Desea limpiar todos los campos?", 
-            "Confirmar Limpieza", 
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-        );
-        
-        if (opcion == JOptionPane.YES_OPTION) {
-            limpiarFormulario();
-            JOptionPane.showMessageDialog(this, "Formulario limpiado correctamente", 
-                "Información", JOptionPane.INFORMATION_MESSAGE);
-        }
+        int opcion = JOptionPane.showConfirmDialog(
+        this, 
+        "¿Desea limpiar todos los campos?", 
+        "Confirmar Limpieza", 
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE
+    );
+    
+    if (opcion == JOptionPane.YES_OPTION) {
+        limpiarFormulario();
+        JOptionPane.showMessageDialog(this, 
+            "Formulario limpiado correctamente", 
+            "Información", 
+            JOptionPane.INFORMATION_MESSAGE);
+    }
                                      
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 

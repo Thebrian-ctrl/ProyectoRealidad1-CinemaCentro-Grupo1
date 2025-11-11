@@ -263,7 +263,24 @@ public class PantallaRegistro extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBIniciarActionPerformed
 
     private void jBatrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBatrasActionPerformed
-        PantallaRegistro.this.dispose();
+        int confirm = JOptionPane.showConfirmDialog(this,
+        "¿Desea cancelar el registro y volver?",
+        "Confirmar",
+        JOptionPane.YES_NO_OPTION);
+    
+    if (confirm == JOptionPane.YES_OPTION) {
+        this.dispose();
+        
+        InicioDeSesion login = new InicioDeSesion();
+        login.setVisible(true);
+        this.getDesktopPane().add(login);
+        
+        try {
+            login.setMaximum(true);
+        } catch (Exception e) {
+          
+        }
+    }
         
         
          

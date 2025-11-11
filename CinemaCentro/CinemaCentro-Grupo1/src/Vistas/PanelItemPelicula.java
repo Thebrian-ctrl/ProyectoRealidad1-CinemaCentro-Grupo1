@@ -24,9 +24,7 @@ import javax.swing.JPanel;
  */
 public class PanelItemPelicula extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PanelItemPelicula
-     */
+   
     private Pelicula pelicula;
     private PeliculaData peliData;
     

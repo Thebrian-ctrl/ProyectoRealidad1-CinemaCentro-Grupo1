@@ -7,38 +7,117 @@ package Vistas;
 
 import Modelo.Funcion;
 import Modelo.Lugar;
-import Persistencia.DetalleTicketData;
-import javax.swing.JOptionPane;
-import javax.swing.SpinnerNumberModel;
-import Persistencia.FuncionData;
-import Persistencia.LugarData;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Cursor;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import Persistencia.DetalleTicketData;
+import Persistencia.FuncionData;
+import Persistencia.LugarData;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
+import java.util.List;
 
 /**
  *
  * @author Usuario
  */
 public class DetalleTicket extends javax.swing.JInternalFrame {
+    
+ private DetalleTicketData detalleData;
+    private FuncionData funcionData;
+    private LugarData lugarData;
+    
+    private List<Funcion> funciones;
+    private List<Lugar> lugares;
+    
+    private Funcion funcionSeleccionada;
+    private Lugar lugarSeleccionado;
 
  
     public DetalleTicket() {
         initComponents();
-
+         inicializar();
+    }
+    
+ private void inicializar() {
+        detalleData = new DetalleTicketData();
+        funcionData = new FuncionData();
+        lugarData = new LugarData();
+        
         SpinnerNumberModel nm = new SpinnerNumberModel();
         nm.setMaximum(10);
-        nm.setMinimum(0);
+        nm.setMinimum(1);
         nm.setStepSize(1);
+        nm.setValue(1);
         jSpinnerCantidad.setModel(nm);
+        
+        cargarFunciones();
+         jComboBoxFuncion.addActionListener(e -> {
+            if (jComboBoxFuncion.getSelectedIndex() >= 0) {
+                cargarLugaresPorFuncion();
+            }
+        });
+        
+     
+        jSpinnerCantidad.addChangeListener(e -> calcularSubtotal());
+    }
+    
+  
+    private void cargarFunciones() {
+        jComboBoxFuncion.removeAllItems();
+        funciones = funcionData.listarFuncion();
+        
+        for (Funcion f : funciones) {
+            String texto = f.getPelicula().getTitulo() + " - " + 
+                          f.getHoraInicio().toLocalDate() + " " + 
+                          f.getHoraInicio().toLocalTime();
+            jComboBoxFuncion.addItem(texto);
+        }
+    }
+    
+  
+    private void cargarLugaresPorFuncion() {
+        jComboBoxLugar.removeAllItems();
+        
+        int index = jComboBoxFuncion.getSelectedIndex();
+        if (index < 0 || index >= funciones.size()) {
+            return;
+        }
+        
+        funcionSeleccionada = funciones.get(index);
+        lugares = lugarData.buscarLugaresPorFuncion(funcionSeleccionada.getIdFuncion());
+        
+        for (Lugar l : lugares) {
+            String texto = "Fila " + l.getFila() + " - Asiento " + l.getNum();
+            jComboBoxLugar.addItem(texto);
+        }
+        
+        calcularSubtotal();
+    }
+    
+  
+    private void calcularSubtotal() {
+        if (funcionSeleccionada != null) {
+            int cantidad = (Integer) jSpinnerCantidad.getValue();
+            double precio = funcionSeleccionada.getPrecio();
+            double subtotal = cantidad * precio;
+            jTextFieldSubtotal.setText(String.format("%.2f", subtotal));
+        }
+    
         diseñodticket();
     }
 
+ 
+ 
+ 
     DetalleTicket(Funcion funcionSeleccionada, Lugar lugarPrincipal, int cantidad, double subtotal) {
         throw new UnsupportedOperationException("Not supported yet."); 
+        
     }
+    
+    
 private void diseñodticket() {
   
     Color colorPrimario = new Color(52, 152, 219);     
@@ -302,62 +381,85 @@ private void agregarEfectoHoverDetalle(JButton boton, Color colorBase) {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButtonNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevoActionPerformed
-
-
- limpiarCampos();
-    jTextField1.setEnabled(false); 
-    JOptionPane.showMessageDialog(this, 
-        "Para crear un nuevo detalle de ticket, use la pantalla de Compra de Tickets");
+      limpiarCampos();
+    jTextField1.setEnabled(false);
+    cargarFunciones();
+    JOptionPane.showMessageDialog(this,
+        "Complete los campos para crear un nuevo detalle",
+        "Nuevo Detalle",
+        JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_jButtonNuevoActionPerformed
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         // TODO add your handling code here:
-    DetalleTicketData dticket = new DetalleTicketData();
-    
     try {
-       
         if (jTextField1.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar el detalle ticket.");
+            JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar");
             return;
         }
         
         int id = Integer.parseInt(jTextField1.getText());
         
-        Modelo.DetalleTicket detalle = dticket.buscarDetalleTicket(id);
+        Modelo.DetalleTicket detalle = detalleData.buscarDetalleTicket(id);
         
         if (detalle != null) {
         
-            FuncionData funcionData = new FuncionData();
-            Modelo.Funcion funcion = funcionData.buscarFuncion(detalle.getFuncion().getIdFuncion());
+            Modelo.Funcion funcion = funcionData.buscarFuncion(
+                detalle.getFuncion().getIdFuncion()
+            );
             
             if (funcion != null) {
-                jComboBoxFuncion.removeAllItems();
-                jComboBoxFuncion.addItem(funcion.getPelicula().getTitulo() + " - " + 
-                    funcion.getHoraInicio());
+               
+                for (int i = 0; i < funciones.size(); i++) {
+                    if (funciones.get(i).getIdFuncion() == funcion.getIdFuncion()) {
+                        jComboBoxFuncion.setSelectedIndex(i);
+                        break;
+                    }
+                }
             }
             
-          
-            LugarData lugarData = new LugarData();
-            Modelo.Lugar lugar = lugarData.buscarLugarPorId(detalle.getLugar().getIdLugar());
+      
+            Modelo.Lugar lugar = lugarData.buscarLugarPorId(
+                detalle.getLugar().getIdLugar()
+            );
             
             if (lugar != null) {
-                jComboBoxLugar.removeAllItems();
-                jComboBoxLugar.addItem("Fila " + lugar.getFila() + " - Asiento " + lugar.getNum());
+              
+                for (int i = 0; i < lugares.size(); i++) {
+                    if (lugares.get(i).getIdLugar() == lugar.getIdLugar()) {
+                        jComboBoxLugar.setSelectedIndex(i);
+                        break;
+                    }
+                }
             }
             
             jSpinnerCantidad.setValue(detalle.getCantidad());
-            jTextFieldSubtotal.setText(String.valueOf(detalle.getSubtotal()));
+            jTextFieldSubtotal.setText(String.format("%.2f", detalle.getSubtotal()));
+            
+            JOptionPane.showMessageDialog(this, 
+                "Detalle ticket encontrado",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
             
         } else {
-            JOptionPane.showMessageDialog(this, "No se encontró ningún detalle de ticket con ese ID.");
+            JOptionPane.showMessageDialog(this, 
+                "No se encontró ningún detalle con ese ID",
+                "No encontrado",
+                JOptionPane.WARNING_MESSAGE);
             limpiarCampos();
         }
         
     } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "El campo ID debe contener solo números.");
+        JOptionPane.showMessageDialog(this, 
+            "El ID debe ser un número válido",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al buscar el detalle de ticket: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, 
+            "Error al buscar: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
     }
 
     }//GEN-LAST:event_jButtonBuscarActionPerformed
@@ -365,24 +467,64 @@ private void agregarEfectoHoverDetalle(JButton boton, Color colorBase) {
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
         // TODO add your handling code here:
         try {
+       
+        if (jComboBoxFuncion.getSelectedIndex() < 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione una función");
+            return;
+        }
+        
+        if (jComboBoxLugar.getSelectedIndex() < 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione un lugar");
+            return;
+        }
+        
+        int cantidad = (Integer) jSpinnerCantidad.getValue();
+        if (cantidad <= 0) {
+            JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0");
+            return;
+        }
+        
+     
+        int indexFuncion = jComboBoxFuncion.getSelectedIndex();
+        funcionSeleccionada = funciones.get(indexFuncion);
+        
       
-        if (jComboBoxFuncion.getSelectedIndex() < 0 || jComboBoxLugar.getSelectedIndex() < 0) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar función y lugar");
+        int indexLugar = jComboBoxLugar.getSelectedIndex();
+        lugarSeleccionado = lugares.get(indexLugar);
+        
+    
+        if (!lugarSeleccionado.isEstado()) {
+            JOptionPane.showMessageDialog(this, 
+                "El lugar seleccionado ya está ocupado",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
             return;
         }
         
-        if (jTextFieldSubtotal.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El subtotal no puede estar vacío");
-            return;
-        }
+       
+        double subtotal = cantidad * funcionSeleccionada.getPrecio();
         
-   
-        JOptionPane.showMessageDialog(this, 
-            "Para guardar un nuevo detalle, use la pantalla de Compra de Tickets.\n" +
-            "Esta pantalla es principalmente para consultas y modificaciones.");
+    
+        Modelo.DetalleTicket detalle = new Modelo.DetalleTicket();
+        detalle.setFuncion(funcionSeleccionada);
+        detalle.setLugar(lugarSeleccionado);
+        detalle.setCantidad(cantidad);
+        detalle.setSubtotal(subtotal);
+        
+ 
+        detalleData.guardarDetalleTicket(detalle);
+        
+     
+        lugarData.darBajaLugar(lugarSeleccionado.getIdLugar());
+        
+        limpiarCampos();
+        cargarFunciones(); 
         
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, 
+            "Error al guardar: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
     }
 
         
@@ -391,7 +533,7 @@ private void agregarEfectoHoverDetalle(JButton boton, Color colorBase) {
     private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
         // TODO add your handling code here:
         
-         try {
+        try {
         if (jTextField1.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Primero busque un detalle por ID");
             return;
@@ -399,41 +541,44 @@ private void agregarEfectoHoverDetalle(JButton boton, Color colorBase) {
         
         int id = Integer.parseInt(jTextField1.getText());
         
-        if (jTextFieldSubtotal.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El subtotal no puede estar vacío");
+     
+        Modelo.DetalleTicket detalle = detalleData.buscarDetalleTicket(id);
+        
+        if (detalle == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró el detalle");
             return;
         }
         
       
-        DetalleTicketData dticket = new DetalleTicketData();
-        Modelo.DetalleTicket detalle = dticket.buscarDetalleTicket(id);
+        int nuevaCantidad = (Integer) jSpinnerCantidad.getValue();
+        double nuevoSubtotal = Double.parseDouble(jTextFieldSubtotal.getText());
         
-        if (detalle != null) {
-          
-            detalle.setCantidad((Integer) jSpinnerCantidad.getValue());
-            detalle.setSubtotal(Double.parseDouble(jTextFieldSubtotal.getText()));
-            
-          
-            dticket.actualizarDetalleTicket(detalle);
-            
-            JOptionPane.showMessageDialog(this, "Detalle actualizado correctamente");
-            limpiarCampos();
-        } else {
-            JOptionPane.showMessageDialog(this, "No se encontró el detalle a actualizar");
-        }
+        detalle.setCantidad(nuevaCantidad);
+        detalle.setSubtotal(nuevoSubtotal);
+        
+     
+        detalleData.actualizarDetalleTicket(detalle);
+        
+        limpiarCampos();
         
     } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Verifique que los campos numéricos sean válidos");
+        JOptionPane.showMessageDialog(this, 
+            "Verifique que los campos numéricos sean válidos",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, 
+            "Error al actualizar: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
     }
 
     }//GEN-LAST:event_jButtonActualizarActionPerformed
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
-        // TODO add your handling code here:
+      
         
-         try {
+       try {
         if (jTextField1.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingrese un ID para eliminar");
             return;
@@ -441,23 +586,39 @@ private void agregarEfectoHoverDetalle(JButton boton, Color colorBase) {
         
         int id = Integer.parseInt(jTextField1.getText());
         
-        int confirmacion = JOptionPane.showConfirmDialog(this,
+    
+        Modelo.DetalleTicket detalle = detalleData.buscarDetalleTicket(id);
+        
+        if (detalle == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró el detalle");
+            return;
+        }
+        
+        int confirm = JOptionPane.showConfirmDialog(this,
             "¿Está seguro de eliminar este detalle?\n" +
-            "ADVERTENCIA: Esto puede afectar tickets de compra asociados.",
-            "Confirmar eliminación",
+            "ADVERTENCIA: Esto liberará el lugar asociado.",
+            "Confirmar Eliminación",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.WARNING_MESSAGE);
         
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            DetalleTicketData dticket = new DetalleTicketData();
-            dticket.eliminarDetalleTicket(id);
+        if (confirm == JOptionPane.YES_OPTION) {
+       
+            if (detalle.getLugar() != null) {
+                lugarData.darAltaLugar(detalle.getLugar().getIdLugar());
+            }
+            
+          
+            detalleData.eliminarDetalleTicket(id);
+            
             limpiarCampos();
+            cargarFunciones(); 
         }
         
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "El ID debe ser numérico");
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, 
+            "Error al eliminar: " + e.getMessage());
     }
 
     }//GEN-LAST:event_jButtonEliminarActionPerformed
@@ -484,11 +645,14 @@ private void agregarEfectoHoverDetalle(JButton boton, Color colorBase) {
     // End of variables declaration//GEN-END:variables
 
     private void limpiarCampos() {
-        jTextField1.setText("");
-        jComboBoxFuncion.setSelectedIndex(-1);
-        jComboBoxLugar.setSelectedIndex(-1);
-        jSpinnerCantidad.setValue(0);
-        jTextFieldSubtotal.setText("");
+       jTextField1.setText("");
+    jTextField1.setEnabled(true);
+    jComboBoxFuncion.setSelectedIndex(-1);
+    jComboBoxLugar.removeAllItems();
+    jSpinnerCantidad.setValue(1);
+    jTextFieldSubtotal.setText("");
+    funcionSeleccionada = null;
+    lugarSeleccionado = null;
     }
 
 }

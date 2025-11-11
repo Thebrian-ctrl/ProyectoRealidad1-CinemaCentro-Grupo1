@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package Vistas;
+import java.sql.SQLException;
+import javax.swing.*;
 
 /**
  *
@@ -16,7 +18,9 @@ public class CompraTickets extends javax.swing.JInternalFrame {
         initComponents();
     }
 
-  
+  private void cargarPeliculas() {
+   
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

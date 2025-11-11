@@ -3,6 +3,7 @@ package Vistas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Cursor;
+import javax.swing.JOptionPane;
 /**
  *
  * @author franco
@@ -15,6 +16,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     public PantallaPrincipal() {
         initComponents();
        diseñoPrincipal();
+         jmenuBar.setVisible(false);
+    btnAdministrar.setText("Activar Administración");
     }
 private void diseñoPrincipal() {
    
@@ -64,6 +67,8 @@ private void diseñoPrincipal() {
         jmFunciones = new javax.swing.JMenu();
         jMenuFuncion = new javax.swing.JMenuItem();
         jMenuSala = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -165,6 +170,18 @@ private void diseñoPrincipal() {
 
         jmenuBar.add(jmFunciones);
 
+        jMenu1.setText("Tickets");
+
+        jMenuItem2.setText("Detalle Ticket");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jmenuBar.add(jMenu1);
+
         setJMenuBar(jmenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -192,7 +209,13 @@ private void diseñoPrincipal() {
 
     private void btnAdministrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdministrarActionPerformed
         // TODO add your handling code here:
-        jmenuBar.setEnabled(true);
+        if (jmenuBar.isVisible()) {
+        jmenuBar.setVisible(false);
+        btnAdministrar.setText("Activar Administración");
+    } else {
+        jmenuBar.setVisible(true);
+        btnAdministrar.setText("Ocultar Administración");
+    }
     }//GEN-LAST:event_btnAdministrarActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -231,6 +254,12 @@ private void diseñoPrincipal() {
         jDesktopPane1.add(dticket);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    DetalleTicket dticket = new DetalleTicket();
+    dticket.setVisible(true);
+    jDesktopPane1.add(dticket);       
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
 
     public static void main(String args[]) {
      
@@ -242,8 +271,10 @@ private void diseñoPrincipal() {
     private javax.swing.JButton btnComprar;
     private javax.swing.JButton jButton2;
     private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuFuncion;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuSala;
     private javax.swing.JMenu jmFunciones;
     private javax.swing.JMenu jmPeliculas;
