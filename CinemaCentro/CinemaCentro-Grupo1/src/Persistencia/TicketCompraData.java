@@ -170,7 +170,7 @@ public class TicketCompraData {
        }
     }
     
-    // listo los tickets por fecha 
+
     
     public List<TicketCompra> listarTicketsPorFecha (LocalDate fecha) {
         List <TicketCompra> tickets = new ArrayList <> ();
@@ -211,7 +211,7 @@ public class TicketCompraData {
         return tickets;
     }
   
-    // listo los tickets por pelicula 
+ 
     
     public List <TicketCompra> ListarTicketsPorPelicula (int idPelicula ) {
         List <TicketCompra> tickets = new ArrayList <> ();
@@ -255,7 +255,7 @@ public class TicketCompraData {
             return tickets;
         }
                 
-    // seguir listando tickets x comprador 
+
      public List<TicketCompra> listarTicketsPorComprador(int idComprador) {
         List<TicketCompra> tickets = new ArrayList<>();
         String query = "SELECT * FROM ticketcompra WHERE idComprador = ?";

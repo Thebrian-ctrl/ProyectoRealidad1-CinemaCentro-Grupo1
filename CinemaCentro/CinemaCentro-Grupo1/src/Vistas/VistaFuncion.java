@@ -27,9 +27,7 @@ import javax.swing.SpinnerNumberModel;
  */
 public class VistaFuncion extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form VistaFuncion
-     */
+  
     FuncionData funcionData = new FuncionData();
     
     PeliculaData peliData = new PeliculaData();
