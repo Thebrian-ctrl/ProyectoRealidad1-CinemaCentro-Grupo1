@@ -121,7 +121,7 @@ public class DetalleTicketData {
                 detalle = new DetalleTicket();
 
                 detalle.setIdDetalleTicket(rs.getInt("idDetalleTicket"));
-                //detalle.setCantidad(rs.getInt("cantidad"));
+                detalle.setCantidad(rs.getInt("cantidad"));
                 detalle.setSubtotal(rs.getDouble("subtotal"));
                 Funcion funcion = new Funcion();
                 funcion.setIdFuncion(rs.getInt("idFuncion"));

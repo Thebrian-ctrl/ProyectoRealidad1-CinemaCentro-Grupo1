@@ -283,6 +283,74 @@ public class FuncionData {
         return funcion;
     }
     
+    
+    public void actualizarPrecio2D(double nuevoPrecio) {
+    String query = "UPDATE funcion SET precio = ? WHERE es3d = false";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setDouble(1, nuevoPrecio);
+        
+        int actualizados = ps.executeUpdate();
+        JOptionPane.showMessageDialog(null, 
+            "Se actualizaron " + actualizados + " funciones 2D con el nuevo precio");
+        
+        ps.close();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al actualizar precios 2D: " + e.getMessage());
+    }
+}
+
+public void actualizarPrecio3D(double nuevoPrecio) {
+    String query = "UPDATE funcion SET precio = ? WHERE es3d = true";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setDouble(1, nuevoPrecio);
+        
+        int actualizados = ps.executeUpdate();
+        JOptionPane.showMessageDialog(null, 
+            "Se actualizaron " + actualizados + " funciones 3D con el nuevo precio");
+        
+        ps.close();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al actualizar precios 3D: " + e.getMessage());
+    }
+}
+
+public List<Sala> listarSalasPorPelicula(int idPelicula) {
+    List<Sala> salas = new ArrayList<>();
+    String query = "SELECT DISTINCT s.* FROM sala s " +
+                   "INNER JOIN funcion f ON s.idSala = f.idSala " +
+                   "WHERE f.idPelicula = ?";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, idPelicula);
+        ResultSet rs = ps.executeQuery();
+        
+        while(rs.next()) {
+            Sala sala = new Sala();
+            sala.setIdSala(rs.getInt("idSala"));
+            sala.setNroSala(rs.getInt("nroSala"));
+            sala.setApto3d(rs.getBoolean("apta3d"));
+            sala.setCapacidad(rs.getInt("capacidad"));
+            sala.setEstado(rs.getBoolean("estado"));
+            
+            salas.add(sala);
+        }
+        
+        ps.close();
+        rs.close();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al listar salas: " + e.getMessage());
+    }
+    
+    return salas;
+}
     public void crearLugaresParaFuncion (Funcion funcion){
         
         LugarData lugarData = new LugarData();
