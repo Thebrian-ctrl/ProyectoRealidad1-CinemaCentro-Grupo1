@@ -29,7 +29,7 @@ private void diseñoPrincipal() {
         
      
         estilizarBoton(btnAdministrar, new Color(110, 110, 110)); 
-        estilizarBoton(jButton2, new Color(200, 200, 200));
+
     }
 
     private void estilizarBoton(javax.swing.JButton boton, Color colorBase) {
@@ -59,7 +59,6 @@ private void diseñoPrincipal() {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         btnComprar = new javax.swing.JButton();
         btnAdministrar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jmenuBar = new javax.swing.JMenuBar();
         jmPeliculas = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -86,16 +85,8 @@ private void diseñoPrincipal() {
             }
         });
 
-        jButton2.setText("dticket");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         jDesktopPane1.setLayer(btnComprar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnAdministrar, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -106,9 +97,7 @@ private void diseñoPrincipal() {
                 .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(334, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(35, 781, Short.MAX_VALUE)
                 .addComponent(btnAdministrar)
                 .addGap(14, 14, 14))
         );
@@ -117,15 +106,9 @@ private void diseñoPrincipal() {
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap(263, Short.MAX_VALUE)
                 .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGap(251, 251, 251)
-                        .addComponent(btnAdministrar)
-                        .addGap(24, 24, 24))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
-                        .addGap(16, 16, 16))))
+                .addGap(251, 251, 251)
+                .addComponent(btnAdministrar)
+                .addGap(24, 24, 24))
         );
 
         jmenuBar.setEnabled(false);
@@ -247,13 +230,6 @@ private void diseñoPrincipal() {
         jDesktopPane1.add(sala);
     }//GEN-LAST:event_jMenuSalaActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        DetalleTicket dticket = new DetalleTicket();
-        dticket.setVisible(true);
-        jDesktopPane1.add(dticket);
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
     DetalleTicket dticket = new DetalleTicket();
     dticket.setVisible(true);
@@ -269,7 +245,6 @@ private void diseñoPrincipal() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdministrar;
     private javax.swing.JButton btnComprar;
-    private javax.swing.JButton jButton2;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuFuncion;
