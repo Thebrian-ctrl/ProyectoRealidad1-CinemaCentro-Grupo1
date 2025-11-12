@@ -70,6 +70,7 @@ private void diseñoPrincipal() {
         jMenuSala = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
@@ -169,6 +170,14 @@ private void diseñoPrincipal() {
         });
         jMenu1.add(jMenuItem2);
 
+        jMenuItem5.setText("Modificar Ticket");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem5);
+
         jmenuBar.add(jMenu1);
 
         jMenu2.setText("Informes");
@@ -267,7 +276,6 @@ private void diseñoPrincipal() {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-
     VistaInformes informes = new VistaInformes();
     informes.setVisible(true);
     jDesktopPane1.add(informes);
@@ -278,11 +286,25 @@ private void diseñoPrincipal() {
      
     }
 
+
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-
+       ModificarTicket modificar = new ModificarTicket ();
+       modificar.setVisible (true);
+       jDesktopPane1.add(modificar);
+       
+       try {
+           modificar.setMaximum(true);
+       } catch (Exception e) {
+           
+       }
+       
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
 
     public static void main(String args[]) {
@@ -306,6 +328,7 @@ private void diseñoPrincipal() {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuSala;
     private javax.swing.JMenu jmFunciones;
     private javax.swing.JMenu jmPeliculas;
