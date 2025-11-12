@@ -22,7 +22,7 @@ public class MyConexion {
     if(con == null){
         
         try {
-            Class.forName("org.mariadb.jdbc.Driver");
+       Class.forName("org.mariadb.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mariadb://localhost/cinemacentro-grupo1", "root", "");
             JOptionPane.showMessageDialog(null, "Base de datos conectada exitosamente");
         } catch (ClassNotFoundException ex) {
