@@ -3,7 +3,9 @@ package Vistas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Cursor;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
+import Persistencia.*;
 /**
  *
  * @author franco
@@ -68,6 +70,10 @@ private void diseñoPrincipal() {
         jMenuSala = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -165,6 +171,30 @@ private void diseñoPrincipal() {
 
         jmenuBar.add(jMenu1);
 
+        jMenu2.setText("Informes");
+
+        jMenuItem3.setText("Ver informes");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
+        jmenuBar.add(jMenu2);
+
+        jMenu3.setText("Consultas");
+
+        jMenuItem4.setText("Sala y horario");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem4);
+
+        jmenuBar.add(jMenu3);
+
         setJMenuBar(jmenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -236,20 +266,46 @@ private void diseñoPrincipal() {
     jDesktopPane1.add(dticket);       
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+
+    VistaInformes informes = new VistaInformes();
+    informes.setVisible(true);
+    jDesktopPane1.add(informes);
+    
+    try {
+        informes.setMaximum(true); 
+    } catch (Exception e) {
+     
+    }
+
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
 
     public static void main(String args[]) {
      
         java.awt.EventQueue.invokeLater(() -> new PantallaPrincipal().setVisible(true));
     }
+    
+    
+ 
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdministrar;
     private javax.swing.JButton btnComprar;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuItem jMenuFuncion;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuSala;
     private javax.swing.JMenu jmFunciones;
     private javax.swing.JMenu jmPeliculas;
