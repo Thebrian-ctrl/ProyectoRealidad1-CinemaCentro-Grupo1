@@ -273,18 +273,34 @@ public class InicioDeSesion extends javax.swing.JInternalFrame {
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
           // TODO add your handling code here:
-     this.dispose();
-  
-    PantallaRegistro registro = new PantallaRegistro();
-    registro.setVisible(true);
-    
-    this.getDesktopPane().add(registro);
-    
     try {
-        registro.setMaximum(true); 
+     
+        javax.swing.JDesktopPane escritorio = this.getDesktopPane();
+        
+        if (escritorio == null) {
+            JOptionPane.showMessageDialog(this, "Error: No se puede acceder al escritorio");
+            return;
+        }
+        
+       
+        this.dispose();
+        
+     
+        PantallaRegistro registro = new PantallaRegistro();
+        registro.setVisible(true);
+        escritorio.add(registro);
+        
+       
+        try {
+            registro.setSelected(true);
+        } catch (java.beans.PropertyVetoException e) {
+         
+        }
+        
     } catch (Exception e) {
-      
+        JOptionPane.showMessageDialog(this, "Error al abrir registro: " + e.getMessage());
     }
+
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed

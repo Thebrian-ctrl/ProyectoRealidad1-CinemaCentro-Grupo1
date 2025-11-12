@@ -218,69 +218,90 @@ public class PantallaRegistro extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIniciarActionPerformed
-        try{
-            
-            
-            //validamos  q no haya campos vacios
-            
-            
-            if(jTextNombre.getText().isEmpty() ||jTextDni.getText().isEmpty() || 
-                    jDateNacimiento.getDate()==null || 
-                    jContrasenia.getPassword().length ==0 ||
-                    jComboMedioDePago.getSelectedIndex()==0){
-                
-                JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
-                return;
-            }
-            
-            
-            Comprador comprador = new Comprador();
-            comprador.setNombre(jTextNombre.getText());
-            comprador.setDni(Integer.parseInt(jTextDni.getText()));
-            
-            
-            LocalDate fechaNac = jDateNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            comprador.setFechaNac(fechaNac);
-            
-            comprador.setPassword(new String (jContrasenia.getPassword()));
-            comprador.setMedioDePago((String)jComboMedioDePago.getSelectedItem());
-            
-            CompradorData compraData = new CompradorData();
-            compraData.guardarComprador(comprador);
-            
-            
-             JOptionPane.showMessageDialog(this, "Comprador registrado Correctamente");
-             
-             
-             limpiarCampos();
-            
-        }catch(NumberFormatException ex){
-            JOptionPane.showMessageDialog(this, "El dni debe ser un numero valido");
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(this,"Error al registrar al comprador");
+         try {
+      
         
+        if(jTextNombre.getText().isEmpty() || jTextDni.getText().isEmpty() || 
+                jDateNacimiento.getDate()==null || 
+                jContrasenia.getPassword().length ==0 ||
+                jComboMedioDePago.getSelectedIndex()==0){
+            
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
+            return;
+        }
+        
+        Comprador comprador = new Comprador();
+        comprador.setNombre(jTextNombre.getText());
+        comprador.setDni(Integer.parseInt(jTextDni.getText()));
+        
+        LocalDate fechaNac = jDateNacimiento.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate();
+        comprador.setFechaNac(fechaNac);
+        
+        comprador.setPassword(new String(jContrasenia.getPassword()));
+        comprador.setMedioDePago((String)jComboMedioDePago.getSelectedItem());
+        
+        CompradorData compraData = new CompradorData();
+        compraData.guardarComprador(comprador);
+        
+        JOptionPane.showMessageDialog(this, "Comprador registrado correctamente");
+        limpiarCampos();
+     
+        javax.swing.JDesktopPane escritorio = this.getDesktopPane();
+        
+        if (escritorio != null) {
+            this.dispose();
+            
+            InicioDeSesion inicioSesion = new InicioDeSesion();
+            inicioSesion.setVisible(true);
+            escritorio.add(inicioSesion);
+            
+            try {
+                inicioSesion.setSelected(true);
+            } catch (java.beans.PropertyVetoException e) {
+             
+            }
+        }
+        
+    } catch(NumberFormatException ex){
+        JOptionPane.showMessageDialog(this, "El dni debe ser un numero valido");
+    } catch(Exception e){
+        JOptionPane.showMessageDialog(this, "Error al registrar al comprador: " + e.getMessage());
     }
+     
+    
+
     }//GEN-LAST:event_jBIniciarActionPerformed
 
     private void jBatrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBatrasActionPerformed
-        int confirm = JOptionPane.showConfirmDialog(this,
-        "¿Desea cancelar el registro y volver?",
-        "Confirmar",
-        JOptionPane.YES_NO_OPTION);
-    
-    if (confirm == JOptionPane.YES_OPTION) {
+     try {
+ 
+        javax.swing.JDesktopPane escritorio = this.getDesktopPane();
+        
+        if (escritorio == null) {
+            JOptionPane.showMessageDialog(this, "Error: No se puede acceder al escritorio");
+            return;
+        }
+        
+  
         this.dispose();
         
-        InicioDeSesion login = new InicioDeSesion();
-        login.setVisible(true);
-        this.getDesktopPane().add(login);
+  
+        InicioDeSesion inicioSesion = new InicioDeSesion();
+        inicioSesion.setVisible(true);
+        escritorio.add(inicioSesion);
         
+      
         try {
-            login.setMaximum(true);
-        } catch (Exception e) {
-          
+            inicioSesion.setSelected(true);
+        } catch (java.beans.PropertyVetoException e) {
+         
         }
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al volver: " + e.getMessage());
     }
+
         
         
          
