@@ -211,7 +211,29 @@ public class TicketCompraData {
         return tickets;
     }
   
- 
+ public void modificarTicket(int idTicket, LocalDate nuevaFechaFuncion, double nuevoMonto) {
+    String query = "UPDATE ticketcompra SET fechaFuncion = ?, monto = ? WHERE idTicket = ?";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setTimestamp(1, java.sql.Timestamp.valueOf(nuevaFechaFuncion.atStartOfDay()));
+        ps.setDouble(2, nuevoMonto);
+        ps.setInt(3, idTicket);
+        
+        int actualizado = ps.executeUpdate();
+        
+        if (actualizado == 1) {
+            JOptionPane.showMessageDialog(null, "Ticket modificado correctamente");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo modificar el ticket");
+        }
+        
+        ps.close();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al modificar ticket: " + e.getMessage());
+    }
+}
     
     public List <TicketCompra> ListarTicketsPorPelicula (int idPelicula ) {
         List <TicketCompra> tickets = new ArrayList <> ();
