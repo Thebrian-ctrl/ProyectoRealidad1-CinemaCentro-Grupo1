@@ -19,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -350,6 +351,45 @@ public List<Sala> listarSalasPorPelicula(int idPelicula) {
     }
     
     return salas;
+}
+
+public List<Funcion> listarFuncionesPorSalaYHorario(int idSala, LocalDate fecha) {
+    List<Funcion> funciones = new ArrayList<>();
+    String query = "SELECT * FROM funcion WHERE idSala = ? AND DATE(horarioInicio) = ?";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, idSala);
+        ps.setDate(2, java.sql.Date.valueOf(fecha));
+        
+        ResultSet rs = ps.executeQuery();
+        
+        while(rs.next()) {
+            Funcion f = new Funcion();
+            f.setIdFuncion(rs.getInt("idFuncion"));
+            
+            PeliculaData peliData = new PeliculaData();
+            Pelicula peli = peliData.buscarPeliculaPorId(rs.getInt("idPelicula"));
+            f.setPelicula(peli);
+            
+            f.setIdioma(rs.getString("idioma"));
+            f.setEs3d(rs.getBoolean("es3d"));
+            f.setSubtitulado(rs.getBoolean("subtitulado"));
+            f.setHoraInicio(rs.getTimestamp("horarioInicio").toLocalDateTime());
+            f.setHoraFin(rs.getTimestamp("horarioFin").toLocalDateTime());
+            f.setPrecio(rs.getDouble("precio"));
+            
+            funciones.add(f);
+        }
+        
+        ps.close();
+        rs.close();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al listar funciones: " + e.getMessage());
+    }
+    
+    return funciones;
 }
     public void crearLugaresParaFuncion (Funcion funcion){
         
