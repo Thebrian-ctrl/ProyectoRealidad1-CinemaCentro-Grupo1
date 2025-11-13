@@ -154,37 +154,37 @@ public class LugarData {
             
         }
     }
+public List<Lugar> buscarLugaresPorFuncion(int idFuncion){
+    List<Lugar> lugares = new ArrayList<>();
     
-    public List<Lugar> buscarLugaresPorFuncion(int idFuncion){
-        List<Lugar> lugares = new ArrayList<>();
+    String query = "SELECT * FROM lugar WHERE idFuncion = ? AND estado = 1";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, idFuncion);
         
-        String query = "SELECT * FROM lugar WHERE idFuncion = ? AND estado = 1";
+        ResultSet rs = ps.executeQuery();
         
-        try {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, idFuncion);
+        while(rs.next()){
+            Lugar lugar = new Lugar();
+            lugar.setIdLugar(rs.getInt("idLugar"));
+            lugar.setFila(rs.getString("fila").charAt(0));
+            lugar.setNum(rs.getInt("num"));
+            lugar.setEstado(rs.getBoolean("estado"));
             
-            ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()){
-                
-                Lugar lugar = new Lugar();
-                lugar.setIdLugar(rs.getInt("idLugar"));
-                lugar.setFila(rs.getString("fila").charAt(0));
-                lugar.setNum(rs.getInt("num"));
-                lugar.setEstado(rs.getBoolean("estado"));
-                
-                lugares.add(lugar);
-            
-            }
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al buscar los lugares" + e.getMessage());
-       
+            lugares.add(lugar);
         }
-    
-        return lugares;
+        
+        rs.close();
+        ps.close();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al buscar los lugares: " + e.getMessage());
+        e.printStackTrace();
     }
+
+    return lugares;
+}
     public Lugar buscarLugarPorId(int idLugar) {
         Lugar l = null;
         String query = "SELECT * FROM lugar WHERE idLugar = ?";

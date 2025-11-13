@@ -5,8 +5,11 @@
  */
 package Vistas;
 
+import Modelo.Funcion;
 import Modelo.Sala;
+import Persistencia.FuncionData;
 import Persistencia.SalaData;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -184,145 +187,465 @@ public class vistaSala extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBuscarActionPerformed
-        
-        SalaData salaData = new SalaData();
-        
-        try{
-         if (jTextID.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar la sala.");
+    try {
+       
+        if (jTextID.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Ingrese el ID de la sala a buscar", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextID.requestFocus();
             return;
         }
         
-         
-         
-         int id = Integer.parseInt(jTextID.getText());
-         Sala sala = salaData.buscarSala(id);
-         
-         
-         if (sala != null) {
-         
-            jTextNroSala.setText(String.valueOf(sala.getNroSala()));
-            jCapacidad.setValue(sala.getCapacidad());
-            jRadio3d.setSelected(sala.isApto3d());
-            jRadioEstado.setSelected(sala.isEstado());
-           
-        } else {
-            JOptionPane.showMessageDialog(this, "No se encontró ninguna sala con ese ID.");
-            limpiarCampos();
+   
+        int id;
+        try {
+            id = Integer.parseInt(jTextID.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "El ID debe ser un número válido", 
+                "ID inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextID.requestFocus();
+            jTextID.selectAll();
+            return;
         }
-        }catch(NumberFormatException e){
-            
-              JOptionPane.showMessageDialog(this, "El campo ID debe contener solo números.");
+        
+        if (id <= 0) {
+            JOptionPane.showMessageDialog(this, 
+                "El ID debe ser un número positivo", 
+                "ID inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextID.requestFocus();
+            jTextID.selectAll();
+            return;
         }
+        
+     
+        SalaData salaData = new SalaData();
+        Sala sala = salaData.buscarSala(id);
+        
+        if (sala == null) {
+            JOptionPane.showMessageDialog(this, 
+                "No se encontró ninguna sala con el ID: " + id, 
+                "Sala no encontrada", 
+                JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+     
+        jTextNroSala.setText(String.valueOf(sala.getNroSala()));
+        jCapacidad.setValue(sala.getCapacidad());
+        jRadio3d.setSelected(sala.isApto3d());
+        jRadioEstado.setSelected(sala.isEstado());
+        
+        JOptionPane.showMessageDialog(this, 
+            "Sala encontrada:\n\n" +
+            "Sala #" + sala.getNroSala() + "\n" +
+            "Capacidad: " + sala.getCapacidad() + " asientos\n" +
+            "3D: " + (sala.isApto3d() ? "Sí" : "No") + "\n" +
+            "Estado: " + (sala.isEstado() ? "Activa" : "Inactiva"), 
+            "Sala encontrada", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al buscar la sala:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+
          
     }//GEN-LAST:event_jBuscarActionPerformed
 
     private void jBCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCrearActionPerformed
        
+   try {
+     
+        if (jTextNroSala.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe ingresar el número de sala", 
+                "Campo obligatorio", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextNroSala.requestFocus();
+            return;
+        }
+        
+     
+        int numero;
+        try {
+            numero = Integer.parseInt(jTextNroSala.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "El número de sala debe ser un número válido", 
+                "Número inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextNroSala.requestFocus();
+            jTextNroSala.selectAll();
+            return;
+        }
+        
+        if (numero <= 0) {
+            JOptionPane.showMessageDialog(this, 
+                "El número de sala debe ser mayor a 0", 
+                "Número inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextNroSala.requestFocus();
+            jTextNroSala.selectAll();
+            return;
+        }
+        
+        if (numero > 50) {
+            JOptionPane.showMessageDialog(this, 
+                "El número de sala no puede ser mayor a 50", 
+                "Número muy alto", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextNroSala.requestFocus();
+            jTextNroSala.selectAll();
+            return;
+        }
+        
+       
         SalaData salaData = new SalaData();
         
-        try {
-        if (jTextNroSala.getText().isEmpty()) {
-           JOptionPane.showMessageDialog(this, "Debe ingresar el número de sala.");
+        if (salaData.existeNumeroSala(numero)) {
+            JOptionPane.showMessageDialog(this, 
+                "Ya existe una sala con el número " + numero + "\n\n" +
+                "Por favor, elija otro número", 
+                "Sala duplicada", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextNroSala.requestFocus();
+            jTextNroSala.selectAll();
             return;
         }
-
-        int numero = Integer.parseInt(jTextNroSala.getText());
-        boolean apto3D = jRadio3d.isSelected();
+        
+     
         int capacidad = (Integer) jCapacidad.getValue();
-        boolean estado = jRadioEstado.isSelected();
-
-       if (salaData.existeNumeroSala(numero)) {
-            JOptionPane.showMessageDialog(this,"Ya existe una sala con el número " + numero);
+        
+        if (capacidad <= 0) {
+            JOptionPane.showMessageDialog(this, 
+                "La capacidad debe ser mayor a 0", 
+                "Capacidad inválida", 
+                JOptionPane.ERROR_MESSAGE);
+            jCapacidad.requestFocus();
             return;
         }
+        
+        if (capacidad < 10) {
+            int confirmacion = JOptionPane.showConfirmDialog(this, 
+                "La capacidad es muy baja (" + capacidad + " asientos)\n" +
+                "¿Está seguro de continuar?", 
+                "Capacidad baja", 
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+            
+            if (confirmacion != JOptionPane.YES_OPTION) {
+                jCapacidad.requestFocus();
+                return;
+            }
+        }
+        
+        if (capacidad > 500) {
+            int confirmacion = JOptionPane.showConfirmDialog(this, 
+                "La capacidad es muy alta (" + capacidad + " asientos)\n" +
+                "¿Está seguro de continuar?", 
+                "Capacidad alta", 
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+            
+            if (confirmacion != JOptionPane.YES_OPTION) {
+                jCapacidad.requestFocus();
+                return;
+            }
+        }
+        
+
+        boolean apto3D = jRadio3d.isSelected();
+        
+        if (apto3D && capacidad < 50) {
+            int confirmacion = JOptionPane.showConfirmDialog(this, 
+                "Las salas 3D generalmente tienen mayor capacidad\n" +
+                "Capacidad actual: " + capacidad + " asientos\n\n" +
+                "¿Desea continuar de todos modos?", 
+                "Advertencia 3D", 
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+            
+            if (confirmacion != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+        
+  
+        boolean estado = jRadioEstado.isSelected();
+        
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Confirmar creación de sala?\n\n" +
+            "Número de sala: " + numero + "\n" +
+            "Capacidad: " + capacidad + " asientos\n" +
+            "Apta para 3D: " + (apto3D ? "Sí" : "No") + "\n" +
+            "Estado: " + (estado ? "Activa" : "Inactiva"), 
+            "Confirmar creación", 
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+     
         Sala nuevaSala = new Sala();
         nuevaSala.setNroSala(numero);
         nuevaSala.setApto3d(apto3D);
         nuevaSala.setCapacidad(capacidad);
         nuevaSala.setEstado(estado);
-
-        salaData.guardarSala(nuevaSala);
-
         
-
+        salaData.guardarSala(nuevaSala);
+        
+        JOptionPane.showMessageDialog(this, 
+            "Sala creada exitosamente\n\n" +
+            "Sala #" + numero + "\n" +
+            "Capacidad: " + capacidad + " asientos\n" +
+            "3D: " + (apto3D ? "Sí" : "No"), 
+            "Éxito", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
         limpiarCampos();
-
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Ingrese un número válido para el campo 'Número de Sala'.");
-    } 
-
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al crear la sala:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_jBCrearActionPerformed
 
     private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed
        
-        SalaData salaData = new SalaData();
-        
-        try{
-         if (jTextID.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar la sala.");
+       try {
+        // ========== VALIDACIÓN 1: Sala buscada ==========
+        if (jTextID.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Primero debe buscar una sala por ID", 
+                "Búsqueda requerida", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextID.requestFocus();
             return;
         }
-         
-         
-         
-          int id = Integer.parseInt(jTextID.getText());
-          int numero = Integer.parseInt(jTextNroSala.getText());
-          boolean apto3D = jRadio3d.isSelected();
-          int capacidad = (Integer) jCapacidad.getValue();
-          boolean estado = jRadioEstado.isSelected();
-          
-          
-          if (salaData.existeNumeroSalaExcluyendoId(numero, id)) {
-            JOptionPane.showMessageDialog(this, "Ya existe otra sala con el número ");
-            return; 
-         }
-          
-          Sala s = new Sala();
-          s.setIdSala(id);
-          s.setNroSala(numero);
-          s.setApto3d(apto3D);
-          s.setCapacidad(capacidad);
-          s.setEstado(estado);
-          
-          
-          salaData.actualizarSala(s);
-          
-           limpiarCampos();
+        
+        int id = Integer.parseInt(jTextID.getText().trim());
+        
 
-        }catch(NumberFormatException e){
-             JOptionPane.showMessageDialog(this, "El campo ID debe contener solo números.");
-            
+        if (jTextNroSala.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "El número de sala es obligatorio", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextNroSala.requestFocus();
+            return;
         }
+        
+        int numero = Integer.parseInt(jTextNroSala.getText().trim());
+        
+        if (numero <= 0) {
+            JOptionPane.showMessageDialog(this, 
+                "El número de sala debe ser mayor a 0", 
+                "Número inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+     
+        SalaData salaData = new SalaData();
+        
+        if (salaData.existeNumeroSalaExcluyendoId(numero, id)) {
+            JOptionPane.showMessageDialog(this, 
+                "Ya existe otra sala con el número " + numero, 
+                "Número duplicado", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+   
+        int capacidad = (Integer) jCapacidad.getValue();
+        
+        if (capacidad <= 0) {
+            JOptionPane.showMessageDialog(this, 
+                "La capacidad debe ser mayor a 0", 
+                "Capacidad inválida", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+  
+        Sala salaActual = salaData.buscarSala(id);
+        if (salaActual != null && salaActual.getCapacidad() != capacidad) {
+            int confirmacion = JOptionPane.showConfirmDialog(this, 
+                " ADVERTENCIA \n\n" +
+                "Está cambiando la capacidad de la sala\n" +
+                "Capacidad anterior: " + salaActual.getCapacidad() + " asientos\n" +
+                "Capacidad nueva: " + capacidad + " asientos\n\n" +
+                "Esto podría afectar las funciones ya programadas.\n" +
+                "¿Desea continuar?", 
+                "Cambio de capacidad", 
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+            
+            if (confirmacion != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+        
+     
+        boolean apto3D = jRadio3d.isSelected();
+        boolean estado = jRadioEstado.isSelected();
+        
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Está seguro de actualizar la sala #" + id + "?\n\n" +
+            "Número: " + numero + "\n" +
+            "Capacidad: " + capacidad + "\n" +
+            "3D: " + (apto3D ? "Sí" : "No") + "\n" +
+            "Estado: " + (estado ? "Activa" : "Inactiva"), 
+            "Confirmar actualización", 
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+    
+        Sala sala = new Sala();
+        sala.setIdSala(id);
+        sala.setNroSala(numero);
+        sala.setApto3d(apto3D);
+        sala.setCapacidad(capacidad);
+        sala.setEstado(estado);
+        
+        salaData.actualizarSala(sala);
+        
+        JOptionPane.showMessageDialog(this, 
+            "Sala actualizada exitosamente", 
+            "Éxito", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+        limpiarCampos();
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Verifique que todos los campos numéricos sean válidos", 
+            "Error de formato", 
+            JOptionPane.ERROR_MESSAGE);
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al actualizar la sala:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_jBActualizarActionPerformed
 
     private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed
         
-        SalaData salaData = new SalaData();
-        
-        
-        try{
-         if (jTextID.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar la sala.");
+      try {
+    
+        if (jTextID.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Ingrese el ID de la sala a eliminar", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextID.requestFocus();
             return;
         }
-         
-         
-         int id = Integer.parseInt(jTextID.getText());
-         
-         
-         int confirm = JOptionPane.showConfirmDialog(
-                this, "¿Está seguro que desea eliminar la sala con ID " + id + "?", "Confirmar eliminación",JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            salaData.eliminarSala(id);
-            limpiarCampos();
+        
+        int id = Integer.parseInt(jTextID.getText().trim());
+        
+    
+        SalaData salaData = new SalaData();
+        Sala sala = salaData.buscarSala(id);
+        
+        if (sala == null) {
+            JOptionPane.showMessageDialog(this, 
+                "No se encontró ninguna sala con el ID: " + id, 
+                "Sala no encontrada", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
         }
-         
-         }catch(NumberFormatException e){
-             JOptionPane.showMessageDialog(this, "El campo ID debe contener solo números.");
-            
+        
+    
+        FuncionData funcionData = new FuncionData();
+        List<Funcion> funciones = funcionData.listarFuncion();
+        
+        int funcionesEnSala = 0;
+        for (Funcion f : funciones) {
+            if (f.getSalaProyeccion().getIdSala() == id) {
+                funcionesEnSala++;
+            }
         }
+        
+        if (funcionesEnSala > 0) {
+            JOptionPane.showMessageDialog(this, 
+                "ADVERTENCIA \n\n" +
+                "No se puede eliminar la sala porque tiene\n" +
+                funcionesEnSala + " función(es) programada(s)\n\n" +
+                "Primero debe eliminar las funciones asociadas\n" +
+                "o puede dar de baja la sala en su lugar.", 
+                "Sala en uso", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+   
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            " ADVERTENCIA \n\n" +
+            "¿Está seguro de eliminar la Sala #" + sala.getNroSala() + "?\n\n" +
+            "Esta acción NO se puede deshacer.", 
+            "Confirmar eliminación", 
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+     
+        confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Está COMPLETAMENTE seguro?\n\n" +
+            "Esta es su última oportunidad para cancelar.", 
+            "Última confirmación", 
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.ERROR_MESSAGE);
+        
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+    
+        salaData.eliminarSala(id);
+        
+        JOptionPane.showMessageDialog(this, 
+            "Sala eliminada correctamente", 
+            "Éxito", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+        limpiarCampos();
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, 
+            "El ID debe ser un número válido", 
+            "Error de formato", 
+            JOptionPane.ERROR_MESSAGE);
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al eliminar la sala:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_jBEliminarActionPerformed
 
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed

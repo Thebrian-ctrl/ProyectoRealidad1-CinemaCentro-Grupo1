@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
-
+import java.time.Period;
 
 
 /**
@@ -305,62 +305,121 @@ public class InicioDeSesion extends javax.swing.JInternalFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
- try {
-    
-        if (jtfDNI.getText().isEmpty() || jtfContraseña.getPassword().length == 0) {
-            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
+    try {
+   
+        if (jtfDNI.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe ingresar su DNI", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jtfDNI.requestFocus();
             return;
         }
         
-        int dni = Integer.parseInt(jtfDNI.getText());
+        if (jtfContraseña.getPassword().length == 0) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe ingresar su contraseña", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jtfContraseña.requestFocus();
+            return;
+        }
+        
+     
+        String dniTexto = jtfDNI.getText().trim();
+        
+        if (!dniTexto.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, 
+                "El DNI solo puede contener números", 
+                "DNI inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jtfDNI.requestFocus();
+            jtfDNI.selectAll();
+            return;
+        }
+        
+        int dni = Integer.parseInt(dniTexto);
         String password = new String(jtfContraseña.getPassword());
         
-      
+   
         CompradorData compradorData = new CompradorData();
         Comprador comprador = compradorData.buscarComprador(dni);
         
-  
-        if (comprador != null && comprador.getPassword().equals(password)) {
-            JOptionPane.showMessageDialog(this, "¡Bienvenido " + comprador.getNombre() + "!");
-            
-         
-            javax.swing.JDesktopPane escritorio = this.getDesktopPane();
-            
-            if (escritorio == null) {
-                JOptionPane.showMessageDialog(this, "Error: No se puede acceder al escritorio");
-                return;
-            }
-            
-            this.dispose();
-            
-         
-            CompraTicket compraTicket = new CompraTicket(comprador);
-            compraTicket.setVisible(true);
-            escritorio.add(compraTicket);
-            
-       
-            try {
-                compraTicket.setMaximum(true);
-            } catch (java.beans.PropertyVetoException e) {
-          
-                compraTicket.setSelected(true);
-            }
-            
-        } else {
+        if (comprador == null) {
             JOptionPane.showMessageDialog(this, 
-                "DNI o contraseña incorrectos", 
+                "No existe un usuario registrado con el DNI " + dni + "\n\n" +
+                "¿Desea registrarse?", 
+                "Usuario no encontrado", 
+                JOptionPane.ERROR_MESSAGE);
+            jtfDNI.requestFocus();
+            jtfDNI.selectAll();
+            jtfContraseña.setText("");
+            return;
+        }
+        
+   
+        if (!comprador.getPassword().equals(password)) {
+            JOptionPane.showMessageDialog(this, 
+                "Contraseña incorrecta\n\n" +
+                "Por favor, intente nuevamente", 
                 "Error de autenticación", 
                 JOptionPane.ERROR_MESSAGE);
             jtfContraseña.setText("");
+            jtfContraseña.requestFocus();
+            return;
+        }
+        
+   
+        JOptionPane.showMessageDialog(this, 
+            "¡Bienvenido " + comprador.getNombre() + "!\n\n" +
+            "Inicio de sesión exitoso", 
+            "Bienvenido", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+    
+        javax.swing.JDesktopPane escritorio = this.getDesktopPane();
+        
+        if (escritorio == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Error: No se puede acceder al escritorio", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+  
+        this.dispose();
+        
+   
+        CompraTicket compraTicket = new CompraTicket(comprador);
+        compraTicket.setVisible(true);
+        escritorio.add(compraTicket);
+        
+ 
+        try {
+            compraTicket.setMaximum(true);
+        } catch (java.beans.PropertyVetoException e) {
+            compraTicket.setSelected(true);
         }
         
     } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "El DNI debe ser un número válido");
+        JOptionPane.showMessageDialog(this, 
+            "El DNI debe ser un número válido", 
+            "Error de formato", 
+            JOptionPane.ERROR_MESSAGE);
+        jtfDNI.requestFocus();
+        jtfDNI.selectAll();
+        
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al iniciar sesión: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, 
+            "Error al iniciar sesión:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
     }
-    
+
+
+
 
 
     }//GEN-LAST:event_btnIngresarActionPerformed

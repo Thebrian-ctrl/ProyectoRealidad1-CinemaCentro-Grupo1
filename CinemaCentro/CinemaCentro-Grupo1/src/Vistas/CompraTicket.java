@@ -4,12 +4,11 @@
  * and open the template in the editor.
  */
 package Vistas;
+
 import javax.swing.*;
 import java.util.*;
 import javax.swing.DefaultListModel;
 import java.time.LocalDateTime;
-import Modelo.*;          
-import Persistencia.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.awt.Color;
@@ -17,6 +16,22 @@ import java.awt.Font;
 import java.awt.Cursor;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+
+
+import Modelo.Comprador;
+import Modelo.Pelicula;
+import Modelo.Funcion;
+import Modelo.Lugar;
+import Modelo.Sala;
+import Modelo.DetalleTicket; 
+import Modelo.TicketCompra;   
+
+import Persistencia.PeliculaData;
+import Persistencia.FuncionData;
+import Persistencia.LugarData;
+import Persistencia.CompradorData;
+import Persistencia.TicketCompraData;
+import Persistencia.DetalleTicketData;
 /**
  *
  * @author camila biarnes
@@ -212,6 +227,7 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
         BtnCancelar = new javax.swing.JButton();
         BtnComprar = new javax.swing.JButton();
         BtnLimpiar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("COMPRA DE ENTRADAS");
@@ -265,6 +281,8 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
             }
         });
 
+        jLabel3.setText(" Mantenga presionada CTRL para seleccionar múltiples asientos\"");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -284,21 +302,23 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
                             .addComponent(BtnCancelar))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(BtnComprar)
+                                .addGap(87, 87, 87)
+                                .addComponent(BtnLimpiar))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jComboBox1, 0, 194, Short.MAX_VALUE)
                                     .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jSpinField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addComponent(BtnComprar)
-                                .addGap(87, 87, 87)
-                                .addComponent(BtnLimpiar))))
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel3))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(171, 171, 171)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(188, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,9 +341,11 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
                         .addComponent(jLabelCantEntradas))
                     .addComponent(jSpinField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelSelecAsientos)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabelSelecAsientos)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(41, 41, 41)
                 .addComponent(jLabelPrecio)
                 .addGap(18, 18, 18)
@@ -341,7 +363,7 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -378,41 +400,51 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
    
     
     private void BtnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnComprarActionPerformed
- try {
-    
+
+    try {
+      
         if (jComboBox1.getSelectedIndex() < 0) {
             JOptionPane.showMessageDialog(this, "Seleccione una película");
             return;
         }
         
+     
         if (jComboBox2.getSelectedIndex() < 0) {
             JOptionPane.showMessageDialog(this, "Seleccione una función");
             return;
         }
         
+     
         int cantidad = jSpinField1.getValue();
         if (cantidad <= 0) {
             JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0");
             return;
         }
-        
+ 
         if (lugaresSeleccionados.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar al menos un asiento");
+            JOptionPane.showMessageDialog(this, 
+                "Debe seleccionar al menos un asiento.\n\n" +
+                "IMPORTANTE: Mantenga presionada la tecla CTRL\n" +
+                "para seleccionar múltiples asientos.");
             return;
         }
         
+    
         if (lugaresSeleccionados.size() != cantidad) {
             JOptionPane.showMessageDialog(this, 
-                "Debe seleccionar exactamente " + cantidad + " asiento(s)");
+                "Debe seleccionar exactamente " + cantidad + " asiento(s).\n" +
+                "Actualmente tiene " + lugaresSeleccionados.size() + " seleccionado(s).\n\n" +
+                "TIP: Use CTRL + Click para seleccionar múltiples asientos.");
             return;
         }
         
-       
+      
         double subtotal = funcionSeleccionada.getPrecio() * cantidad;
         
-
+      
         Lugar lugarPrincipal = lugaresSeleccionados.get(0);
         
+   
         DetalleTicket detalle = new DetalleTicket(
             funcionSeleccionada,
             lugarPrincipal,
@@ -420,7 +452,7 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
             subtotal
         );
         
-      
+     
         detalleData.guardarDetalleTicket(detalle);
         
      
@@ -434,40 +466,52 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
         
     
         ticketData.guardarTicketCompra(ticket);
-        
-     
+    
         for (Lugar lugar : lugaresSeleccionados) {
             lugarData.darBajaLugar(lugar.getIdLugar());
         }
         
-      
+   
         StringBuilder resumen = new StringBuilder();
         resumen.append("¡COMPRA EXITOSA!\n\n");
         resumen.append("Ticket #").append(ticket.getIdTicket()).append("\n");
+        resumen.append("═══════════════════════════════\n");
+        resumen.append("Comprador: ").append(compradorActual.getNombre()).append("\n");
+        resumen.append("DNI: ").append(compradorActual.getDni()).append("\n");
+        resumen.append("───────────────────────────────\n");
         resumen.append("Película: ").append(funcionSeleccionada.getPelicula().getTitulo()).append("\n");
-        resumen.append("Función: ").append(funcionSeleccionada.getHoraInicio()).append("\n");
+        resumen.append("Función: ").append(funcionSeleccionada.getHoraInicio().format(
+            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n");
         resumen.append("Sala: ").append(funcionSeleccionada.getSalaProyeccion().getNroSala()).append("\n");
-        resumen.append("Asientos: ");
+        resumen.append("Formato: ").append(funcionSeleccionada.isEs3d() ? "3D" : "2D").append("\n");
+        resumen.append("───────────────────────────────\n");
+        resumen.append("Asientos:\n");
         for (Lugar l : lugaresSeleccionados) {
-            resumen.append(l.getFila()).append(l.getNum()).append(" ");
+            resumen.append("  • Fila ").append(l.getFila())
+                   .append(" - Asiento ").append(l.getNum()).append("\n");
         }
-        resumen.append("\n");
-        resumen.append("Total: $").append(String.format("%.2f", subtotal));
+        resumen.append("───────────────────────────────\n");
+        resumen.append("Cantidad: ").append(cantidad).append(" entrada(s)\n");
+        resumen.append("Precio unitario: $").append(String.format("%.2f", funcionSeleccionada.getPrecio())).append("\n");
+        resumen.append("TOTAL: $").append(String.format("%.2f", subtotal)).append("\n");
+        resumen.append("═══════════════════════════════\n");
         
         JOptionPane.showMessageDialog(this, resumen.toString(), 
             "Compra Exitosa", JOptionPane.INFORMATION_MESSAGE);
         
+     
         limpiarFormulario();
         
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, 
             "Error al procesar la compra: " + e.getMessage(),
             "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     
-    
-                                      
+
+}                
     }//GEN-LAST:event_BtnComprarActionPerformed
-    }
+    
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
         int opcion = JOptionPane.showConfirmDialog(
         this, 
@@ -513,6 +557,7 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelCantEntradas;
     private javax.swing.JLabel jLabelFuncion;
     private javax.swing.JLabel jLabelPelicula;
@@ -554,45 +599,68 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
 }
 
 private void cargarLugares() {
+ 
+    System.out.println("=== INICIANDO CARGA DE LUGARES ===");
     modeloLista.clear();
     
     if (jComboBox2.getSelectedIndex() < 0) {
+        System.out.println("ERROR: No hay función seleccionada");
         return;
     }
     
-
+ 
     int indiceFuncion = jComboBox2.getSelectedIndex();
     String tituloSeleccionado = (String) jComboBox1.getSelectedItem();
     
+    System.out.println("Función seleccionada (índice): " + indiceFuncion);
+    System.out.println("Película: " + tituloSeleccionado);
+    
    
     int contador = 0;
+    funcionSeleccionada = null;
+    
     for (Funcion f : funciones) {
         if (f.getPelicula().getTitulo().equals(tituloSeleccionado)) {
             if (contador == indiceFuncion) {
                 funcionSeleccionada = f;
+                System.out.println("Función encontrada - ID: " + f.getIdFuncion());
                 break;
             }
             contador++;
         }
     }
     
-    if (funcionSeleccionada != null) {
-    
-        List<Lugar> lugaresDisponibles = lugarData.buscarLugaresPorFuncion(
-            funcionSeleccionada.getIdFuncion()
-        );
-        
-        for (Lugar lugar : lugaresDisponibles) {
-            modeloLista.addElement("Fila " + lugar.getFila() + " - Asiento " + lugar.getNum());
-        }
-        
-    
-        jLabelPrecio.setText("Precio por entrada: $" + 
-            String.format("%.2f", funcionSeleccionada.getPrecio()));
-        
-    
-        actualizarTotal();
+    if (funcionSeleccionada == null) {
+        System.out.println("ERROR: No se encontró la función");
+        JOptionPane.showMessageDialog(this, "Error al cargar la función");
+        return;
     }
+    
+  
+    List<Lugar> lugaresDisponibles = lugarData.buscarLugaresPorFuncion(
+        funcionSeleccionada.getIdFuncion()
+    );
+    
+    System.out.println("Lugares disponibles encontrados: " + lugaresDisponibles.size());
+    
+    if (lugaresDisponibles.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No hay lugares disponibles para esta función");
+        return;
+    }
+ 
+    for (Lugar lugar : lugaresDisponibles) {
+        String texto = "Fila " + lugar.getFila() + " - Asiento " + lugar.getNum();
+        modeloLista.addElement(texto);
+        System.out.println("Lugar agregado: " + texto);
+    }
+
+    jLabelPrecio.setText("Precio por entrada: $" + 
+        String.format("%.2f", funcionSeleccionada.getPrecio()));
+  
+    actualizarTotal();
+    
+    System.out.println("=== CARGA COMPLETADA ===");
+
 }
 
 private void seleccionarLugares() {

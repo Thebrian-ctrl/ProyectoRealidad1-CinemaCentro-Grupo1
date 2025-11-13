@@ -421,4 +421,8 @@ public List<Funcion> listarFuncionesPorSalaYHorario(int idSala, LocalDate fecha)
         }
     
     }
+
+    public List<Funcion> listarFuncionesPorFecha(LocalDate fecha) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

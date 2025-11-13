@@ -14,6 +14,7 @@ import Persistencia.SalaData;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -292,109 +293,326 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
        
         
-        try{
-         if (jTextFieldID.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar la Funcion.");
+        try {
+   
+        if (jTextFieldID.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Ingrese el ID de la función a buscar", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextFieldID.requestFocus();
             return;
         }
         
-         
-         
-         int id = Integer.parseInt(jTextFieldID.getText());
-         Funcion funcion = funcionData.buscarFuncion(id);
-         
-         
-         if (funcion == null) {
-            
-            JOptionPane.showMessageDialog(this, "No se encontró ninguna función con ese ID.");
+        int id;
+        try {
+            id = Integer.parseInt(jTextFieldID.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "El ID debe ser un número válido", 
+                "ID inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextFieldID.requestFocus();
+            jTextFieldID.selectAll();
             return;
-           
-        } 
-           jComboPeliculas.setSelectedItem(funcion.getPelicula());
-            jtfIdioma.setText(funcion.getIdioma());
-            jRadioButton3d.setSelected(funcion.isEs3d());
-            jRadioButtonSub.setSelected(funcion.isSubtitulado());
-            LocalDate fecha = funcion.getHoraInicio().toLocalDate();
-            jdcHoraInicio.setDate(java.sql.Date.valueOf(fecha));
-            jSpinnerHora.setValue(funcion.getHoraInicio().getHour());
-            jSpinnerMinutos.setValue(funcion.getHoraInicio().getMinute());
-            jSpinnerHoraFin.setValue(funcion.getHoraFin().getHour());
-            jSpinnerMinutosFin.setValue(funcion.getHoraFin().getMinute());
-            jComboBoxSala.setSelectedItem(funcion.getSalaProyeccion());
-            jTextFieldPrecio.setText(String.valueOf(funcion.getPrecio()));
-        
-            jButtonActualizar.setEnabled(true);
-            jButtonEliminar.setEnabled(true);
-       }catch(NumberFormatException e){
-            
-              JOptionPane.showMessageDialog(this, "El campo ID debe contener solo números.");
         }
+        
+        if (id <= 0) {
+            JOptionPane.showMessageDialog(this, 
+                "El ID debe ser un número positivo", 
+                "ID inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextFieldID.requestFocus();
+            jTextFieldID.selectAll();
+            return;
+        }
+        
+    
+        FuncionData funcionData = new FuncionData();
+        Funcion funcion = funcionData.buscarFuncion(id);
+        
+        if (funcion == null) {
+            JOptionPane.showMessageDialog(this, 
+                "No se encontró ninguna función con el ID: " + id, 
+                "Función no encontrada", 
+                JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+  
+        jComboPeliculas.setSelectedItem(funcion.getPelicula());
+        jtfIdioma.setText(funcion.getIdioma());
+        jRadioButton3d.setSelected(funcion.isEs3d());
+        jRadioButtonSub.setSelected(funcion.isSubtitulado());
+        
+        LocalDate fecha = funcion.getHoraInicio().toLocalDate();
+        jdcHoraInicio.setDate(java.sql.Date.valueOf(fecha));
+        
+        jSpinnerHora.setValue(funcion.getHoraInicio().getHour());
+        jSpinnerMinutos.setValue(funcion.getHoraInicio().getMinute());
+        jSpinnerHoraFin.setValue(funcion.getHoraFin().getHour());
+        jSpinnerMinutosFin.setValue(funcion.getHoraFin().getMinute());
+        
+        jComboBoxSala.setSelectedItem(funcion.getSalaProyeccion());
+        jTextFieldPrecio.setText(String.valueOf(funcion.getPrecio()));
+        
+        jButtonActualizar.setEnabled(true);
+        jButtonEliminar.setEnabled(true);
+        
+        JOptionPane.showMessageDialog(this, 
+            "Función encontrada:\n\n" +
+            "Película: " + funcion.getPelicula().getTitulo() + "\n" +
+            "Fecha: " + fecha + "\n" +
+            "Sala: " + funcion.getSalaProyeccion().getNroSala(), 
+            "Función encontrada", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al buscar la función:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jButtonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearActionPerformed
         // TODO add your handling code here:
-        try {
-            // filtro q no esten vacios los campos 
-            if (jComboPeliculas.getSelectedItem() == null || jComboBoxSala.getSelectedItem() == null) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una película y una sala.");
+         try {
+   
+        if (jComboPeliculas.getSelectedItem() == null || jComboPeliculas.getSelectedIndex() < 0) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe seleccionar una película", 
+                "Campo obligatorio", 
+                JOptionPane.WARNING_MESSAGE);
+            jComboPeliculas.requestFocus();
             return;
-            }
-        
-            if (jtfIdioma.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un idioma.");
-            return;
-            }
-        
-            if (jdcHoraInicio.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha.");
-            return;
-            }
-        
-            if (jTextFieldPrecio.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un precio.");
-            return;
-            }
-
-            Funcion funcion = new Funcion();
-            
-            funcion.setPelicula((Pelicula)jComboPeliculas.getSelectedItem());
-            funcion.setIdioma(jtfIdioma.getText());
-            funcion.setEs3d(jRadioButton3d.isSelected());
-            funcion.setSubtitulado(jRadioButtonSub.isSelected());
-            
-            Date fechaseleccionada = jdcHoraInicio.getDate();
-            LocalDate fecha = fechaseleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            
-            int hora = (Integer) jSpinnerHora.getValue();
-            int minuto = (Integer) jSpinnerMinutos.getValue();
-            
-            LocalDateTime fechaHoraInicio = LocalDateTime.of(fecha.getYear(),fecha.getMonthValue() , fecha.getDayOfMonth(), hora, minuto);
-            
-            funcion.setHoraInicio(fechaHoraInicio);
-            
-            int hora2 = (Integer) jSpinnerHoraFin.getValue();
-            int minuto2 = (Integer) jSpinnerMinutosFin.getValue();
-            
-            LocalDateTime fechaHoraFin = LocalDateTime.of(fecha.getYear(),fecha.getMonthValue() , fecha.getDayOfMonth(), hora2, minuto2);
-            
-            funcion.setHoraFin(fechaHoraFin);
-                     
-            
-            funcion.setSalaProyeccion((Sala)jComboBoxSala.getSelectedItem());
-            
-            Sala sala = (Sala)jComboBoxSala.getSelectedItem();
-            
-            double precio = Double.parseDouble(jTextFieldPrecio.getText());
-            
-            funcion.setPrecio(precio);
-            
-            
-            funcionData.guardarFuncion(funcion);
-            
-            limpiarCampos();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar la funcion");
         }
+        
+    
+        if (jtfIdioma.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe ingresar el idioma", 
+                "Campo obligatorio", 
+                JOptionPane.WARNING_MESSAGE);
+            jtfIdioma.requestFocus();
+            return;
+        }
+        
+        String idioma = jtfIdioma.getText().trim();
+        if (!idioma.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            JOptionPane.showMessageDialog(this, 
+                "El idioma solo puede contener letras", 
+                "Idioma inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jtfIdioma.requestFocus();
+            return;
+        }
+        
+     
+        if (jdcHoraInicio.getDate() == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe seleccionar una fecha para la función", 
+                "Campo obligatorio", 
+                JOptionPane.WARNING_MESSAGE);
+            jdcHoraInicio.requestFocus();
+            return;
+        }
+        
+    
+        if (jComboBoxSala.getSelectedItem() == null || jComboBoxSala.getSelectedIndex() < 0) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe seleccionar una sala", 
+                "Campo obligatorio", 
+                JOptionPane.WARNING_MESSAGE);
+            jComboBoxSala.requestFocus();
+            return;
+        }
+        
+   
+        if (jTextFieldPrecio.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe ingresar el precio", 
+                "Campo obligatorio", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextFieldPrecio.requestFocus();
+            return;
+        }
+        
+        double precio;
+        try {
+            precio = Double.parseDouble(jTextFieldPrecio.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "El precio debe ser un número válido", 
+                "Precio inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextFieldPrecio.requestFocus();
+            jTextFieldPrecio.selectAll();
+            return;
+        }
+        
+        if (precio <= 0) {
+            JOptionPane.showMessageDialog(this, 
+                "El precio debe ser mayor a cero", 
+                "Precio inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextFieldPrecio.requestFocus();
+            jTextFieldPrecio.selectAll();
+            return;
+        }
+        
+        if (precio > 100000) {
+            JOptionPane.showMessageDialog(this, 
+                "El precio parece demasiado alto\n" +
+                "¿Está seguro del valor ingresado?", 
+                "Verificar precio", 
+                JOptionPane.WARNING_MESSAGE);
+        }
+        
+      
+        Date fechaSeleccionada = jdcHoraInicio.getDate();
+        LocalDate fecha = fechaSeleccionada.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        
+        int horaInicio = (Integer) jSpinnerHora.getValue();
+        int minutoInicio = (Integer) jSpinnerMinutos.getValue();
+        int horaFin = (Integer) jSpinnerHoraFin.getValue();
+        int minutoFin = (Integer) jSpinnerMinutosFin.getValue();
+        
+        LocalDateTime inicio = LocalDateTime.of(fecha, java.time.LocalTime.of(horaInicio, minutoInicio));
+        LocalDateTime fin = LocalDateTime.of(fecha, java.time.LocalTime.of(horaFin, minutoFin));
+        
+    
+        if (inicio.isBefore(LocalDateTime.now())) {
+            JOptionPane.showMessageDialog(this, 
+                "No puede crear funciones en el pasado", 
+                "Fecha inválida", 
+                JOptionPane.ERROR_MESSAGE);
+            jdcHoraInicio.requestFocus();
+            return;
+        }
+        
+       
+        if (fin.isBefore(inicio) || fin.equals(inicio)) {
+            JOptionPane.showMessageDialog(this, 
+                "La hora de fin debe ser posterior a la hora de inicio", 
+                "Horarios inválidos", 
+                JOptionPane.ERROR_MESSAGE);
+            jSpinnerHoraFin.requestFocus();
+            return;
+        }
+        
+   
+        long minutos = java.time.Duration.between(inicio, fin).toMinutes();
+        if (minutos < 30) {
+            JOptionPane.showMessageDialog(this, 
+                "La función debe durar al menos 30 minutos", 
+                "Duración muy corta", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if (minutos > 300) { 
+            int confirmacion = JOptionPane.showConfirmDialog(this, 
+                "La función dura " + minutos + " minutos (" + (minutos/60) + " horas)\n" +
+                "¿Está seguro de esta duración?", 
+                "Duración muy larga", 
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+            
+            if (confirmacion != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+        
+      
+        Sala sala = (Sala) jComboBoxSala.getSelectedItem();
+        boolean es3d = jRadioButton3d.isSelected();
+        
+        if (es3d && !sala.isApto3d()) {
+            JOptionPane.showMessageDialog(this, 
+                "La sala seleccionada no está habilitada para 3D\n\n" +
+                "Sala: " + sala.getNroSala() + " - No apta para 3D", 
+                "Sala incompatible", 
+                JOptionPane.ERROR_MESSAGE);
+            jRadioButton3d.setSelected(false);
+            return;
+        }
+        
+    
+        FuncionData funcionData = new FuncionData();
+        List<Funcion> funcionesExistentes = funcionData.listarFuncionesPorFecha(fecha);
+        
+        for (Funcion f : funcionesExistentes) {
+            if (f.getSalaProyeccion().getIdSala() == sala.getIdSala()) {
+            
+                if ((inicio.isBefore(f.getHoraFin()) && fin.isAfter(f.getHoraInicio()))) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Conflicto de horarios detectado:\n\n" +
+                        "Ya existe una función de \"" + f.getPelicula().getTitulo() + "\"\n" +
+                        "en la Sala " + sala.getNroSala() + "\n" +
+                        "Horario: " + f.getHoraInicio().format(DateTimeFormatter.ofPattern("HH:mm")) + 
+                        " - " + f.getHoraFin().format(DateTimeFormatter.ofPattern("HH:mm")), 
+                        "Conflicto de horarios", 
+                        JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+        }
+        
+ 
+        Pelicula pelicula = (Pelicula) jComboPeliculas.getSelectedItem();
+        
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Confirmar creación de función?\n\n" +
+            "Película: " + pelicula.getTitulo() + "\n" +
+            "Fecha: " + fecha + "\n" +
+            "Horario: " + horaInicio + ":" + String.format("%02d", minutoInicio) + 
+            " - " + horaFin + ":" + String.format("%02d", minutoFin) + "\n" +
+            "Sala: " + sala.getNroSala() + "\n" +
+            "Formato: " + (es3d ? "3D" : "2D") + "\n" +
+            "Idioma: " + idioma + "\n" +
+            "Precio: $" + precio, 
+            "Confirmar creación", 
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+     
+        Funcion funcion = new Funcion();
+        funcion.setPelicula(pelicula);
+        funcion.setIdioma(idioma);
+        funcion.setEs3d(es3d);
+        funcion.setSubtitulado(jRadioButtonSub.isSelected());
+        funcion.setHoraInicio(inicio);
+        funcion.setHoraFin(fin);
+        funcion.setSalaProyeccion(sala);
+        funcion.setPrecio(precio);
+        
+        funcionData.guardarFuncion(funcion);
+        
+        JOptionPane.showMessageDialog(this, 
+            "Función creada exitosamente\n\n" +
+            "Se crearon automáticamente los lugares disponibles", 
+            "Éxito", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+        limpiarCampos();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al crear la función:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+
         
         
     }//GEN-LAST:event_jButtonCrearActionPerformed
@@ -411,79 +629,161 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtoncerrarActionPerformed
 
     private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
-       try{
-        if (jTextFieldID.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese un ID para buscar la Funcion.");
+     try {
+   
+        if (jTextFieldID.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Primero debe buscar una función por ID", 
+                "Búsqueda requerida", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextFieldID.requestFocus();
             return;
         }
         
-         
-         
-         int id = Integer.parseInt(jTextFieldID.getText()); 
+        int id = Integer.parseInt(jTextFieldID.getText().trim());
         
-        Funcion funcion = new Funcion();
-        funcion.setIdFuncion(id);
-        funcion.setPelicula((Pelicula) jComboPeliculas.getSelectedItem());
-        funcion.setIdioma(jtfIdioma.getText());
-        funcion.setEs3d(jRadioButton3d.isSelected());
-        funcion.setSubtitulado(jRadioButtonSub.isSelected());
-
+   
+        if (jComboPeliculas.getSelectedItem() == null || 
+            jtfIdioma.getText().trim().isEmpty() ||
+            jdcHoraInicio.getDate() == null ||
+            jComboBoxSala.getSelectedItem() == null ||
+            jTextFieldPrecio.getText().trim().isEmpty()) {
+            
+            JOptionPane.showMessageDialog(this, 
+                "Todos los campos son obligatorios", 
+                "Campos incompletos", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         Date fechaSeleccionada = jdcHoraInicio.getDate();
-        LocalDate fecha = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
+        LocalDate fecha = fechaSeleccionada.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        
         int horaInicio = (Integer) jSpinnerHora.getValue();
         int minutoInicio = (Integer) jSpinnerMinutos.getValue();
         int horaFin = (Integer) jSpinnerHoraFin.getValue();
         int minutoFin = (Integer) jSpinnerMinutosFin.getValue();
-
+        
         LocalDateTime inicio = LocalDateTime.of(fecha, java.time.LocalTime.of(horaInicio, minutoInicio));
         LocalDateTime fin = LocalDateTime.of(fecha, java.time.LocalTime.of(horaFin, minutoFin));
-
-        if (fin.isBefore(inicio)) {
-            JOptionPane.showMessageDialog(this, "La hora de fin no puede ser anterior al inicio.");
+        
+        if (fin.isBefore(inicio) || fin.equals(inicio)) {
+            JOptionPane.showMessageDialog(this, 
+                "La hora de fin debe ser posterior a la hora de inicio", 
+                "Horarios inválidos", 
+                JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        
+  
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Está seguro de actualizar la función #" + id + "?", 
+            "Confirmar actualización", 
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+    
+        Funcion funcion = new Funcion();
+        funcion.setIdFuncion(id);
+        funcion.setPelicula((Pelicula) jComboPeliculas.getSelectedItem());
+        funcion.setIdioma(jtfIdioma.getText().trim());
+        funcion.setEs3d(jRadioButton3d.isSelected());
+        funcion.setSubtitulado(jRadioButtonSub.isSelected());
         funcion.setHoraInicio(inicio);
         funcion.setHoraFin(fin);
         funcion.setSalaProyeccion((Sala) jComboBoxSala.getSelectedItem());
-        funcion.setPrecio(Double.parseDouble(jTextFieldPrecio.getText()));
-
+        funcion.setPrecio(Double.parseDouble(jTextFieldPrecio.getText().trim()));
+        
+        FuncionData funcionData = new FuncionData();
         funcionData.actualizarFuncion(funcion);
-        limpiarCampos(); 
+        
+        JOptionPane.showMessageDialog(this, 
+            "Función actualizada exitosamente", 
+            "Éxito", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+        limpiarCampos();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al actualizar la función:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
 
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "El ID y el precio deben ser valores numéricos válidos.");
-    } 
-     
    
    
     }//GEN-LAST:event_jButtonActualizarActionPerformed
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
        
-        
-        try {
-        if (jTextFieldID.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese un ID para eliminar la función.");
+      try {
+      
+        if (jTextFieldID.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Ingrese el ID de la función a eliminar", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextFieldID.requestFocus();
             return;
         }
-
-        int id = Integer.parseInt(jTextFieldID.getText());
-
+        
+        int id = Integer.parseInt(jTextFieldID.getText().trim());
+        
+   
         int confirmacion = JOptionPane.showConfirmDialog(this, 
-            "¿Seguro que desea eliminar la función con ID " + id + "?", 
+            " ADVERTENCIA \n\n" +
+            "¿Está seguro de eliminar la función #" + id + "?\n\n" +
+            "Esta acción también eliminará:\n" +
+            " Todos los lugares asociados\n" +
+            " Los tickets vendidos para esta función\n\n" +
+            "Esta acción NO se puede deshacer.", 
             "Confirmar eliminación", 
-            JOptionPane.YES_NO_OPTION);
-
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            funcionData.eliminarFuncion(id);
-            limpiarCampos(); 
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
         }
+        
 
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "El ID debe ser un número válido.");
+        confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Está COMPLETAMENTE seguro?\n\n" +
+            "Esta es su última oportunidad para cancelar.", 
+            "Última confirmación", 
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.ERROR_MESSAGE);
+        
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+     
+        FuncionData funcionData = new FuncionData();
+        funcionData.eliminarFuncion(id);
+        
+        JOptionPane.showMessageDialog(this, 
+            "Función eliminada correctamente", 
+            "Éxito", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+        limpiarCampos();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al eliminar la función:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
+
         
         
     }//GEN-LAST:event_jButtonEliminarActionPerformed

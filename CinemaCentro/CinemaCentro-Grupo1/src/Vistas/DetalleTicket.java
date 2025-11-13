@@ -112,11 +112,7 @@ public class DetalleTicket extends javax.swing.JInternalFrame {
  
  
  
-    DetalleTicket(Funcion funcionSeleccionada, Lugar lugarPrincipal, int cantidad, double subtotal) {
-        throw new UnsupportedOperationException("Not supported yet."); 
-        
-    }
-    
+
     
 private void diseñodticket() {
   

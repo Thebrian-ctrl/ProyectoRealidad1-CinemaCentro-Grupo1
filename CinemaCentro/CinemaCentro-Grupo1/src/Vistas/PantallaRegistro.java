@@ -11,6 +11,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import com.toedter.calendar.JDateChooser;
+import java.time.Period;
 /**
  *
  * @author franco
@@ -218,44 +219,187 @@ public class PantallaRegistro extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIniciarActionPerformed
-         try {
-      
-        
-        if(jTextNombre.getText().isEmpty() || jTextDni.getText().isEmpty() || 
-                jDateNacimiento.getDate()==null || 
-                jContrasenia.getPassword().length ==0 ||
-                jComboMedioDePago.getSelectedIndex()==0){
-            
-            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
+        try {
+       
+        if (jTextNombre.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "El campo Nombre es obligatorio", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextNombre.requestFocus();
             return;
         }
         
-        Comprador comprador = new Comprador();
-        comprador.setNombre(jTextNombre.getText());
-        comprador.setDni(Integer.parseInt(jTextDni.getText()));
+        if (jTextDni.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "El campo DNI es obligatorio", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextDni.requestFocus();
+            return;
+        }
         
-        LocalDate fechaNac = jDateNacimiento.getDate().toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
-        comprador.setFechaNac(fechaNac);
+        if (jDateNacimiento.getDate() == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe seleccionar una fecha de nacimiento", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jDateNacimiento.requestFocus();
+            return;
+        }
         
-        comprador.setPassword(new String(jContrasenia.getPassword()));
-        comprador.setMedioDePago((String)jComboMedioDePago.getSelectedItem());
+        if (jContrasenia.getPassword().length == 0) {
+            JOptionPane.showMessageDialog(this, 
+                "El campo Contraseña es obligatorio", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jContrasenia.requestFocus();
+            return;
+        }
         
+        if (jComboMedioDePago.getSelectedIndex() == 0 || jComboMedioDePago.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe seleccionar un medio de pago", 
+                "Campo vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            jComboMedioDePago.requestFocus();
+            return;
+        }
+        
+       
+        String dniTexto = jTextDni.getText().trim();
+        
+        if (!dniTexto.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, 
+                "El DNI solo puede contener números", 
+                "DNI inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextDni.requestFocus();
+            jTextDni.selectAll();
+            return;
+        }
+        
+        int dni = Integer.parseInt(dniTexto);
+        
+        if (dni < 1000000 || dni > 99999999) {
+            JOptionPane.showMessageDialog(this, 
+                "El DNI debe tener entre 7 y 8 dígitos", 
+                "DNI inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextDni.requestFocus();
+            jTextDni.selectAll();
+            return;
+        }
+        
+    
         CompradorData compraData = new CompradorData();
+        Comprador existe = compraData.buscarComprador(dni);
+        
+        if (existe != null) {
+            JOptionPane.showMessageDialog(this, 
+                "Ya existe un comprador registrado con el DNI " + dni, 
+                "DNI duplicado", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextDni.requestFocus();
+            jTextDni.selectAll();
+            return;
+        }
+        
+    
+        String nombre = jTextNombre.getText().trim();
+        
+        if (nombre.length() < 3) {
+            JOptionPane.showMessageDialog(this, 
+                "El nombre debe tener al menos 3 caracteres", 
+                "Nombre inválido", 
+                JOptionPane.WARNING_MESSAGE);
+            jTextNombre.requestFocus();
+            return;
+        }
+        
+        if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            JOptionPane.showMessageDialog(this, 
+                "El nombre solo puede contener letras y espacios", 
+                "Nombre inválido", 
+                JOptionPane.ERROR_MESSAGE);
+            jTextNombre.requestFocus();
+            return;
+        }
+        
+     
+        LocalDate fechaNac = jDateNacimiento.getDate()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        
+        LocalDate hoy = LocalDate.now();
+        int edad = Period.between(fechaNac, hoy).getYears();
+        
+        if (fechaNac.isAfter(hoy)) {
+            JOptionPane.showMessageDialog(this, 
+                "La fecha de nacimiento no puede ser futura", 
+                "Fecha inválida", 
+                JOptionPane.ERROR_MESSAGE);
+            jDateNacimiento.requestFocus();
+            return;
+        }
+        
+        if (edad < 13) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe tener al menos 13 años para registrarse", 
+                "Edad insuficiente", 
+                JOptionPane.WARNING_MESSAGE);
+            jDateNacimiento.requestFocus();
+            return;
+        }
+        
+        if (edad > 120) {
+            JOptionPane.showMessageDialog(this, 
+                "La fecha de nacimiento no es válida", 
+                "Fecha inválida", 
+                JOptionPane.ERROR_MESSAGE);
+            jDateNacimiento.requestFocus();
+            return;
+        }
+        
+     
+        String password = new String(jContrasenia.getPassword());
+        
+        if (password.length() < 3) {
+            JOptionPane.showMessageDialog(this, 
+                "La contraseña debe tener al menos 3 caracteres", 
+                "Contraseña débil", 
+                JOptionPane.WARNING_MESSAGE);
+            jContrasenia.requestFocus();
+            return;
+        }
+        
+     
+        Comprador comprador = new Comprador();
+        comprador.setNombre(nombre);
+        comprador.setDni(dni);
+        comprador.setFechaNac(fechaNac);
+        comprador.setPassword(password);
+        comprador.setMedioDePago((String) jComboMedioDePago.getSelectedItem());
+        
         compraData.guardarComprador(comprador);
         
-        JOptionPane.showMessageDialog(this, "Comprador registrado correctamente");
+        JOptionPane.showMessageDialog(this, 
+            "¡Registro exitoso!\n\n" +
+            "Bienvenido " + nombre + "\n" +
+            "Ya puede iniciar sesión con su DNI: " + dni, 
+            "Registro completado", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
         limpiarCampos();
+        
      
         javax.swing.JDesktopPane escritorio = this.getDesktopPane();
-        
         if (escritorio != null) {
             this.dispose();
-            
             InicioDeSesion inicioSesion = new InicioDeSesion();
             inicioSesion.setVisible(true);
             escritorio.add(inicioSesion);
-            
             try {
                 inicioSesion.setSelected(true);
             } catch (java.beans.PropertyVetoException e) {
@@ -263,12 +407,22 @@ public class PantallaRegistro extends javax.swing.JInternalFrame {
             }
         }
         
-    } catch(NumberFormatException ex){
-        JOptionPane.showMessageDialog(this, "El dni debe ser un numero valido");
-    } catch(Exception e){
-        JOptionPane.showMessageDialog(this, "Error al registrar al comprador: " + e.getMessage());
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, 
+            "El DNI debe ser un número válido", 
+            "Error de formato", 
+            JOptionPane.ERROR_MESSAGE);
+        jTextDni.requestFocus();
+        jTextDni.selectAll();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al registrar el comprador:\n" + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
-     
+
     
 
     }//GEN-LAST:event_jBIniciarActionPerformed
