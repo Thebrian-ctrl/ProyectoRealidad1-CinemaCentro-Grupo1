@@ -80,9 +80,7 @@ public class Lugar {
         return "Lugar{" + "fila=" + fila + ", num=" + num + ", estado=" + estado + ", funcion=" + funcion + '}';
     }
 
-    public Object getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  
     
     
     

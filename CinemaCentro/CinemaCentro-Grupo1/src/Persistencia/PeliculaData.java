@@ -238,6 +238,23 @@ public class PeliculaData {
         }
     }
     
+   public int actualizarCarteleraPorFecha() {
+    String query = "UPDATE pelicula SET cartelera = true " +
+                   "WHERE estreno <= CURDATE() AND cartelera = false";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        int actualizadas = ps.executeUpdate();
+        ps.close();
+        
+        return actualizadas; // ✅ Retornar cantidad de filas actualizadas
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al actualizar cartelera: " + e.getMessage());
+        return 0;
+    }
+   }
     public Pelicula buscarPeliculaPorId(int idPelicula) {
     
     String query = "SELECT * FROM pelicula WHERE idPelicula = ?";

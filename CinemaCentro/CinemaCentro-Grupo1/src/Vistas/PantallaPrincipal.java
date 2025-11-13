@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import Persistencia.*;
+import java.time.format.DateTimeFormatter;
 /**
  *
  * @author franco
@@ -18,6 +19,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     public PantallaPrincipal() {
         initComponents();
        diseñoPrincipal();
+          PeliculaData peliData = new PeliculaData();
+    peliData.actualizarCarteleraPorFecha();
          jmenuBar.setVisible(false);
     btnAdministrar.setText("Activar Administración");
     }
@@ -67,6 +70,7 @@ private void diseñoPrincipal() {
         jmPeliculas = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         menuListaPelis = new javax.swing.JMenuItem();
+        jMenuItemActualizarCartelera = new javax.swing.JMenuItem();
         jmFunciones = new javax.swing.JMenu();
         jMenuFuncion = new javax.swing.JMenuItem();
         jMenuSala = new javax.swing.JMenuItem();
@@ -159,6 +163,14 @@ private void diseñoPrincipal() {
             }
         });
         jmPeliculas.add(menuListaPelis);
+
+        jMenuItemActualizarCartelera.setText("Actualizar Cartelera");
+        jMenuItemActualizarCartelera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemActualizarCarteleraActionPerformed(evt);
+            }
+        });
+        jmPeliculas.add(jMenuItemActualizarCartelera);
 
         jmenuBar.add(jmPeliculas);
 
@@ -328,6 +340,18 @@ private void diseñoPrincipal() {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
+    private void jMenuItemActualizarCarteleraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemActualizarCarteleraActionPerformed
+    jMenuItemActualizarCartelera.setText("Actualizar Cartelera");
+    jMenuItemActualizarCartelera.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            actualizarCartelera(evt);
+        }
+    });
+    jmPeliculas.add(jMenuItemActualizarCartelera);
+    
+    jmenuBar.add(jmPeliculas);
+    }//GEN-LAST:event_jMenuItemActualizarCarteleraActionPerformed
+
 
     public static void main(String args[]) {
      
@@ -335,7 +359,43 @@ private void diseñoPrincipal() {
     }
     
     
- 
+ private void actualizarCartelera(java.awt.event.ActionEvent evt) {
+    try {
+        JOptionPane.showMessageDialog(this,
+            "Actualizando cartelera...\n\n" +
+            "Se marcarán como 'En Cartelera' todas las películas\n" +
+            "cuya fecha de estreno ya llegó.",
+            "Actualizar Cartelera",
+            JOptionPane.INFORMATION_MESSAGE);
+        
+        PeliculaData peliData = new PeliculaData();
+        int actualizadas = peliData.actualizarCarteleraPorFecha();
+        
+        if (actualizadas > 0) {
+            JOptionPane.showMessageDialog(this,
+                "Cartelera actualizada exitosamente!\n\n" +
+                "Se actualizaron " + actualizadas + " película(s)\n" +
+                "Fecha: " + java.time.LocalDate.now().format(
+                    java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                "Actualización Exitosa",
+                JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "La cartelera ya está actualizada\n\n" +
+                "No hay películas nuevas para agregar a cartelera.",
+                "Sin Cambios",
+                JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+            " Error al actualizar cartelera:\n" + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -353,6 +413,7 @@ private void diseñoPrincipal() {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItemActualizarCartelera;
     private javax.swing.JMenuItem jMenuSala;
     private javax.swing.JMenu jmFunciones;
     private javax.swing.JMenu jmPeliculas;

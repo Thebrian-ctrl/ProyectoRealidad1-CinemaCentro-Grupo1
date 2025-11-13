@@ -140,9 +140,7 @@ public class Funcion {
         return "Funcion{" + "pelicula=" + pelicula + ", idioma=" + idioma + ", es3d=" + es3d + ", subtitulado=" + subtitulado + ", horaInicio=" + horaInicio + ", horaFin=" + horaFin + ", listaLugaresDisp=" + listaLugaresDisp + ", salaProyeccion=" + salaProyeccion + ", precio=" + precio + '}';
     }
 
-    public Object getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+ 
 
     
     
