@@ -26,9 +26,7 @@ import javax.swing.JButton;
 
 public class CompraTicket extends javax.swing.JInternalFrame {
     
-    
-
-     private PeliculaData peliculaData;
+    private PeliculaData peliculaData;
     private FuncionData funcionData;
     private LugarData lugarData;
     private CompradorData compradorData;
@@ -42,14 +40,23 @@ public class CompraTicket extends javax.swing.JInternalFrame {
     
     private DefaultListModel<String> modeloLista;
     
-private Comprador compradorActual;
+    private Comprador compradorActual;
 
     public CompraTicket() {
         initComponents();
-         Comprador comprador = null;
-         this.compradorActual = comprador;
-         inicializar();
-          aplicarEstilos();
+        Comprador comprador = null;
+        this.compradorActual = comprador;
+        inicializar();
+        aplicarEstilos();
+    }
+    
+
+    public CompraTicket(Comprador comprador) {
+        initComponents();
+        this.compradorActual = comprador;
+        inicializar();
+        aplicarEstilos();
+    
         
     
 }
@@ -145,9 +152,6 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
         }
     });
 }
-    CompraTicket(Comprador comprador) {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
    
      private void inicializar() {
          

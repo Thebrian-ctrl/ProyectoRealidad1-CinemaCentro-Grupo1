@@ -305,35 +305,46 @@ public class InicioDeSesion extends javax.swing.JInternalFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
-        
-         try {
-       
+ try {
+    
         if (jtfDNI.getText().isEmpty() || jtfContraseña.getPassword().length == 0) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
             return;
         }
         
-
         int dni = Integer.parseInt(jtfDNI.getText());
         String password = new String(jtfContraseña.getPassword());
         
-  
+      
         CompradorData compradorData = new CompradorData();
         Comprador comprador = compradorData.buscarComprador(dni);
         
-
+  
         if (comprador != null && comprador.getPassword().equals(password)) {
             JOptionPane.showMessageDialog(this, "¡Bienvenido " + comprador.getNombre() + "!");
             
-  
+         
+            javax.swing.JDesktopPane escritorio = this.getDesktopPane();
+            
+            if (escritorio == null) {
+                JOptionPane.showMessageDialog(this, "Error: No se puede acceder al escritorio");
+                return;
+            }
+            
             this.dispose();
             
-
+         
             CompraTicket compraTicket = new CompraTicket(comprador);
             compraTicket.setVisible(true);
+            escritorio.add(compraTicket);
             
-        
-            this.getDesktopPane().add(compraTicket);
+       
+            try {
+                compraTicket.setMaximum(true);
+            } catch (java.beans.PropertyVetoException e) {
+          
+                compraTicket.setSelected(true);
+            }
             
         } else {
             JOptionPane.showMessageDialog(this, 
@@ -347,7 +358,10 @@ public class InicioDeSesion extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(this, "El DNI debe ser un número válido");
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error al iniciar sesión: " + e.getMessage());
+        e.printStackTrace();
     }
+    
+
 
     }//GEN-LAST:event_btnIngresarActionPerformed
 
