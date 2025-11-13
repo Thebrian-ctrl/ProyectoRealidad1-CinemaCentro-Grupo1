@@ -77,6 +77,7 @@ private void diseñoPrincipal() {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
@@ -212,6 +213,9 @@ private void diseñoPrincipal() {
         });
         jMenu1.add(jMenuItem5);
 
+        jMenuItem6.setText("Anular Ticket");
+        jMenu1.add(jMenuItem6);
+
         jmenuBar.add(jMenu1);
 
         jMenu2.setText("Informes");
@@ -337,7 +341,15 @@ private void diseñoPrincipal() {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        // TODO add your handling code here:
+  ModificarTicket modificar = new ModificarTicket();
+    modificar.setVisible(true);
+    jDesktopPane1.add(modificar);
+    
+    try {
+        modificar.setMaximum(true);
+    } catch (Exception e) {
+      
+    }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItemActualizarCarteleraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemActualizarCarteleraActionPerformed
@@ -413,6 +425,7 @@ private void diseñoPrincipal() {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItemActualizarCartelera;
     private javax.swing.JMenuItem jMenuSala;
     private javax.swing.JMenu jmFunciones;
