@@ -137,6 +137,10 @@ private void aplicarEstilos() {
     configurarBoton(BtnCancelar, colorPeligro, Color.WHITE, new Font("Segoe UI", Font.BOLD, 14));
     configurarBoton(BtnLimpiar, colorSecundario, Color.WHITE, new Font("Segoe UI", Font.BOLD, 14));
     
+    Color colorSalir = new Color(52, 73, 94); 
+    configurarBoton(jButtonSalir, colorSalir, Color.WHITE, new Font("Segoe UI", Font.BOLD, 14));
+    agregarEfectoHover(jButtonSalir, colorSalir, new Color(44, 62, 80));
+    
 
     agregarEfectoHover(BtnComprar, colorExito, new Color(46, 204, 113));
     agregarEfectoHover(BtnCancelar, colorPeligro, new Color(192, 57, 43));
@@ -166,6 +170,9 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
             boton.setBackground(colorNormal);
         }
     });
+    
+    
+
 }
    
      private void inicializar() {
@@ -228,6 +235,7 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
         BtnComprar = new javax.swing.JButton();
         BtnLimpiar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        jButtonSalir = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("COMPRA DE ENTRADAS");
@@ -283,6 +291,13 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
 
         jLabel3.setText(" Mantenga presionada CTRL para seleccionar múltiples asientos\"");
 
+        jButtonSalir.setText("Salir");
+        jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -305,7 +320,9 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
                                 .addGap(33, 33, 33)
                                 .addComponent(BtnComprar)
                                 .addGap(87, 87, 87)
-                                .addComponent(BtnLimpiar))
+                                .addComponent(BtnLimpiar)
+                                .addGap(76, 76, 76)
+                                .addComponent(jButtonSalir))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -354,7 +371,8 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnCancelar)
                     .addComponent(BtnComprar)
-                    .addComponent(BtnLimpiar))
+                    .addComponent(BtnLimpiar)
+                    .addComponent(jButtonSalir))
                 .addContainerGap(98, Short.MAX_VALUE))
         );
 
@@ -535,6 +553,29 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
+     int confirmacion = JOptionPane.showConfirmDialog(this,
+        "¿Está seguro que desea salir?\n\nSe perderán los datos no guardados.",
+        "Confirmar Salida",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE);
+    
+    if (confirmacion == JOptionPane.YES_OPTION) {
+             javax.swing.JDesktopPane escritorio = this.getDesktopPane();
+        
+      
+        this.dispose();
+        
+    
+        if (escritorio != null) {
+            javax.swing.JInternalFrame[] frames = escritorio.getAllFrames();
+            for (javax.swing.JInternalFrame frame : frames) {
+                frame.dispose();
+            }
+        }
+    }
+    }//GEN-LAST:event_jButtonSalirActionPerformed
+
     
     private void limpiarFormulario() {
         jComboBox1.setSelectedIndex(-1);
@@ -553,6 +594,7 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
     private javax.swing.JButton BtnCancelar;
     private javax.swing.JButton BtnComprar;
     private javax.swing.JButton BtnLimpiar;
+    private javax.swing.JButton jButtonSalir;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;

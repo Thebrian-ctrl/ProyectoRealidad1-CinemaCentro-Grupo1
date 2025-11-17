@@ -129,10 +129,9 @@ public class DetalleTicketData {
 
                 Lugar lugar = new Lugar();
                 lugar.setIdLugar(rs.getInt("idLugar"));
+                detalle.setLugar(lugar);
                 
-                Lugar lugar2 = new Lugar();
-                
-                lugar2.setIdLugar(rs.getInt("cantidad"));
+          
                 
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontro el detalleticket");

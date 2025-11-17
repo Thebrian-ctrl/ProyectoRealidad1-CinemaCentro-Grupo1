@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -69,7 +70,7 @@ public class FuncionData {
                 ps.close();
                 rs.close();
                 
-                JOptionPane.showMessageDialog(null, "Funcion guardado correctamente");
+          
             } else {
                 JOptionPane.showMessageDialog(null, "Error al guardar la funcion");
             }
@@ -353,43 +354,49 @@ public List<Sala> listarSalasPorPelicula(int idPelicula) {
     return salas;
 }
 
-public List<Funcion> listarFuncionesPorSalaYHorario(int idSala, LocalDate fecha) {
-    List<Funcion> funciones = new ArrayList<>();
-    String query = "SELECT * FROM funcion WHERE idSala = ? AND DATE(horarioInicio) = ?";
+public List<Pelicula> listarPeliculasPorSalaYHorario(int idSala, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+    List<Pelicula> peliculas = new ArrayList<>();
+    
+    String query = "SELECT DISTINCT p.* FROM pelicula p " +
+                   "INNER JOIN funcion f ON p.idPelicula = f.idPelicula " +
+                   "WHERE f.idSala = ? " +
+                   "AND DATE(f.horarioInicio) = ? " +
+                   "AND TIME(f.horarioInicio) BETWEEN ? AND ?";
     
     try {
         PreparedStatement ps = conn.prepareStatement(query);
         ps.setInt(1, idSala);
         ps.setDate(2, java.sql.Date.valueOf(fecha));
+        ps.setTime(3, java.sql.Time.valueOf(horaInicio));
+        ps.setTime(4, java.sql.Time.valueOf(horaFin));
         
         ResultSet rs = ps.executeQuery();
         
         while(rs.next()) {
-            Funcion f = new Funcion();
-            f.setIdFuncion(rs.getInt("idFuncion"));
+            Pelicula p = new Pelicula();
+            p.setIdPelicula(rs.getInt("idPelicula"));
+            p.setTitulo(rs.getString("titulo"));
+            p.setDirector(rs.getString("director"));
+            p.setActores(rs.getString("actores"));
+            p.setOrigen(rs.getString("origen"));
+            p.setGenero(rs.getString("genero"));
+            p.setEstreno(rs.getDate("estreno").toLocalDate());
+            p.setCartelera(rs.getBoolean("cartelera"));
+            p.setRutaImagen(rs.getString("rutaImagen"));
             
-            PeliculaData peliData = new PeliculaData();
-            Pelicula peli = peliData.buscarPeliculaPorId(rs.getInt("idPelicula"));
-            f.setPelicula(peli);
-            
-            f.setIdioma(rs.getString("idioma"));
-            f.setEs3d(rs.getBoolean("es3d"));
-            f.setSubtitulado(rs.getBoolean("subtitulado"));
-            f.setHoraInicio(rs.getTimestamp("horarioInicio").toLocalDateTime());
-            f.setHoraFin(rs.getTimestamp("horarioFin").toLocalDateTime());
-            f.setPrecio(rs.getDouble("precio"));
-            
-            funciones.add(f);
+            peliculas.add(p);
         }
         
         ps.close();
         rs.close();
         
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al listar funciones: " + e.getMessage());
+        JOptionPane.showMessageDialog(null, 
+            "Error al listar películas: " + e.getMessage());
     }
     
-    return funciones;
+    return peliculas;
+
 }
     public void crearLugaresParaFuncion (Funcion funcion){
         
@@ -422,7 +429,69 @@ public List<Funcion> listarFuncionesPorSalaYHorario(int idSala, LocalDate fecha)
     
     }
 
-    public List<Funcion> listarFuncionesPorFecha(LocalDate fecha) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   public List<Funcion> listarFuncionesPorFecha(LocalDate fecha) {
+    List<Funcion> funciones = new ArrayList<>();
+    
+    String query = "SELECT f.idFuncion, f.idioma, f.es3d, f.subtitulado, " +
+                   "f.horarioInicio, f.horarioFin, f.precio, " +
+                   "p.idPelicula, p.titulo, p.director, p.actores, p.origen, " +
+                   "p.genero, p.estreno, p.cartelera, " +
+                   "s.idSala, s.nroSala, s.apta3d, s.capacidad, s.estado " +
+                   "FROM funcion f " +
+                   "INNER JOIN pelicula p ON f.idPelicula = p.idPelicula " +
+                   "INNER JOIN sala s ON f.idSala = s.idSala " +
+                   "WHERE DATE(f.horarioInicio) = ?";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setDate(1, java.sql.Date.valueOf(fecha));
+        
+        ResultSet rs = ps.executeQuery();
+        
+        while(rs.next()) {
+           
+            Pelicula p = new Pelicula();
+            p.setIdPelicula(rs.getInt("idPelicula"));
+            p.setTitulo(rs.getString("titulo"));
+            p.setDirector(rs.getString("director"));
+            p.setActores(rs.getString("actores"));
+            p.setOrigen(rs.getString("origen"));
+            p.setGenero(rs.getString("genero"));
+            p.setEstreno(rs.getDate("estreno").toLocalDate());
+            p.setCartelera(rs.getBoolean("cartelera"));
+            
+        
+            Sala s = new Sala();
+            s.setIdSala(rs.getInt("idSala"));
+            s.setNroSala(rs.getInt("nroSala"));
+            s.setApto3d(rs.getBoolean("apta3d"));
+            s.setCapacidad(rs.getInt("capacidad"));
+            s.setEstado(rs.getBoolean("estado"));
+            
+          
+            Funcion f = new Funcion();
+            f.setIdFuncion(rs.getInt("idFuncion"));
+            f.setIdioma(rs.getString("idioma"));
+            f.setEs3d(rs.getBoolean("es3d"));
+            f.setSubtitulado(rs.getBoolean("subtitulado"));
+            f.setHoraInicio(rs.getTimestamp("horarioInicio").toLocalDateTime());
+            f.setHoraFin(rs.getTimestamp("horarioFin").toLocalDateTime());
+            f.setPrecio(rs.getDouble("precio"));
+            f.setPelicula(p);
+            f.setSalaProyeccion(s);
+            
+            funciones.add(f);
+        }
+        
+        ps.close();
+        rs.close();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al listar funciones por fecha: " + e.getMessage());
+        e.printStackTrace();
     }
+    
+    return funciones;
+   }
 }

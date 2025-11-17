@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @author Usuario
  */
-public class DetalleTicket extends javax.swing.JInternalFrame {
+public class VistaDetalleTicket extends javax.swing.JInternalFrame {
     
  private DetalleTicketData detalleData;
     private FuncionData funcionData;
@@ -36,7 +36,7 @@ public class DetalleTicket extends javax.swing.JInternalFrame {
     private Lugar lugarSeleccionado;
 
  
-    public DetalleTicket() {
+    public VistaDetalleTicket() {
         initComponents();
          inicializar();
     }

@@ -37,7 +37,7 @@ public class Funcion {
         this.subtitulado = subtitulado;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-        this.listaLugaresDisp = listaLugaresDisp = new ArrayList<>();
+        this.listaLugaresDisp = new ArrayList<>();   
         this.salaProyeccion = salaProyeccion;
         this.precio = precio;
     }

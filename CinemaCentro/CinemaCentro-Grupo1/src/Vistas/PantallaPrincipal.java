@@ -214,6 +214,11 @@ private void diseñoPrincipal() {
         jMenu1.add(jMenuItem5);
 
         jMenuItem6.setText("Anular Ticket");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem6);
 
         jmenuBar.add(jMenu1);
@@ -308,7 +313,7 @@ private void diseñoPrincipal() {
     }//GEN-LAST:event_jMenuSalaActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-    DetalleTicket dticket = new DetalleTicket();
+    VistaDetalleTicket dticket = new VistaDetalleTicket();
     dticket.setVisible(true);
     jDesktopPane1.add(dticket);       
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -363,6 +368,19 @@ private void diseñoPrincipal() {
     
     jmenuBar.add(jmPeliculas);
     }//GEN-LAST:event_jMenuItemActualizarCarteleraActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+      AnularTicket anularTicket = new AnularTicket();
+    anularTicket.setVisible(true);
+    jDesktopPane1.add(anularTicket);
+    
+    try {
+        anularTicket.setMaximum(true);
+    } catch (Exception e) {
+        
+    }
+
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
 
     public static void main(String args[]) {
