@@ -176,13 +176,13 @@ public class ModificarTicket extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarActionPerformed
-        try {
-            if (jtfIdTicket.getText().isEmpty()) {
+         try {
+            if (jTextField1.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Ingrese un ID de ticket");
                 return;
             }
 
-            int id = Integer.parseInt(jtfIdTicket.getText());
+            int id = Integer.parseInt(jTextField1.getText());
             ticketActual = ticketData.buscarTickerporId(id);
 
             if (ticketActual == null) {
@@ -190,7 +190,7 @@ public class ModificarTicket extends javax.swing.JInternalFrame {
                 return;
             }
 
-            Comprador comp = compradorData.buscarComprador(
+            Comprador comp = compradorData.buscarCompradorPorId(
                     ticketActual.getComprador().getIdComprador()
             );
 
@@ -205,18 +205,15 @@ public class ModificarTicket extends javax.swing.JInternalFrame {
 
             AreaInfo.setText(info.toString());
 
-            AreaInfo.setText(String.format("%.2f", ticketActual.getMonto()));
-
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "ID inválido");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
-
     }//GEN-LAST:event_jbBuscarActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
-        try {
+     try {
             if (ticketActual == null) {
                 JOptionPane.showMessageDialog(this, "Primero busque un ticket");
                 return;

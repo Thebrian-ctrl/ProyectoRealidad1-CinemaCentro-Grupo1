@@ -162,7 +162,7 @@ public class CompradorData {
   }
   
   
-   // Listar todos los compradores
+
     public List<Comprador> listarCompradores() {
         List<Comprador> compradores = new ArrayList<>();
         String query = "SELECT * FROM comprador";
@@ -191,7 +191,30 @@ public class CompradorData {
     }
   
   
-  
+    public Comprador buscarCompradorPorId(int idComprador){
+        Comprador c = null;
+        String query = "SELECT * FROM comprador WHERE idComprador = ?";
+        try {
+            PreparedStatement ps= conn.prepareStatement(query);
+            ps.setInt(1, idComprador);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()) {
+                c = new Comprador();
+                c.setIdComprador(rs.getInt("idComprador"));
+                c.setDni(rs.getInt("dni"));
+                c.setNombre(rs.getString("nombre"));
+                c.setPassword(rs.getString("password"));
+                c.setMedioDePago(rs.getString("medioDePago"));
+                c.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró el comprador con ID " + idComprador);
+            }
+        }catch(Exception e){
+             JOptionPane.showMessageDialog(null, "Error al buscar el Comprador por ID: " + e.getMessage());
+        }
+        return c;
+  }
   
   
 
