@@ -50,7 +50,7 @@ public class LugarData {
 
             if (rs.next()) {
                 lugar.setIdLugar(rs.getInt(1));
-                JOptionPane.showMessageDialog(null, "Lugar guardado correctamente");
+//                JOptionPane.showMessageDialog(null, "Lugar guardado correctamente");
             } else {
                 JOptionPane.showMessageDialog(null, "Error al guardar el Lugar");
             }
