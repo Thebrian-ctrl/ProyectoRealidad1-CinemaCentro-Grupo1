@@ -21,13 +21,29 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import java.awt.Color;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JSpinner;
 /**
  *
  * @author arceb
  */
 public class VistaFuncion extends javax.swing.JInternalFrame {
-
+private Color COLOR_PRIMARIO = new Color(52, 152, 219);       
+private Color COLOR_PRIMARIO_HOVER = new Color(41, 128, 185);  
+private Color COLOR_EXITO = new Color(46, 204, 113);           
+private Color COLOR_EXITO_HOVER = new Color(39, 174, 96);      
+private Color COLOR_PELIGRO = new Color(231, 76, 60);          
+private Color COLOR_PELIGRO_HOVER = new Color(192, 57, 43);    
+private Color COLOR_SECUNDARIO = new Color(149, 165, 166);     
+private Color COLOR_SECUNDARIO_HOVER = new Color(127, 140, 141); 
+private Color COLOR_FONDO = new Color(236, 240, 241);          
   
     FuncionData funcionData = new FuncionData();
     
@@ -37,13 +53,15 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
     List<Sala> listaSalas = salaData.listarSalas();
     
      
-    
+
+
     
     public VistaFuncion() {
         initComponents();
         cargarPeliculas();
         cargarSalas();
        limpiarCampos();
+       aplicarEstilos();
         jButtonActualizar.setEnabled(false);
         jButtonEliminar.setEnabled(false);
         
@@ -70,7 +88,166 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
         JSpinner.NumberEditor numEditorHora2 = new JSpinner.NumberEditor(jSpinnerHoraFin, "00");
         jSpinnerHoraFin.setEditor(numEditorHora2);
         
+        
     }
+
+   
+    
+    private void aplicarEstilos() {
+  
+    getContentPane().setBackground(COLOR_FONDO);
+    
+  
+    Font fuenteLabel = new Font("Segoe UI", Font.BOLD, 13);
+    Font fuenteTexto = new Font("Segoe UI", Font.PLAIN, 13);
+    Font fuenteTitulo = new Font("Segoe UI", Font.BOLD, 14);
+    
+ 
+    estilizarLabel(jLabel1, fuenteLabel);
+    estilizarLabel(jLabel2, fuenteLabel);
+    estilizarLabel(jLabel3, fuenteLabel);
+    estilizarLabel(jLabel4, fuenteLabel);
+    estilizarLabel(jLabel5, fuenteLabel);
+    estilizarLabel(jLabel6, fuenteLabel);
+    estilizarLabel(jLabel7, fuenteLabel);
+    estilizarLabel(jLabel8, fuenteLabel);
+    estilizarLabel(jLabel9, fuenteTitulo);
+
+    estilizarTextField(jtfIdioma, fuenteTexto);
+    estilizarTextField(jTextFieldPrecio, fuenteTexto);
+    estilizarTextField(jTextFieldID, fuenteTexto);
+    
+   
+    estilizarComboBox(jComboPeliculas, fuenteTexto);
+    estilizarComboBox(jComboBoxSala, fuenteTexto);
+    
+ 
+    estilizarRadioButton(jRadioButton3d, fuenteTexto);
+    estilizarRadioButton(jRadioButtonSub, fuenteTexto);
+    
+ 
+    estilizarSpinner(jSpinnerHora);
+    estilizarSpinner(jSpinnerMinutos);
+    estilizarSpinner(jSpinnerHoraFin);
+    estilizarSpinner(jSpinnerMinutosFin);
+    
+
+    jdcHoraInicio.setFont(fuenteTexto);
+    jdcHoraInicio.setBackground(Color.WHITE);
+    
+
+    estilizarBotonModerno(jButtonCrear, "Crear", COLOR_EXITO, COLOR_EXITO_HOVER);
+    estilizarBotonModerno(jButtonActualizar, "Actualizar", COLOR_PRIMARIO, COLOR_PRIMARIO_HOVER);
+    estilizarBotonModerno(jButtonEliminar, "Eliminar", COLOR_PELIGRO, COLOR_PELIGRO_HOVER);
+    estilizarBotonModerno(jButtoncerrar, "Cerrar", COLOR_SECUNDARIO, COLOR_SECUNDARIO_HOVER);
+    
+
+    jButtonBuscar.setBackground(COLOR_PRIMARIO);
+    jButtonBuscar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    jButtonBuscar.setBorderPainted(false);
+    jButtonBuscar.setFocusPainted(false);
+    jButtonBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            if (jButtonBuscar.isEnabled()) {
+                jButtonBuscar.setBackground(COLOR_PRIMARIO_HOVER);
+            }
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            jButtonBuscar.setBackground(COLOR_PRIMARIO);
+        }
+    });
+}
+
+
+private void estilizarLabel(javax.swing.JLabel label, Font fuente) {
+    label.setFont(fuente);
+    label.setForeground(new Color(44, 62, 80));
+}
+
+
+private void estilizarTextField(javax.swing.JTextField textField, Font fuente) {
+    textField.setFont(fuente);
+    textField.setForeground(new Color(44, 62, 80));
+    textField.setBackground(Color.WHITE);
+    textField.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(189, 195, 199), 2),
+        BorderFactory.createEmptyBorder(8, 12, 8, 12)
+    ));
+    textField.setCaretColor(COLOR_PRIMARIO);
+}
+
+
+private void estilizarComboBox(javax.swing.JComboBox comboBox, Font fuente) {
+    comboBox.setFont(fuente);
+    comboBox.setForeground(new Color(44, 62, 80));
+    comboBox.setBackground(Color.WHITE);
+    comboBox.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(189, 195, 199), 2),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+    comboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
+}
+
+
+private void estilizarRadioButton(javax.swing.JRadioButton radioButton, Font fuente) {
+    radioButton.setFont(fuente);
+    radioButton.setForeground(new Color(44, 62, 80));
+    radioButton.setBackground(COLOR_FONDO);
+    radioButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    radioButton.setFocusPainted(false);
+}
+
+
+private void estilizarSpinner(javax.swing.JSpinner spinner) {
+    spinner.setFont(new Font("Segoe UI", Font.BOLD, 14));
+    JComponent editor = spinner.getEditor();
+    if (editor instanceof JSpinner.DefaultEditor) {
+        ((JSpinner.DefaultEditor) editor).getTextField().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        ((JSpinner.DefaultEditor) editor).getTextField().setForeground(new Color(44, 62, 80));
+        ((JSpinner.DefaultEditor) editor).getTextField().setBackground(Color.WHITE);
+        ((JSpinner.DefaultEditor) editor).getTextField().setHorizontalAlignment(javax.swing.JTextField.CENTER);
+    }
+    spinner.setBorder(BorderFactory.createLineBorder(new Color(189, 195, 199), 2));
+    spinner.setCursor(new Cursor(Cursor.HAND_CURSOR));
+}
+
+
+
+private void estilizarBotonModerno(JButton boton, String texto, Color colorNormal, Color colorHover) {
+    boton.setText(texto);
+    boton.setFont(new Font("Segoe UI", Font.BOLD, 12));
+    boton.setForeground(Color.WHITE);
+    boton.setBackground(colorNormal);
+    boton.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+    boton.setBorderPainted(false);
+    boton.setFocusPainted(false);
+    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    boton.setOpaque(true);
+    
+ 
+    boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            if (boton.isEnabled()) {
+                boton.setBackground(colorHover);
+            }
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorNormal);
+        }
+        public void mousePressed(java.awt.event.MouseEvent evt) {
+            if (boton.isEnabled()) {
+                boton.setBackground(colorHover.darker());
+            }
+        }
+        public void mouseReleased(java.awt.event.MouseEvent evt) {
+            if (boton.isEnabled()) {
+                boton.setBackground(colorHover);
+            }
+        }
+    });
+   
+}
+
 
  
     @SuppressWarnings("unchecked")
@@ -104,21 +281,21 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
         jButtonEliminar = new javax.swing.JButton();
         jButtoncerrar = new javax.swing.JButton();
 
-        jLabel1.setText("Seleccionar pelicula");
+        jLabel1.setText("SELECCIONAR PELICULA");
 
-        jLabel2.setText("Idioma:");
+        jLabel2.setText("IDIOMA");
 
-        jLabel3.setText("3d:");
+        jLabel3.setText("3D");
 
-        jLabel4.setText("Subtitulado:");
+        jLabel4.setText("SUBTITULADO");
 
-        jLabel5.setText("Horario de inicio:");
+        jLabel5.setText("HORARIO DE INICIO");
 
-        jLabel6.setText("Horario de fin");
+        jLabel6.setText("HORARIO DE FIN");
 
-        jLabel7.setText("Sala:");
+        jLabel7.setText("SALA");
 
-        jLabel8.setText("Precio:");
+        jLabel8.setText("PRECIO");
 
         jButtonCrear.setText("Crear");
         jButtonCrear.addActionListener(new java.awt.event.ActionListener() {
@@ -134,7 +311,7 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel9.setText("Id Funcion");
+        jLabel9.setText("ID FUNCION");
 
         jButtonBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/lupa.png"))); // NOI18N
         jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -191,8 +368,8 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel1)
                                             .addComponent(jLabel8)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel7))
+                                            .addComponent(jLabel7)
+                                            .addComponent(jLabel2))
                                         .addGap(76, 76, 76)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                             .addComponent(jComboPeliculas, javax.swing.GroupLayout.Alignment.LEADING, 0, 241, Short.MAX_VALUE)
@@ -216,20 +393,16 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
                             .addComponent(jButtonActualizar)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jButtonCrear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)))
+                                .addComponent(jButtonEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE))
+                            .addComponent(jButtoncerrar, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(77, 77, 77))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtoncerrar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(70, 70, 70)
-                                .addComponent(jLabel9)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                                .addComponent(jButtonBuscar)))
+                        .addGap(70, 70, 70)
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonBuscar)
                         .addGap(17, 17, 17))))
         );
         layout.setVerticalGroup(

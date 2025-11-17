@@ -52,8 +52,8 @@
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel8" alignment="1" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel2" alignment="1" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel7" alignment="1" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel2" alignment="1" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="76" pref="76" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -90,24 +90,17 @@
                               <Component id="jButtonCrear" alignment="1" max="32767" attributes="0"/>
                               <Component id="jButtonEliminar" alignment="1" pref="87" max="32767" attributes="0"/>
                           </Group>
+                          <Component id="jButtoncerrar" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="jButtoncerrar" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
-                              <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jTextFieldID" min="-2" pref="48" max="-2" attributes="0"/>
-                              <EmptySpace pref="23" max="32767" attributes="0"/>
-                              <Component id="jButtonBuscar" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
+                      <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                      <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jTextFieldID" min="-2" pref="48" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jButtonBuscar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -197,33 +190,33 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Seleccionar pelicula"/>
+        <Property name="text" type="java.lang.String" value="SELECCIONAR PELICULA"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Idioma:"/>
+        <Property name="text" type="java.lang.String" value="IDIOMA"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jtfIdioma">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="3d:"/>
+        <Property name="text" type="java.lang.String" value="3D"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JRadioButton" name="jRadioButton3d">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Subtitulado:"/>
+        <Property name="text" type="java.lang.String" value="SUBTITULADO"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JRadioButton" name="jRadioButtonSub">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Horario de inicio:"/>
+        <Property name="text" type="java.lang.String" value="HORARIO DE INICIO"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSpinner" name="jSpinnerHora">
@@ -232,7 +225,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Horario de fin"/>
+        <Property name="text" type="java.lang.String" value="HORARIO DE FIN"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSpinner" name="jSpinnerHoraFin">
@@ -243,12 +236,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Sala:"/>
+        <Property name="text" type="java.lang.String" value="SALA"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Precio:"/>
+        <Property name="text" type="java.lang.String" value="PRECIO"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="jComboBoxSala">
@@ -281,7 +274,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel9">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Id Funcion"/>
+        <Property name="text" type="java.lang.String" value="ID FUNCION"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonBuscar">
