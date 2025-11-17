@@ -18,16 +18,16 @@ public class ListarPeliculas extends javax.swing.JInternalFrame {
      * Creates new form ListarPeliculas
      */
     private PeliculaData peliculaData;
+
     public ListarPeliculas() {
         initComponents();
         this.peliculaData = new PeliculaData();
         cargarPeliculas();
-        
-        
-         setClosable(true);     
-    setIconifiable(true);   
-    setMaximizable(true);   
-    setResizable(true);     
+
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
     }
 
     /**
@@ -69,16 +69,16 @@ public class ListarPeliculas extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-    private void cargarPeliculas(){
+    private void cargarPeliculas() {
         PanelContenedor.removeAll();
-        
+
         List<Pelicula> peliculas = peliculaData.listarPeliculasCartelera();
-        
-        for(Pelicula p : peliculas){
-            
-                PanelItemPelicula itemPanel = new PanelItemPelicula(p, peliculaData);
-                PanelContenedor.add(itemPanel);
-        
+
+        for (Pelicula p : peliculas) {
+
+            PanelItemPelicula itemPanel = new PanelItemPelicula(p, peliculaData);
+            PanelContenedor.add(itemPanel);
+
         }
         PanelContenedor.revalidate();
         PanelContenedor.repaint();

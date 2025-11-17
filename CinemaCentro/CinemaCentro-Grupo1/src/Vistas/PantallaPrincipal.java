@@ -65,6 +65,7 @@ private void diseñoPrincipal() {
         btnComprar = new javax.swing.JButton();
         btnAdministrar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jButtonProximosEstrenos = new javax.swing.JButton();
         jmenuBar = new javax.swing.JMenuBar();
         jmPeliculas = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -101,16 +102,26 @@ private void diseñoPrincipal() {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/unnamed.jpg"))); // NOI18N
         jLabel2.setText("jLabel2");
 
+        jButtonProximosEstrenos.setText("Proximos Estrenos");
+        jButtonProximosEstrenos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonProximosEstrenosActionPerformed(evt);
+            }
+        });
+
         jDesktopPane1.setLayer(btnComprar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnAdministrar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jButtonProximosEstrenos, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(49, 49, 49)
+                .addComponent(jButtonProximosEstrenos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(191, 191, 191)
                 .addComponent(btnAdministrar)
@@ -128,7 +139,8 @@ private void diseñoPrincipal() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAdministrar, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnComprar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnComprar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonProximosEstrenos, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(24, 24, 24))
         );
 
@@ -369,6 +381,13 @@ private void diseñoPrincipal() {
 
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private void jButtonProximosEstrenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProximosEstrenosActionPerformed
+        // TODO add your handling code here:
+        PróximosEstrenos pe = new PróximosEstrenos();
+        pe.setVisible(true);
+        jDesktopPane1.add(pe);
+    }//GEN-LAST:event_jButtonProximosEstrenosActionPerformed
+
 
     public static void main(String args[]) {
      
@@ -418,6 +437,7 @@ private void diseñoPrincipal() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdministrar;
     private javax.swing.JButton btnComprar;
+    private javax.swing.JButton jButtonProximosEstrenos;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
