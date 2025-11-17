@@ -1,5 +1,5 @@
-
 package Vistas;
+
 import Modelo.*;
 import Persistencia.*;
 import javax.swing.JOptionPane;
@@ -10,29 +10,32 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class VistaInformes extends javax.swing.JInternalFrame {
-     private TicketCompraData ticketData;
+
+    private TicketCompraData ticketData;
     private PeliculaData peliculaData;
     private CompradorData compradorData;
     private DateTimeFormatter formatter;
 
     public VistaInformes() {
-        initComponents(); 
+        initComponents();
         inicializar();
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
     }
-    
+
     private void inicializar() {
         ticketData = new TicketCompraData();
         peliculaData = new PeliculaData();
         compradorData = new CompradorData();
         formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        
+
         TextoArea.setEditable(false);
-       TextoArea.setText("Seleccione un tipo de informe usando los botones de arriba.");
+        TextoArea.setText("Seleccione un tipo de informe usando los botones de arriba.");
     }
 
- 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -183,42 +186,42 @@ public class VistaInformes extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCompradoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompradoresActionPerformed
-  com.toedter.calendar.JDateChooser dateChooser = new com.toedter.calendar.JDateChooser();
-        
+        com.toedter.calendar.JDateChooser dateChooser = new com.toedter.calendar.JDateChooser();
+
         int option = JOptionPane.showConfirmDialog(this,
-            dateChooser,
-            "Seleccione una fecha",
-            JOptionPane.OK_CANCEL_OPTION);
-        
+                dateChooser,
+                "Seleccione una fecha",
+                JOptionPane.OK_CANCEL_OPTION);
+
         if (option != JOptionPane.OK_OPTION || dateChooser.getDate() == null) {
             return;
         }
-        
+
         LocalDate fecha = dateChooser.getDate().toInstant()
-            .atZone(ZoneId.systemDefault()).toLocalDate();
-        
+                .atZone(ZoneId.systemDefault()).toLocalDate();
+
         generarInformeCompradores(fecha);
     }
-    
+
     private void generarInformeCompradores(LocalDate fecha) {
         List<TicketCompra> tickets = ticketData.listarTicketsPorFecha(fecha);
-        
+
         StringBuilder reporte = new StringBuilder();
         reporte.append("         COMPRADORES QUE ASISTIERON\n");
         reporte.append("═══════════════════════════════════════════════════\n\n");
         reporte.append(" Fecha: ").append(fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).append("\n");
         reporte.append(" Total de compradores: ").append(tickets.size()).append("\n\n");
-        
+
         if (tickets.isEmpty()) {
             reporte.append(" No hubo compradores en esta fecha.\n");
         } else {
             int contador = 1;
-            
+
             for (TicketCompra ticket : tickets) {
                 Comprador comp = compradorData.buscarComprador(
-                    ticket.getComprador().getIdComprador()
+                        ticket.getComprador().getIdComprador()
                 );
-                
+
                 if (comp != null) {
                     reporte.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
                     reporte.append(contador).append(". ").append(comp.getNombre()).append("\n");
@@ -226,24 +229,24 @@ public class VistaInformes extends javax.swing.JInternalFrame {
                     reporte.append("   Ticket: #").append(ticket.getIdTicket()).append("\n");
                     reporte.append("   Función: ").append(ticket.getFechaFuncion().format(formatter)).append("\n");
                     reporte.append("   Monto Pagado: $").append(String.format("%.2f", ticket.getMonto())).append("\n");
-                    
+
                     contador++;
                 }
             }
         }
-        
-       TextoArea.setText(reporte.toString());
+
+        TextoArea.setText(reporte.toString());
         TextoArea.setCaretPosition(0);
-    
+
     }//GEN-LAST:event_jButtonCompradoresActionPerformed
 
     private void jButtonEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEstadisticasActionPerformed
-  generarEstadisticas();
+        generarEstadisticas();
     }
-    
+
     private void generarEstadisticas() {
         List<TicketCompra> todosTickets = ticketData.listarTodosTickets();
-        
+
         if (todosTickets.isEmpty()) {
             TextoArea.setText(" No hay datos suficientes para generar estadísticas.");
             return;
@@ -251,88 +254,92 @@ public class VistaInformes extends javax.swing.JInternalFrame {
 
         Map<String, Integer> ticketsPorPeli = new HashMap<>();
         Map<String, Double> recaudacionPorPeli = new HashMap<>();
-        
+
         for (TicketCompra ticket : todosTickets) {
-            if (ticket.getDetalleticket() != null && 
-                ticket.getDetalleticket().getFuncion() != null) {
-                
+            if (ticket.getDetalleticket() != null
+                    && ticket.getDetalleticket().getFuncion() != null) {
+
                 String titulo = ticket.getDetalleticket().getFuncion().getPelicula().getTitulo();
-                
-                ticketsPorPeli.put(titulo, 
-                    ticketsPorPeli.getOrDefault(titulo, 0) + 1);
-                
+
+                ticketsPorPeli.put(titulo,
+                        ticketsPorPeli.getOrDefault(titulo, 0) + 1);
+
                 recaudacionPorPeli.put(titulo,
-                    recaudacionPorPeli.getOrDefault(titulo, 0.0) + ticket.getMonto());
+                        recaudacionPorPeli.getOrDefault(titulo, 0.0) + ticket.getMonto());
             }
         }
-     
+
         List<Map.Entry<String, Integer>> ranking = new java.util.ArrayList<>(ticketsPorPeli.entrySet());
         ranking.sort((a, b) -> b.getValue().compareTo(a.getValue()));
-        
+
         StringBuilder reporte = new StringBuilder();
         reporte.append("     PELÍCULAS MÁS VISTAS \n");
         reporte.append("═══════════════════════════════════════════════════\n\n");
-        
+
         int posicion = 1;
         for (Map.Entry<String, Integer> entry : ranking) {
             String titulo = entry.getKey();
             int cantTickets = entry.getValue();
             double recaudacion = recaudacionPorPeli.get(titulo);
-            
+
             String medalla = "";
-            if (posicion == 1) medalla = "";
-            else if (posicion == 2) medalla = "";
-            else if (posicion == 3) medalla = "";
-            else medalla = "  ";
-            
+            if (posicion == 1) {
+                medalla = "";
+            } else if (posicion == 2) {
+                medalla = "";
+            } else if (posicion == 3) {
+                medalla = "";
+            } else {
+                medalla = "  ";
+            }
+
             reporte.append(medalla).append(" #").append(posicion).append(" - ").append(titulo).append("\n");
             reporte.append("    Tickets vendidos: ").append(cantTickets).append("\n");
             reporte.append("    Recaudado: $").append(String.format("%.2f", recaudacion)).append("\n\n");
-            
+
             posicion++;
         }
-        
-      
+
         reporte.append(" TOTALES GENERALES:\n");
         reporte.append("   Total Tickets: ").append(todosTickets.size()).append("\n");
-        
+
         double totalRecaudado = todosTickets.stream()
-            .mapToDouble(TicketCompra::getMonto)
-            .sum();
+                .mapToDouble(TicketCompra::getMonto)
+                .sum();
         reporte.append("   Total Recaudado: $").append(String.format("%.2f", totalRecaudado)).append("\n");
         reporte.append("═══════════════════════════════════════════════════\n");
-        
+
         TextoArea.setText(reporte.toString());
-       TextoArea.setCaretPosition(0);
-    
+        TextoArea.setCaretPosition(0);
+
     }//GEN-LAST:event_jButtonEstadisticasActionPerformed
 
     private void jButtonPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPeliculaActionPerformed
- String titulo = JOptionPane.showInputDialog(this,
-            "Ingrese el título de la película:",
-            "Buscar Película",
-            JOptionPane.QUESTION_MESSAGE);
-        
+        String titulo = JOptionPane.showInputDialog(this,
+                "Ingrese el título de la película:",
+                "Buscar Película",
+                JOptionPane.QUESTION_MESSAGE);
+
         if (titulo == null || titulo.trim().isEmpty()) {
             return;
         }
-        
+
         Pelicula peli = peliculaData.buscarPelicula(titulo.trim());
-        
+
         if (peli == null) {
             JOptionPane.showMessageDialog(this,
-                "No se encontró la película '" + titulo + "'",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "No se encontró la película '" + titulo + "'",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         generarInformePorPelicula(peli);
     }
-    
+
     private void generarInformePorPelicula(Pelicula peli) {
         List<TicketCompra> tickets = ticketData.ListarTicketsPorPelicula(peli.getIdPelicula());
-        
+
         StringBuilder reporte = new StringBuilder();
         reporte.append("       INFORME DE TICKETS POR PELÍCULA\n");
         reporte.append("Película: ").append(peli.getTitulo()).append("\n");
@@ -340,101 +347,100 @@ public class VistaInformes extends javax.swing.JInternalFrame {
         reporte.append("   Género: ").append(peli.getGenero()).append("\n");
         reporte.append("   Estreno: ").append(peli.getEstreno()).append("\n\n");
         reporte.append(" Total de tickets vendidos: ").append(tickets.size()).append("\n\n");
-        
+
         if (tickets.isEmpty()) {
             reporte.append(" No se han vendido tickets para esta película.\n");
         } else {
             double montoTotal = 0;
             int contador = 1;
-            
+
             for (TicketCompra ticket : tickets) {
                 Comprador comp = compradorData.buscarComprador(
-                    ticket.getComprador().getIdComprador()
+                        ticket.getComprador().getIdComprador()
                 );
-                
+
                 reporte.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
                 reporte.append(contador).append(". Ticket #").append(ticket.getIdTicket()).append("\n");
                 reporte.append("   Comprador: ").append(comp != null ? comp.getNombre() : "N/A").append("\n");
                 reporte.append("   Fecha Compra: ").append(ticket.getFechaCompra()).append("\n");
                 reporte.append("   Monto: $").append(String.format("%.2f", ticket.getMonto())).append("\n");
-                
+
                 montoTotal += ticket.getMonto();
                 contador++;
             }
-            
-      
+
             reporte.append(" TOTAL RECAUDADO: $").append(String.format("%.2f", montoTotal)).append("\n");
             reporte.append("═══════════════════════════════════════════════════\n");
         }
-        
+
         TextoArea.setText(reporte.toString());
         TextoArea.setCaretPosition(0);
-    
+
     }//GEN-LAST:event_jButtonPeliculaActionPerformed
 
     private void jButtonFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFechaActionPerformed
-      com.toedter.calendar.JDateChooser dateChooser = new com.toedter.calendar.JDateChooser();
-        
+        com.toedter.calendar.JDateChooser dateChooser = new com.toedter.calendar.JDateChooser();
+
         int option = JOptionPane.showConfirmDialog(this,
-            dateChooser,
-            "Seleccione una fecha",
-            JOptionPane.OK_CANCEL_OPTION);
-        
+                dateChooser,
+                "Seleccione una fecha",
+                JOptionPane.OK_CANCEL_OPTION);
+
         if (option != JOptionPane.OK_OPTION || dateChooser.getDate() == null) {
             return;
         }
-        
+
         LocalDate fecha = dateChooser.getDate().toInstant()
-            .atZone(ZoneId.systemDefault()).toLocalDate();
-        
+                .atZone(ZoneId.systemDefault()).toLocalDate();
+
         generarInformePorFecha(fecha);
     }
-    
+
     private void generarInformePorFecha(LocalDate fecha) {
         List<TicketCompra> tickets = ticketData.listarTicketsPorFecha(fecha);
-        
+
         StringBuilder reporte = new StringBuilder();
         reporte.append("         INFORME DE TICKETS POR FECHA\n");
         reporte.append("Fecha: ").append(fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).append("\n");
         reporte.append("Total de tickets: ").append(tickets.size()).append("\n\n");
-        
+
         if (tickets.isEmpty()) {
             reporte.append(" No se encontraron tickets para esta fecha.\n");
         } else {
             double montoTotal = 0;
             int contador = 1;
-            
+
             for (TicketCompra ticket : tickets) {
                 Comprador comp = compradorData.buscarComprador(
-                    ticket.getComprador().getIdComprador()
+                        ticket.getComprador().getIdComprador()
                 );
-                
+
                 reporte.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
                 reporte.append(contador).append(". Ticket #").append(ticket.getIdTicket()).append("\n");
                 reporte.append("   Comprador: ").append(comp != null ? comp.getNombre() : "N/A").append("\n");
                 reporte.append("   DNI: ").append(comp != null ? comp.getDni() : "N/A").append("\n");
                 reporte.append("   Función: ").append(ticket.getFechaFuncion().format(formatter)).append("\n");
                 reporte.append("   Monto: $").append(String.format("%.2f", ticket.getMonto())).append("\n");
-                
+
                 montoTotal += ticket.getMonto();
                 contador++;
             }
-        
+
             reporte.append(" TOTAL RECAUDADO: $").append(String.format("%.2f", montoTotal)).append("\n");
             reporte.append("═══════════════════════════════════════════════════\n");
         }
-        
+
         TextoArea.setText(reporte.toString());
-        TextoArea.setCaretPosition(0); 
-    
+        TextoArea.setCaretPosition(0);
+
     }//GEN-LAST:event_jButtonFechaActionPerformed
 
     private void jButtonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimpiarActionPerformed
-    TextoArea.setText("Seleccione un tipo de informe usando los botones de arriba.");
+        TextoArea.setText("Seleccione un tipo de informe usando los botones de arriba.");
     }//GEN-LAST:event_jButtonLimpiarActionPerformed
 
     private void jButtonCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarActionPerformed
-    this.dispose();
+        this.dispose();
     }//GEN-LAST:event_jButtonCerrarActionPerformed
 
 

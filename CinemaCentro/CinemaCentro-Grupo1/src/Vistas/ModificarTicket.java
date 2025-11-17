@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Vistas;
+
 import Modelo.*;
 import Persistencia.*;
 import javax.swing.JOptionPane;
@@ -15,18 +16,22 @@ import java.time.ZoneId;
  * @author camila biarnes
  */
 public class ModificarTicket extends javax.swing.JInternalFrame {
- private TicketCompraData ticketData;
+
+    private TicketCompraData ticketData;
     private CompradorData compradorData;
     private TicketCompra ticketActual;
-   
+
     public ModificarTicket() {
         initComponents();
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
         ticketData = new TicketCompraData();
         compradorData = new CompradorData();
         AreaInfo.setEditable(false);
     }
 
- 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -171,25 +176,23 @@ public class ModificarTicket extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarActionPerformed
- try {
+        try {
             if (jtfIdTicket.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Ingrese un ID de ticket");
                 return;
             }
-            
+
             int id = Integer.parseInt(jtfIdTicket.getText());
             ticketActual = ticketData.buscarTickerporId(id);
-            
+
             if (ticketActual == null) {
                 JOptionPane.showMessageDialog(this, "No se encontró el ticket");
                 return;
             }
-            
-     
+
             Comprador comp = compradorData.buscarComprador(
-                ticketActual.getComprador().getIdComprador()
+                    ticketActual.getComprador().getIdComprador()
             );
-            
 
             StringBuilder info = new StringBuilder();
 
@@ -199,68 +202,66 @@ public class ModificarTicket extends javax.swing.JInternalFrame {
             info.append("Fecha Compra: ").append(ticketActual.getFechaCompra()).append("\n");
             info.append("Fecha Función: ").append(ticketActual.getFechaFuncion()).append("\n");
             info.append("Monto: $").append(String.format("%.2f", ticketActual.getMonto())).append("\n");
-            
-            AreaInfo.setText(info.toString());
-            
 
-          AreaInfo.setText(String.format("%.2f", ticketActual.getMonto()));
-            
+            AreaInfo.setText(info.toString());
+
+            AreaInfo.setText(String.format("%.2f", ticketActual.getMonto()));
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "ID inválido");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
-    
+
     }//GEN-LAST:event_jbBuscarActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
-       try {
+        try {
             if (ticketActual == null) {
                 JOptionPane.showMessageDialog(this, "Primero busque un ticket");
                 return;
             }
-            
+
             if (jFecha.getDate() == null || jtfMonto.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Complete todos los campos");
                 return;
             }
-            
+
             LocalDate nuevaFecha = jFecha.getDate().toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
             double nuevoMonto = Double.parseDouble(jtfMonto.getText());
-            
+
             int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Confirma la modificación del ticket?",
-                "Confirmar",
-                JOptionPane.YES_NO_OPTION);
-            
+                    "¿Confirma la modificación del ticket?",
+                    "Confirmar",
+                    JOptionPane.YES_NO_OPTION);
+
             if (confirm == JOptionPane.YES_OPTION) {
                 ticketData.modificarTicket(
-                    ticketActual.getIdTicket(),
-                    nuevaFecha,
-                    nuevoMonto
+                        ticketActual.getIdTicket(),
+                        nuevaFecha,
+                        nuevoMonto
                 );
-                
+
                 limpiar();
             }
-            
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Monto inválido");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
-    
+
     }//GEN-LAST:event_jbModificarActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
-    this.dispose();
-    
+        this.dispose();
+
     }//GEN-LAST:event_jbCancelarActionPerformed
 
-     
     private void limpiar() {
         jtfIdTicket.setText("");
-       AreaInfo.setText("");
+        AreaInfo.setText("");
         jFecha.setDate(null);
         jtfMonto.setText("");
         ticketActual = null;
