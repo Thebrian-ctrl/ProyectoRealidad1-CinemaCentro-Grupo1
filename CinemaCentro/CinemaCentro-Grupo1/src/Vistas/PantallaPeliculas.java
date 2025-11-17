@@ -28,17 +28,18 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class PantallaPeliculas extends javax.swing.JInternalFrame {
 
- 
-    
     PeliculaData peliData = new PeliculaData();
-    
+
     private String rutaImagenSelec;
-    
+
     public PantallaPeliculas() {
         initComponents();
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
     }
 
-   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -240,183 +241,177 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
 
     private void jbGuardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardar2ActionPerformed
         // TODO add your handling code here:
-        
-     try {
-   
-        if (jtfTitulo.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "El título es obligatorio", 
-                "Campo vacío", 
-                JOptionPane.WARNING_MESSAGE);
-            jtfTitulo.requestFocus();
-            return;
-        }
-        
-        if (jtfDirector.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "El director es obligatorio", 
-                "Campo vacío", 
-                JOptionPane.WARNING_MESSAGE);
-            jtfDirector.requestFocus();
-            return;
-        }
-        
-        if (jtfGenero.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "El género es obligatorio", 
-                "Campo vacío", 
-                JOptionPane.WARNING_MESSAGE);
-            jtfGenero.requestFocus();
-            return;
-        }
-        
-        if (jtfOrigen.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "El origen es obligatorio", 
-                "Campo vacío", 
-                JOptionPane.WARNING_MESSAGE);
-            jtfOrigen.requestFocus();
-            return;
-        }
-        
-        if (jtfActores.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "Los actores son obligatorios", 
-                "Campo vacío", 
-                JOptionPane.WARNING_MESSAGE);
-            jtfActores.requestFocus();
-            return;
-        }
-        
-        if (jdchooseEstreno.getDate() == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe seleccionar una fecha de estreno", 
-                "Campo vacío", 
-                JOptionPane.WARNING_MESSAGE);
-            jdchooseEstreno.requestFocus();
-            return;
-        }
-        
-    
-        String titulo = jtfTitulo.getText().trim();
-        if (titulo.length() < 2) {
-            JOptionPane.showMessageDialog(this, 
-                "El título debe tener al menos 2 caracteres", 
-                "Título inválido", 
-                JOptionPane.WARNING_MESSAGE);
-            jtfTitulo.requestFocus();
-            return;
-        }
-        
-        if (titulo.length() > 70) {
-            JOptionPane.showMessageDialog(this, 
-                "El título no puede superar los 70 caracteres", 
-                "Título muy largo", 
-                JOptionPane.WARNING_MESSAGE);
-            jtfTitulo.requestFocus();
-            return;
-        }
-        
-      
-        PeliculaData peliData = new PeliculaData();
-        Pelicula existe = peliData.buscarPelicula(titulo);
-        
-        if (existe != null) {
-            JOptionPane.showMessageDialog(this, 
-                "Ya existe una película con el título: " + titulo, 
-                "Película duplicada", 
-                JOptionPane.ERROR_MESSAGE);
-            jtfTitulo.requestFocus();
-            return;
-        }
-        
-      
-        LocalDate fechaEstreno = jdchooseEstreno.getDate()
-                .toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        
-        LocalDate hoy = LocalDate.now();
-        LocalDate hace100anios = hoy.minusYears(100);
-        LocalDate en2anios = hoy.plusYears(2);
-        
-        if (fechaEstreno.isBefore(hace100anios)) {
-            JOptionPane.showMessageDialog(this, 
-                "La fecha de estreno no puede ser tan antigua", 
-                "Fecha inválida", 
-                JOptionPane.ERROR_MESSAGE);
-            jdchooseEstreno.requestFocus();
-            return;
-        }
-        
-        if (fechaEstreno.isAfter(en2anios)) {
-            JOptionPane.showMessageDialog(this, 
-                "Solo se pueden registrar películas con hasta 2 años de anticipación", 
-                "Fecha muy lejana", 
-                JOptionPane.WARNING_MESSAGE);
-            jdchooseEstreno.requestFocus();
-            return;
-        }
-        
-   
-        if (this.rutaImagenSelec == null || this.rutaImagenSelec.isEmpty()) {
-            int opcion = JOptionPane.showConfirmDialog(this, 
-                "No ha seleccionado ninguna imagen.\n" +
-                "¿Desea continuar sin imagen?", 
-                "Sin imagen", 
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-            
-            if (opcion == JOptionPane.NO_OPTION) {
-                jbSeleccionarArchivo.requestFocus();
+
+        try {
+
+            if (jtfTitulo.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "El título es obligatorio",
+                        "Campo vacío",
+                        JOptionPane.WARNING_MESSAGE);
+                jtfTitulo.requestFocus();
                 return;
             }
-            
-            this.rutaImagenSelec = "src/img/default.jpg"; 
-        }
-        
-    
-        String director = jtfDirector.getText().trim();
-        String genero = jtfGenero.getText().trim();
-        String origen = jtfOrigen.getText().trim();
-        String actores = jtfActores.getText().trim();
-        Boolean cartelera = jRadioButtonCartelera.isSelected();
-        
-        Pelicula peli = new Pelicula(
-            titulo, 
-            director, 
-            actores, 
-            origen, 
-            genero, 
-            fechaEstreno, 
-            cartelera, 
-            rutaImagenSelec
-        );
-        
-        peliData.guardarPelicula(peli);
-        
-        JOptionPane.showMessageDialog(this, 
-            "Película guardada exitosamente:\n\n" +
-            "Título: " + titulo + "\n" +
-            "Director: " + director + "\n" +
-            "Estreno: " + fechaEstreno + "\n" +
-            "En cartelera: " + (cartelera ? "Sí" : "No"), 
-            "Éxito", 
-            JOptionPane.INFORMATION_MESSAGE);
-        
-   
-        limpiarCampos();
-        this.rutaImagenSelec = null;
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error al guardar la película:\n" + e.getMessage(), 
-            "Error", 
-            JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
 
-        
+            if (jtfDirector.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "El director es obligatorio",
+                        "Campo vacío",
+                        JOptionPane.WARNING_MESSAGE);
+                jtfDirector.requestFocus();
+                return;
+            }
+
+            if (jtfGenero.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "El género es obligatorio",
+                        "Campo vacío",
+                        JOptionPane.WARNING_MESSAGE);
+                jtfGenero.requestFocus();
+                return;
+            }
+
+            if (jtfOrigen.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "El origen es obligatorio",
+                        "Campo vacío",
+                        JOptionPane.WARNING_MESSAGE);
+                jtfOrigen.requestFocus();
+                return;
+            }
+
+            if (jtfActores.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Los actores son obligatorios",
+                        "Campo vacío",
+                        JOptionPane.WARNING_MESSAGE);
+                jtfActores.requestFocus();
+                return;
+            }
+
+            if (jdchooseEstreno.getDate() == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Debe seleccionar una fecha de estreno",
+                        "Campo vacío",
+                        JOptionPane.WARNING_MESSAGE);
+                jdchooseEstreno.requestFocus();
+                return;
+            }
+
+            String titulo = jtfTitulo.getText().trim();
+            if (titulo.length() < 2) {
+                JOptionPane.showMessageDialog(this,
+                        "El título debe tener al menos 2 caracteres",
+                        "Título inválido",
+                        JOptionPane.WARNING_MESSAGE);
+                jtfTitulo.requestFocus();
+                return;
+            }
+
+            if (titulo.length() > 70) {
+                JOptionPane.showMessageDialog(this,
+                        "El título no puede superar los 70 caracteres",
+                        "Título muy largo",
+                        JOptionPane.WARNING_MESSAGE);
+                jtfTitulo.requestFocus();
+                return;
+            }
+
+            PeliculaData peliData = new PeliculaData();
+            Pelicula existe = peliData.buscarPelicula(titulo);
+
+            if (existe != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Ya existe una película con el título: " + titulo,
+                        "Película duplicada",
+                        JOptionPane.ERROR_MESSAGE);
+                jtfTitulo.requestFocus();
+                return;
+            }
+
+            LocalDate fechaEstreno = jdchooseEstreno.getDate()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            LocalDate hoy = LocalDate.now();
+            LocalDate hace100anios = hoy.minusYears(100);
+            LocalDate en2anios = hoy.plusYears(2);
+
+            if (fechaEstreno.isBefore(hace100anios)) {
+                JOptionPane.showMessageDialog(this,
+                        "La fecha de estreno no puede ser tan antigua",
+                        "Fecha inválida",
+                        JOptionPane.ERROR_MESSAGE);
+                jdchooseEstreno.requestFocus();
+                return;
+            }
+
+            if (fechaEstreno.isAfter(en2anios)) {
+                JOptionPane.showMessageDialog(this,
+                        "Solo se pueden registrar películas con hasta 2 años de anticipación",
+                        "Fecha muy lejana",
+                        JOptionPane.WARNING_MESSAGE);
+                jdchooseEstreno.requestFocus();
+                return;
+            }
+
+            if (this.rutaImagenSelec == null || this.rutaImagenSelec.isEmpty()) {
+                int opcion = JOptionPane.showConfirmDialog(this,
+                        "No ha seleccionado ninguna imagen.\n"
+                        + "¿Desea continuar sin imagen?",
+                        "Sin imagen",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+
+                if (opcion == JOptionPane.NO_OPTION) {
+                    jbSeleccionarArchivo.requestFocus();
+                    return;
+                }
+
+                this.rutaImagenSelec = "src/img/default.jpg";
+            }
+
+            String director = jtfDirector.getText().trim();
+            String genero = jtfGenero.getText().trim();
+            String origen = jtfOrigen.getText().trim();
+            String actores = jtfActores.getText().trim();
+            Boolean cartelera = jRadioButtonCartelera.isSelected();
+
+            Pelicula peli = new Pelicula(
+                    titulo,
+                    director,
+                    actores,
+                    origen,
+                    genero,
+                    fechaEstreno,
+                    cartelera,
+                    rutaImagenSelec
+            );
+
+            peliData.guardarPelicula(peli);
+
+            JOptionPane.showMessageDialog(this,
+                    "Película guardada exitosamente:\n\n"
+                    + "Título: " + titulo + "\n"
+                    + "Director: " + director + "\n"
+                    + "Estreno: " + fechaEstreno + "\n"
+                    + "En cartelera: " + (cartelera ? "Sí" : "No"),
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            limpiarCampos();
+            this.rutaImagenSelec = null;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al guardar la película:\n" + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
+
     }//GEN-LAST:event_jbGuardar2ActionPerformed
 
     private void jRadioButtonCarteleraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonCarteleraActionPerformed
@@ -426,211 +421,207 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
     private void jbSeleccionarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSeleccionarArchivoActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
-        
+
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Imagenes (jpg, png, jpeg)", "jpg", "png", "jpeg");
         fileChooser.setFileFilter(filter);
-        
+
         int resultado = fileChooser.showOpenDialog(this);
-        
-        if(resultado == JFileChooser.APPROVE_OPTION){
-            try{
-            File archivoOriginal = fileChooser.getSelectedFile();
-            
-            Path destino = Paths.get("src/img/" + archivoOriginal.getName());
-            
-            Files.copy(archivoOriginal.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
-            
-            this.rutaImagenSelec = "src/img/" + archivoOriginal.getName();
-            
-            JOptionPane.showMessageDialog(this, "Imagen seleccionada y copiada");
-            
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            try {
+                File archivoOriginal = fileChooser.getSelectedFile();
+
+                Path destino = Paths.get("src/img/" + archivoOriginal.getName());
+
+                Files.copy(archivoOriginal.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
+
+                this.rutaImagenSelec = "src/img/" + archivoOriginal.getName();
+
+                JOptionPane.showMessageDialog(this, "Imagen seleccionada y copiada");
+
                 ImageIcon icon = new ImageIcon(destino.toString());
                 Image img = icon.getImage().getScaledInstance(jLabelImagen.getWidth(), jLabelImagen.getHeight(), Image.SCALE_SMOOTH);
                 jLabelImagen.setIcon(new ImageIcon(img));
-            
-            }catch(Exception e){
+
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error al copiar la imagen" + e.getMessage());
-            
+
             }
         }
     }//GEN-LAST:event_jbSeleccionarArchivoActionPerformed
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         // TODO add your handling code here:
-    try {
-  
-        if (jtfTitulo.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "Ingrese el título de la película a buscar", 
-                "Campo vacío", 
-                JOptionPane.WARNING_MESSAGE);
-            jtfTitulo.requestFocus();
-            return;
-        }
-        
-        String titulo = jtfTitulo.getText().trim();
-        
-        PeliculaData peliData = new PeliculaData();
-        Pelicula pelicula = peliData.buscarPelicula(titulo);
-        
-        if (pelicula == null) {
-            JOptionPane.showMessageDialog(this, 
-                "No se encontró ninguna película con el título:\n" + titulo, 
-                "Película no encontrada", 
-                JOptionPane.INFORMATION_MESSAGE);
-            limpiarCampos();
-            jtfTitulo.setText(titulo);
-            jtfTitulo.requestFocus();
-            return;
-        }
-        
-    
-        jtfDirector.setText(pelicula.getDirector());
-        jtfGenero.setText(pelicula.getGenero());
-        jtfOrigen.setText(pelicula.getOrigen());
-        jtfActores.setText(pelicula.getActores());
-        jdchooseEstreno.setDate(java.sql.Date.valueOf(pelicula.getEstreno()));
-        jRadioButtonCartelera.setSelected(pelicula.isCartelera());
-        
-    
-        if (pelicula.getRutaImagen() != null && !pelicula.getRutaImagen().isEmpty()) {
-            try {
-                ImageIcon icon = new ImageIcon(pelicula.getRutaImagen());
-                Image img = icon.getImage().getScaledInstance(
-                    jLabelImagen.getWidth(), 
-                    jLabelImagen.getHeight(), 
-                    Image.SCALE_SMOOTH
-                );
-                jLabelImagen.setIcon(new ImageIcon(img));
-                this.rutaImagenSelec = pelicula.getRutaImagen();
-            } catch (Exception e) {
-                System.out.println("No se pudo cargar la imagen");
+        try {
+
+            if (jtfTitulo.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Ingrese el título de la película a buscar",
+                        "Campo vacío",
+                        JOptionPane.WARNING_MESSAGE);
+                jtfTitulo.requestFocus();
+                return;
             }
+
+            String titulo = jtfTitulo.getText().trim();
+
+            PeliculaData peliData = new PeliculaData();
+            Pelicula pelicula = peliData.buscarPelicula(titulo);
+
+            if (pelicula == null) {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró ninguna película con el título:\n" + titulo,
+                        "Película no encontrada",
+                        JOptionPane.INFORMATION_MESSAGE);
+                limpiarCampos();
+                jtfTitulo.setText(titulo);
+                jtfTitulo.requestFocus();
+                return;
+            }
+
+            jtfDirector.setText(pelicula.getDirector());
+            jtfGenero.setText(pelicula.getGenero());
+            jtfOrigen.setText(pelicula.getOrigen());
+            jtfActores.setText(pelicula.getActores());
+            jdchooseEstreno.setDate(java.sql.Date.valueOf(pelicula.getEstreno()));
+            jRadioButtonCartelera.setSelected(pelicula.isCartelera());
+
+            if (pelicula.getRutaImagen() != null && !pelicula.getRutaImagen().isEmpty()) {
+                try {
+                    ImageIcon icon = new ImageIcon(pelicula.getRutaImagen());
+                    Image img = icon.getImage().getScaledInstance(
+                            jLabelImagen.getWidth(),
+                            jLabelImagen.getHeight(),
+                            Image.SCALE_SMOOTH
+                    );
+                    jLabelImagen.setIcon(new ImageIcon(img));
+                    this.rutaImagenSelec = pelicula.getRutaImagen();
+                } catch (Exception e) {
+                    System.out.println("No se pudo cargar la imagen");
+                }
+            }
+
+            JOptionPane.showMessageDialog(this,
+                    "Película encontrada:\n\n"
+                    + "Título: " + pelicula.getTitulo() + "\n"
+                    + "Director: " + pelicula.getDirector() + "\n"
+                    + "Estreno: " + pelicula.getEstreno(),
+                    "Película encontrada",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al buscar la película:\n" + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-        
-        JOptionPane.showMessageDialog(this, 
-            "Película encontrada:\n\n" +
-            "Título: " + pelicula.getTitulo() + "\n" +
-            "Director: " + pelicula.getDirector() + "\n" +
-            "Estreno: " + pelicula.getEstreno(), 
-            "Película encontrada", 
-            JOptionPane.INFORMATION_MESSAGE);
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error al buscar la película:\n" + e.getMessage(), 
-            "Error", 
-            JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
 
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jbActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbActualizarActionPerformed
         // TODO add your handling code here:
-       try {
-    
-        if (jtfTitulo.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "Primero debe buscar una película", 
-                "Búsqueda requerida", 
-                JOptionPane.WARNING_MESSAGE);
-            jtfTitulo.requestFocus();
-            return;
-        }
-        
-        String titulo = jtfTitulo.getText().trim();
-        
-        PeliculaData peliData = new PeliculaData();
-        Pelicula p = peliData.buscarPelicula(titulo);
-        
-        if (p == null) {
-            JOptionPane.showMessageDialog(this, 
-                "No se encontró la película: " + titulo + "\n\n" +
-                "Use el botón Buscar primero", 
-                "Película no encontrada", 
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-     
-        if (jtfDirector.getText().trim().isEmpty() || 
-            jtfGenero.getText().trim().isEmpty() ||
-            jtfOrigen.getText().trim().isEmpty() ||
-            jtfActores.getText().trim().isEmpty() ||
-            jdchooseEstreno.getDate() == null) {
-            
-            JOptionPane.showMessageDialog(this, 
-                "Todos los campos son obligatorios", 
-                "Campos incompletos", 
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-    
-        int confirmacion = JOptionPane.showConfirmDialog(this, 
-            "¿Está seguro de actualizar la película?\n\n" +
-            "Título: " + titulo, 
-            "Confirmar actualización", 
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
-        
-        if (confirmacion != JOptionPane.YES_OPTION) {
-            return;
+        try {
+
+            if (jtfTitulo.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Primero debe buscar una película",
+                        "Búsqueda requerida",
+                        JOptionPane.WARNING_MESSAGE);
+                jtfTitulo.requestFocus();
+                return;
+            }
+
+            String titulo = jtfTitulo.getText().trim();
+
+            PeliculaData peliData = new PeliculaData();
+            Pelicula p = peliData.buscarPelicula(titulo);
+
+            if (p == null) {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró la película: " + titulo + "\n\n"
+                        + "Use el botón Buscar primero",
+                        "Película no encontrada",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (jtfDirector.getText().trim().isEmpty()
+                    || jtfGenero.getText().trim().isEmpty()
+                    || jtfOrigen.getText().trim().isEmpty()
+                    || jtfActores.getText().trim().isEmpty()
+                    || jdchooseEstreno.getDate() == null) {
+
+                JOptionPane.showMessageDialog(this,
+                        "Todos los campos son obligatorios",
+                        "Campos incompletos",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            int confirmacion = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro de actualizar la película?\n\n"
+                    + "Título: " + titulo,
+                    "Confirmar actualización",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (confirmacion != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            p.setTitulo(jtfTitulo.getText().trim());
+            p.setDirector(jtfDirector.getText().trim());
+            p.setGenero(jtfGenero.getText().trim());
+            p.setOrigen(jtfOrigen.getText().trim());
+            p.setActores(jtfActores.getText().trim());
+
+            LocalDate fechaEstreno = jdchooseEstreno.getDate()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            p.setEstreno(fechaEstreno);
+            p.setCartelera(jRadioButtonCartelera.isSelected());
+
+            if (rutaImagenSelec != null && !rutaImagenSelec.isEmpty()) {
+                p.setRutaImagen(rutaImagenSelec);
+            }
+
+            peliData.actualizarPelicula(p);
+
+            JOptionPane.showMessageDialog(this,
+                    "Película actualizada exitosamente",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            limpiarCampos();
+            this.rutaImagenSelec = null;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al actualizar la película:\n" + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
 
-        p.setTitulo(jtfTitulo.getText().trim());
-        p.setDirector(jtfDirector.getText().trim());
-        p.setGenero(jtfGenero.getText().trim());
-        p.setOrigen(jtfOrigen.getText().trim());
-        p.setActores(jtfActores.getText().trim());
-        
-        LocalDate fechaEstreno = jdchooseEstreno.getDate()
-                .toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        p.setEstreno(fechaEstreno);
-        p.setCartelera(jRadioButtonCartelera.isSelected());
-        
-        if (rutaImagenSelec != null && !rutaImagenSelec.isEmpty()) {
-            p.setRutaImagen(rutaImagenSelec);
-        }
-        
-        peliData.actualizarPelicula(p);
-        
-        JOptionPane.showMessageDialog(this, 
-            "Película actualizada exitosamente", 
-            "Éxito", 
-            JOptionPane.INFORMATION_MESSAGE);
-        
-        limpiarCampos();
-        this.rutaImagenSelec = null;
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error al actualizar la película:\n" + e.getMessage(), 
-            "Error", 
-            JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
 
-            
     }//GEN-LAST:event_jbActualizarActionPerformed
 
     private void jButtonCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarActionPerformed
-  this.dispose();        // TODO add your handling code here:
+        this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButtonCerrarActionPerformed
 
-private void limpiarCampos() {
-    jtfTitulo.setText("");
-    jtfDirector.setText("");
-    jtfGenero.setText("");
-    jtfOrigen.setText("");
-    jtfActores.setText("");
-    jdchooseEstreno.setDate(null);
-    jRadioButtonCartelera.setSelected(false);
-    jLabelImagen.setIcon(null);
-}
+    private void limpiarCampos() {
+        jtfTitulo.setText("");
+        jtfDirector.setText("");
+        jtfGenero.setText("");
+        jtfOrigen.setText("");
+        jtfActores.setText("");
+        jdchooseEstreno.setDate(null);
+        jRadioButtonCartelera.setSelected(false);
+        jLabelImagen.setIcon(null);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonCerrar;
