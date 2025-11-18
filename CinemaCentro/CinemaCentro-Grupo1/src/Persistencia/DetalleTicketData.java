@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import Persistencia.FuncionData;
+import Persistencia.LugarData;
 
 /**
  *
@@ -87,7 +89,9 @@ public class DetalleTicketData {
     }
 
     public void eliminarDetalleTicket(int idDetalleTicket) {
-      String queryVerificar = "SELECT COUNT(*) as total FROM ticketcompra WHERE idDetalleTicket = ?";
+
+ 
+    String queryVerificar = "SELECT COUNT(*) as total FROM ticketcompra WHERE idDetalleTicket = ?";
     
     try {
         PreparedStatement psVerificar = conn.prepareStatement(queryVerificar);
@@ -102,7 +106,7 @@ public class DetalleTicketData {
         rs.close();
         psVerificar.close();
         
-   
+      
         if (ticketsAsociados > 0) {
             JOptionPane.showMessageDialog(null,
                 "⚠️ NO SE PUEDE ELIMINAR\n\n" +
@@ -120,7 +124,7 @@ public class DetalleTicketData {
         return;
     }
     
- 
+   
     String queryBuscarLugar = "SELECT idLugar FROM detalleticket WHERE idDetalleTicket = ?";
     Integer idLugar = null;
     
@@ -137,27 +141,16 @@ public class DetalleTicketData {
         psLugar.close();
         
     } catch (SQLException e) {
-        System.out.println(" No se pudo buscar el lugar: " + e.getMessage());
+        System.out.println("⚠️ No se pudo buscar el lugar: " + e.getMessage());
     }
     
-
+  
     if (idLugar != null) {
-        String queryLiberarLugar = "UPDATE lugar SET estado = true WHERE idLugar = ?";
-        
-        try {
-            PreparedStatement psLiberar = conn.prepareStatement(queryLiberarLugar);
-            psLiberar.setInt(1, idLugar);
-            psLiberar.executeUpdate();
-            psLiberar.close();
-            
-            System.out.println(" Lugar liberado: ID " + idLugar);
-            
-        } catch (SQLException e) {
-            System.out.println(" No se pudo liberar el lugar: " + e.getMessage());
-        }
+        LugarData lugarData = new LugarData();
+        lugarData.actualizarEstadoLugar(idLugar, true);
     }
     
-
+  
     String queryEliminar = "DELETE FROM detalleticket WHERE idDetalleTicket = ?";
     
     try {
@@ -169,7 +162,7 @@ public class DetalleTicketData {
         if (resultado > 0) {
             System.out.println(" DetalleTicket eliminado: ID " + idDetalleTicket);
             
-            String mensaje = " DetalleTicket eliminado exitosamente";
+            String mensaje = "DetalleTicket eliminado exitosamente";
             if (idLugar != null) {
                 mensaje += "\n\nEl asiento ha sido liberado";
             }
@@ -188,46 +181,45 @@ public class DetalleTicketData {
             "Error al eliminar el DetalleTicket: " + e.getMessage());
         e.printStackTrace();
     }
+}
 
-    }
+   public DetalleTicket buscarDetalleTicket(int id) {
+    String query = "SELECT * FROM detalleticket WHERE idDetalleTicket = ?";
+    DetalleTicket detalle = null;
 
-    public DetalleTicket buscarDetalleTicket(int id) {
-        String query = "SELECT * FROM detalleticket WHERE idDetalleTicket = ?";
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
 
-        DetalleTicket detalle = null;
+        if (rs.next()) {
+            detalle = new DetalleTicket();
+            detalle.setIdDetalleTicket(rs.getInt("idDetalleTicket"));
+            detalle.setCantidad(rs.getInt("cantidad"));
+            detalle.setSubtotal(rs.getDouble("subtotal"));
+            
+        
+            int idFuncion = rs.getInt("idFuncion");
+            FuncionData funcionData = new FuncionData();
+            Funcion funcion = funcionData.buscarFuncionPorId(idFuncion);
+            detalle.setFuncion(funcion);
 
-        try {
-            PreparedStatement ps = conn.prepareStatement(query);
-
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                detalle = new DetalleTicket();
-
-                detalle.setIdDetalleTicket(rs.getInt("idDetalleTicket"));
-                detalle.setCantidad(rs.getInt("cantidad"));
-                detalle.setSubtotal(rs.getDouble("subtotal"));
-                Funcion funcion = new Funcion();
-                funcion.setIdFuncion(rs.getInt("idFuncion"));
-                detalle.setFuncion(funcion);
-
-                Lugar lugar = new Lugar();
-                lugar.setIdLugar(rs.getInt("idLugar"));
-                detalle.setLugar(lugar);
-                
-          
-                
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontro el detalleticket");
-            }
-            ps.close();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al buscar el detalleticket");
+         
+            int idLugar = rs.getInt("idLugar");
+            LugarData lugarData = new LugarData();
+            Lugar lugar = lugarData.buscarLugarPorId(idLugar);
+            detalle.setLugar(lugar);
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró el detalleticket");
         }
-        return detalle;
-    }
+        ps.close();
 
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al buscar el detalleticket: " + e.getMessage());
+        e.printStackTrace();
+    }
+    return detalle;
+}
  
 }

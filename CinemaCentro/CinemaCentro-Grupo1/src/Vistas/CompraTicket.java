@@ -57,15 +57,8 @@ public class CompraTicket extends javax.swing.JInternalFrame {
     
     private Comprador compradorActual;
 
-    public CompraTicket() {
-        initComponents();
-        Comprador comprador = null;
-        this.compradorActual = comprador;
-        inicializar();
-        aplicarEstilos();
-    }
-    
-
+   
+   
     public CompraTicket(Comprador comprador) {
         initComponents();
         this.compradorActual = comprador;
@@ -417,7 +410,7 @@ private void cargarPeliculas() {
     
     private void BtnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnComprarActionPerformed
 
-   if (compradorActual == null) {
+ if (compradorActual == null) {
         JOptionPane.showMessageDialog(this,
                 "Debe iniciar sesión para realizar una compra.\n" +
                 "Por favor, regístrese o inicie sesión primero.",
@@ -426,7 +419,7 @@ private void cargarPeliculas() {
         return;
     }
     
-  
+   
     if (jComboBox1.getSelectedIndex() < 0) {
         JOptionPane.showMessageDialog(this,
                 "Por favor seleccione una película",
@@ -435,7 +428,7 @@ private void cargarPeliculas() {
         return;
     }
     
-
+ 
     if (jComboBox2.getSelectedIndex() < 0 || funcionSeleccionada == null) {
         JOptionPane.showMessageDialog(this,
                 "Por favor seleccione una función",
@@ -444,7 +437,7 @@ private void cargarPeliculas() {
         return;
     }
     
- 
+  
     if (lugaresSeleccionados.isEmpty()) {
         JOptionPane.showMessageDialog(this,
                 "Por favor seleccione al menos un asiento",
@@ -453,7 +446,7 @@ private void cargarPeliculas() {
         return;
     }
     
-   
+
     int cantidadSpin = jSpinField1.getValue();
     if (lugaresSeleccionados.size() != cantidadSpin) {
         JOptionPane.showMessageDialog(this,
@@ -480,47 +473,46 @@ private void cargarPeliculas() {
         return;
     }
     
- 
+  
     try {
       
         DetalleTicket primerDetalle = null;
         
         for (Lugar lugar : lugaresSeleccionados) {
-          
+        
             DetalleTicket detalle = new DetalleTicket();
             detalle.setFuncion(funcionSeleccionada);
             detalle.setLugar(lugar);
-            detalle.setCantidad(1);
+            detalle.setCantidad(1); 
             detalle.setSubtotal(funcionSeleccionada.getPrecio());
             
-      
+        
             detalleData.guardarDetalleTicket(detalle);
             
-         
+          
             if (primerDetalle == null) {
                 primerDetalle = detalle;
             }
             
-          
-            lugar.setEstado(false);
-            lugarData.actualizarLugar(lugar);
+           
+            lugarData.actualizarEstadoLugar(lugar.getIdLugar(), false);
         }
         
-     
+       
         TicketCompra ticket = new TicketCompra();
         ticket.setFechaCompra(LocalDate.now());
         ticket.setFechaFuncion(funcionSeleccionada.getHoraInicio());
         ticket.setMonto(subtotal);
         ticket.setComprador(compradorActual);
-        ticket.setDetalleticket(primerDetalle); 
+        ticket.setDetalleticket(primerDetalle);
         
-
+      
         ticketData.guardarTicketCompra(ticket);
         
-  
+      
         StringBuilder resumen = new StringBuilder();
- 
-        resumen.append("     ✅ COMPRA EXITOSA\n");
+        resumen.append("═══════════════════════════════\n");
+        resumen.append("      COMPRA EXITOSA\n");
         resumen.append("═══════════════════════════════\n\n");
         resumen.append("Ticket #").append(ticket.getIdTicket()).append("\n\n");
         resumen.append("Comprador: ").append(compradorActual.getNombre()).append("\n");
@@ -546,19 +538,17 @@ private void cargarPeliculas() {
         JOptionPane.showMessageDialog(this, resumen.toString(), 
             "Compra Exitosa", JOptionPane.INFORMATION_MESSAGE);
         
-       
+
         limpiarFormulario();
         
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, 
-            "❌ Error al procesar la compra: " + e.getMessage() + "\n\n" +
+            " Error al procesar la compra: " + e.getMessage() + "\n\n" +
             "Por favor, intente nuevamente o contacte al administrador.",
             "Error en la Compra", 
             JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
-    
-
-}                
+    }
     }//GEN-LAST:event_BtnComprarActionPerformed
     
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed

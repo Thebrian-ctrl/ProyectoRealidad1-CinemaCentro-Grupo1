@@ -70,35 +70,42 @@ public class LugarData {
 
     }
 
-    public void actualizarLugar(Lugar l) {
-        String query = "UPDATE lugar SET fila = ?, num = ?, estado = ?, idFuncion = ? WHERE idLugar = ?";
+ public void actualizarLugar(Lugar l) {
+    String query = "UPDATE lugar SET fila = ?, num = ?, estado = ?, idFuncion = ? WHERE idLugar = ?";
 
-        try {
-            PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
 
-            ps.setString(1, String.valueOf(l.getFila()));
-            ps.setInt(2, l.getNum());
-            ps.setBoolean(3, l.isEstado());
-             if (l.getFuncion() != null) {
-                ps.setInt(4, l.getFuncion().getIdFuncion());
-            } else {
-                ps.setNull(4, Types.INTEGER);
-            }
-             
-               ps.setInt(5, l.getIdLugar());
-            int actualizado = ps.executeUpdate();
-
-            if (actualizado == 1) {
-                JOptionPane.showMessageDialog(null, "Datos del lugar actualizados correctamente");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo actualizar el lugar");
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar el lugar ");
+        ps.setString(1, String.valueOf(l.getFila()));
+        ps.setInt(2, l.getNum());
+        ps.setBoolean(3, l.isEstado());
+        
+  
+        if (l.getFuncion() != null && l.getFuncion().getIdFuncion() > 0) {
+            ps.setInt(4, l.getFuncion().getIdFuncion());
+        } else {
+        
+            ps.setNull(4, java.sql.Types.INTEGER);
         }
+        
+        ps.setInt(5, l.getIdLugar());
+        
+        int actualizado = ps.executeUpdate();
 
+        if (actualizado == 1) {
+            System.out.println("✅ Lugar actualizado: ID " + l.getIdLugar());
+        } else {
+            System.out.println("⚠️ No se pudo actualizar el lugar ID " + l.getIdLugar());
+        }
+        
+        ps.close();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al actualizar el lugar: " + e.getMessage());
+        e.printStackTrace();
     }
+}
 
     public void eliminarlugar(int idLugar) {
         String query = "DELETE FROM lugar WHERE idLugar = ?";
@@ -216,5 +223,26 @@ public List<Lugar> buscarLugaresPorFuncion(int idFuncion){
 
         return l;
     }
+    public void actualizarEstadoLugar(int idLugar, boolean nuevoEstado) {
+    String query = "UPDATE lugar SET estado = ? WHERE idLugar = ?";
     
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setBoolean(1, nuevoEstado);
+        ps.setInt(2, idLugar);
+        
+        int actualizado = ps.executeUpdate();
+        
+        if (actualizado == 1) {
+            String estadoTexto = nuevoEstado ? "DISPONIBLE" : "OCUPADO";
+            System.out.println(" Lugar actualizado: ID " + idLugar + " -> " + estadoTexto);
+        }
+        
+        ps.close();
+        
+    } catch (SQLException e) {
+        System.out.println(" Error al actualizar estado del lugar: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
 }

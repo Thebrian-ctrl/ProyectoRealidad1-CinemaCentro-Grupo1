@@ -1,4 +1,3 @@
-
 package Persistencia;
 
 import Modelo.Comprador;
@@ -6,38 +5,32 @@ import Modelo.DetalleTicket;
 import Modelo.MyConexion;
 import Modelo.TicketCompra;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
-import java.util.ArrayList; 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
-
-
-/**
- *
- * @author camila biarnes
- */
 public class TicketCompraData {
     
-   private final Connection conn;
+    private Connection conn;
     
     public TicketCompraData() {
-        conn = MyConexion.buscarConexion();
+      conn = MyConexion.buscarConexion();
     }
     
-
+ 
+    
     public void guardarTicketCompra(TicketCompra ticket) {
-        String query = "INSERT INTO ticketcompra (fechaCompra, fechaFuncion, monto, idComprador, idDetalleTicket) "
-                + "VALUES(?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ticketcompra (fechaCompra, fechaFuncion, monto, idComprador, idDetalleTicket) VALUES (?, ?, ?, ?, ?)";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             
-            ps.setDate(1, Date.valueOf(ticket.getFechaCompra()));
+            ps.setDate(1, java.sql.Date.valueOf(ticket.getFechaCompra()));
             ps.setTimestamp(2, java.sql.Timestamp.valueOf(ticket.getFechaFuncion()));
             ps.setDouble(3, ticket.getMonto());
             ps.setInt(4, ticket.getComprador().getIdComprador());
@@ -54,28 +47,30 @@ public class TicketCompraData {
             
             if (rs.next()) {
                 ticket.setIdTicket(rs.getInt(1));
-                JOptionPane.showMessageDialog(null, "Ticket de compra guardado correctamente");
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al guardar el Ticket de compra");
+                System.out.println(" TicketCompra guardado con ID: " + ticket.getIdTicket());
             }
             
             rs.close();
             ps.close();
             
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, 
+                "Error al guardar el ticket: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
     
- 
-    public TicketCompra buscarTickerporId (int idTicket) {
+   
+    
+    public TicketCompra buscarTickerporId(int idTicket) {
         TicketCompra ticket = null;
         String query = "SELECT * FROM ticketcompra WHERE idTicket = ?";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, idTicket);
-            
             ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
@@ -85,71 +80,70 @@ public class TicketCompraData {
                 ticket.setFechaFuncion(rs.getTimestamp("fechaFuncion").toLocalDateTime());
                 ticket.setMonto(rs.getDouble("monto"));
                 
-               
-                Comprador comprador = new Comprador();
-                comprador.setIdComprador(rs.getInt("idComprador"));
+            
+                int idComprador = rs.getInt("idComprador");
+                CompradorData compradorData = new CompradorData();
+                Comprador comprador = compradorData.buscarCompradorPorId(idComprador);
                 ticket.setComprador(comprador);
                 
-             
+            
                 int idDetalle = rs.getInt("idDetalleTicket");
                 if (!rs.wasNull()) {
-                    DetalleTicket detalle = new DetalleTicket();
-                    detalle.setIdDetalleTicket(idDetalle);
+                    DetalleTicketData detalleData = new DetalleTicketData();
+                    DetalleTicket detalle = detalleData.buscarDetalleTicket(idDetalle);
                     ticket.setDetalleticket(detalle);
                 }
-                
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró ticket con ID: " + idTicket);
             }
             
             rs.close();
             ps.close();
             
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al buscar el ticket: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                "Error al buscar ticket: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
         
         return ticket;
     }
     
 
-    public void actualizarTicket(TicketCompra ticket) {
-        String query = "UPDATE ticketcompra SET fechaCompra = ?, fechaFuncion = ?, monto = ?, "
-                + "idComprador = ?, idDetalleTicket = ? WHERE idTicket = ?";
+    
+    public void modificarTicket(int idTicket, LocalDate nuevaFecha, double nuevoMonto) {
+        String query = "UPDATE ticketcompra SET fechaFuncion = ?, monto = ? WHERE idTicket = ?";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
+            ps.setTimestamp(1, java.sql.Timestamp.valueOf(nuevaFecha.atStartOfDay()));
+            ps.setDouble(2, nuevoMonto);
+            ps.setInt(3, idTicket);
             
-            ps.setDate(1, Date.valueOf(ticket.getFechaCompra()));
-            ps.setTimestamp(2, java.sql.Timestamp.valueOf(ticket.getFechaFuncion()));
-            ps.setDouble(3, ticket.getMonto());
-            ps.setInt(4, ticket.getComprador().getIdComprador());
+            int filasAfectadas = ps.executeUpdate();
             
-            if (ticket.getDetalleticket() != null) {
-                ps.setInt(5, ticket.getDetalleticket().getIdDetalleTicket());
+            if (filasAfectadas > 0) {
+                System.out.println("✅ Ticket modificado: ID " + idTicket);
             } else {
-                ps.setNull(5, java.sql.Types.INTEGER);
-            }
-            
-            ps.setInt(6, ticket.getIdTicket());
-            
-            int actualizado = ps.executeUpdate();
-            
-            if (actualizado == 1) {
-                JOptionPane.showMessageDialog(null, "Ticket actualizado correctamente");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo actualizar el ticket");
+                JOptionPane.showMessageDialog(null,
+                    "No se encontró el ticket con ID " + idTicket);
             }
             
             ps.close();
             
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar el Ticket " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                "Error al modificar ticket: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
     
+
     
-    public void anularTicket (int idTicket) {
+   public void anularTicket(int idTicket) {
+  
     String queryBuscar = "SELECT idDetalleTicket FROM ticketcompra WHERE idTicket = ?";
     Integer idDetalleTicket = null;
     
@@ -171,7 +165,32 @@ public class TicketCompraData {
         return;
     }
     
-
+  
+    if (idDetalleTicket != null) {
+        String queryLugar = "SELECT idLugar FROM detalleticket WHERE idDetalleTicket = ?";
+        
+        try {
+            PreparedStatement psLugar = conn.prepareStatement(queryLugar);
+            psLugar.setInt(1, idDetalleTicket);
+            ResultSet rsLugar = psLugar.executeQuery();
+            
+            if (rsLugar.next()) {
+                int idLugar = rsLugar.getInt("idLugar");
+                
+             
+                LugarData lugarData = new LugarData();
+                lugarData.actualizarEstadoLugar(idLugar, true);
+            }
+            
+            rsLugar.close();
+            psLugar.close();
+            
+        } catch (SQLException e) {
+            System.out.println("⚠️ No se pudo liberar el lugar: " + e.getMessage());
+        }
+    }
+    
+   
     String queryTicket = "DELETE FROM ticketcompra WHERE idTicket = ?";
     
     try {
@@ -181,7 +200,7 @@ public class TicketCompraData {
         int filasAfectadas = psTicket.executeUpdate();
         
         if (filasAfectadas > 0) {
-            System.out.println("✅ TicketCompra eliminado: ID " + idTicket);
+            System.out.println(" TicketCompra eliminado: ID " + idTicket);
         }
         
         psTicket.close();
@@ -203,7 +222,7 @@ public class TicketCompraData {
             int filasAfectadas = psDetalle.executeUpdate();
             
             if (filasAfectadas > 0) {
-                System.out.println("✅ DetalleTicket eliminado: ID " + idDetalleTicket);
+                System.out.println(" DetalleTicket eliminado: ID " + idDetalleTicket);
             }
             
             psDetalle.close();
@@ -214,20 +233,20 @@ public class TicketCompraData {
         }
     }
     
-    JOptionPane.showMessageDialog(null, "Ticket anulado correctamente");
-
-    }
+    JOptionPane.showMessageDialog(null, 
+        "Ticket anulado correctamente\n\nLos asientos han sido liberados.",
+        "Anulación Exitosa",
+        JOptionPane.INFORMATION_MESSAGE);
+}
     
-
+ 
     
-    public List<TicketCompra> listarTicketsPorFecha (LocalDate fecha) {
-        List <TicketCompra> tickets = new ArrayList <> ();
-        String query = "SELECT * FROM ticketcompra WHERE fechacompra = ?" ;
+    public List<TicketCompra> listarTodosTickets() {
+        List<TicketCompra> tickets = new ArrayList<>();
+        String query = "SELECT * FROM ticketcompra ORDER BY fechaCompra DESC";
         
         try {
-            PreparedStatement ps = conn.prepareStatement (query) ;
-            ps.setDate (1, Date.valueOf(fecha));
-            
+            PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {
@@ -237,103 +256,161 @@ public class TicketCompraData {
                 ticket.setFechaFuncion(rs.getTimestamp("fechaFuncion").toLocalDateTime());
                 ticket.setMonto(rs.getDouble("monto"));
                 
-                Comprador comprador = new Comprador ();
-                comprador.setIdComprador(rs.getInt("idComprador"));
+              
+                int idComprador = rs.getInt("idComprador");
+                CompradorData compradorData = new CompradorData();
+                Comprador comprador = compradorData.buscarCompradorPorId(idComprador);
+                ticket.setComprador(comprador);
                 
-                int idDetalle = rs.getInt ("IdDetalleTicket");
+              
+                int idDetalle = rs.getInt("idDetalleTicket");
                 if (!rs.wasNull()) {
-                    DetalleTicket detalle = new DetalleTicket ();
-                    detalle.setIdDetalleTicket(idDetalle);
+                    DetalleTicketData detalleData = new DetalleTicketData();
+                    DetalleTicket detalle = detalleData.buscarDetalleTicket(idDetalle);
                     ticket.setDetalleticket(detalle);
                 }
                 
-                tickets.add (ticket);
+                tickets.add(ticket);
             }
             
-            rs.close ();
+            rs.close();
             ps.close();
             
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al listar tickets"+ e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                "Error al listar todos los tickets: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
+        
         return tickets;
     }
-  
- public void modificarTicket(int idTicket, LocalDate nuevaFechaFuncion, double nuevoMonto) {
-    String query = "UPDATE ticketcompra SET fechaFuncion = ?, monto = ? WHERE idTicket = ?";
     
-    try {
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setTimestamp(1, java.sql.Timestamp.valueOf(nuevaFechaFuncion.atStartOfDay()));
-        ps.setDouble(2, nuevoMonto);
-        ps.setInt(3, idTicket);
-        
-        int actualizado = ps.executeUpdate();
-        
-        if (actualizado == 1) {
-            JOptionPane.showMessageDialog(null, "Ticket modificado correctamente");
-        } else {
-            JOptionPane.showMessageDialog(null, "No se pudo modificar el ticket");
-        }
-        
-        ps.close();
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al modificar ticket: " + e.getMessage());
-    }
-}
+
     
-    public List <TicketCompra> ListarTicketsPorPelicula (int idPelicula ) {
-        List <TicketCompra> tickets = new ArrayList <> ();
-        String query = "SELECT DISTINCT t. * FROM ticketcompra t"
-                + "INNER JOIN detalleticket d ON t.idDetalleTicket = d.idDetalleTicket"
-                + "INNER JOIN funcion f ON d.idFuncion = f.idFuncion "
-                + "WHERE f.idPelicula= ?";
+    public List<TicketCompra> listarTicketsPorFecha(LocalDate fecha) {
+        List<TicketCompra> tickets = new ArrayList<>();
+        String query = "SELECT * FROM ticketcompra WHERE DATE(fechaFuncion) = ?";
         
         try {
-            PreparedStatement ps = conn.prepareStatement (query);
-            ps.setInt (1,idPelicula);
-            
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setDate(1, java.sql.Date.valueOf(fecha));
             ResultSet rs = ps.executeQuery();
             
-             while (rs.next()) {
+            while (rs.next()) {
                 TicketCompra ticket = new TicketCompra();
                 ticket.setIdTicket(rs.getInt("idTicket"));
                 ticket.setFechaCompra(rs.getDate("fechaCompra").toLocalDate());
                 ticket.setFechaFuncion(rs.getTimestamp("fechaFuncion").toLocalDateTime());
                 ticket.setMonto(rs.getDouble("monto"));
                 
-                Comprador comprador = new Comprador();
-                comprador.setIdComprador(rs.getInt("idComprador"));
+       
+                int idComprador = rs.getInt("idComprador");
+                CompradorData compradorData = new CompradorData();
+                Comprador comprador = compradorData.buscarCompradorPorId(idComprador);
                 ticket.setComprador(comprador);
                 
+            
                 int idDetalle = rs.getInt("idDetalleTicket");
                 if (!rs.wasNull()) {
-                    DetalleTicket detalle = new DetalleTicket();
-                    detalle.setIdDetalleTicket(idDetalle);
+                    DetalleTicketData detalleData = new DetalleTicketData();
+                    DetalleTicket detalle = detalleData.buscarDetalleTicket(idDetalle);
                     ticket.setDetalleticket(detalle);
                 }
-                tickets.add(ticket);
-             }
-             rs.close();
-             ps.close ();
-             
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al listar tickets por película: " + e.getMessage());
-        }
-            
-            return tickets;
-        }
                 
+                tickets.add(ticket);
+            }
+            
+            rs.close();
+            ps.close();
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                "Error al listar tickets por fecha: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        
+        return tickets;
+    }
+    
+ 
+    
+    public List<TicketCompra> ListarTicketsPorPelicula(int idPelicula) {
+       List<TicketCompra> tickets = new ArrayList<>();
+        String query = "SELECT tc.* FROM ticketcompra tc " +
+                       "JOIN detalleticket dt ON tc.idDetalleTicket = dt.idDetalleTicket " +
+                       "JOIN funcion f ON dt.idFuncion = f.idFuncion " +
+                       "WHERE f.idPelicula = ? " +
+                       "ORDER BY tc.fechaCompra DESC";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, idPelicula);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                TicketCompra ticket = new TicketCompra();
+                ticket.setIdTicket(rs.getInt("idTicket"));
+                ticket.setFechaCompra(rs.getDate("fechaCompra").toLocalDate());
+                ticket.setFechaFuncion(rs.getTimestamp("fechaFuncion").toLocalDateTime());
+                ticket.setMonto(rs.getDouble("monto"));
+                
+           
+                int idComprador = rs.getInt("idComprador");
+                System.out.println("Cargando comprador con ID: " + idComprador);
+                
+                CompradorData compradorData = new CompradorData();
+                Comprador comprador = compradorData.buscarCompradorPorId(idComprador);
+                
+                if (comprador != null) {
+                    ticket.setComprador(comprador);
+                } else {
+                    System.out.println("⚠️ No se encontró comprador con ID " + idComprador);
+                  
+                    comprador = new Comprador();
+                    comprador.setIdComprador(idComprador);
+                    comprador.setNombre("Comprador no encontrado");
+                    comprador.setDni(0);
+                    ticket.setComprador(comprador);
+                }
+                
+           
+                int idDetalle = rs.getInt("idDetalleTicket");
+                if (!rs.wasNull()) {
+                    DetalleTicketData detalleData = new DetalleTicketData();
+                    DetalleTicket detalle = detalleData.buscarDetalleTicket(idDetalle);
+                    ticket.setDetalleticket(detalle);
+                }
+                
+                tickets.add(ticket);
+            }
+            
+            rs.close();
+            ps.close();
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                "Error al listar tickets por película: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        
+        return tickets;
+    }
+    
 
-     public List<TicketCompra> listarTicketsPorComprador(int idComprador) {
+    
+    public List<TicketCompra> listarTicketsPorComprador(int idComprador) {
         List<TicketCompra> tickets = new ArrayList<>();
-        String query = "SELECT * FROM ticketcompra WHERE idComprador = ?";
+        String query = "SELECT * FROM ticketcompra WHERE idComprador = ? ORDER BY fechaCompra DESC";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, idComprador);
-            
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {
@@ -343,14 +420,16 @@ public class TicketCompraData {
                 ticket.setFechaFuncion(rs.getTimestamp("fechaFuncion").toLocalDateTime());
                 ticket.setMonto(rs.getDouble("monto"));
                 
-                Comprador comprador = new Comprador();
-                comprador.setIdComprador(rs.getInt("idComprador"));
+          
+                CompradorData compradorData = new CompradorData();
+                Comprador comprador = compradorData.buscarCompradorPorId(idComprador);
                 ticket.setComprador(comprador);
                 
+          
                 int idDetalle = rs.getInt("idDetalleTicket");
                 if (!rs.wasNull()) {
-                    DetalleTicket detalle = new DetalleTicket();
-                    detalle.setIdDetalleTicket(idDetalle);
+                    DetalleTicketData detalleData = new DetalleTicketData();
+                    DetalleTicket detalle = detalleData.buscarDetalleTicket(idDetalle);
                     ticket.setDetalleticket(detalle);
                 }
                 
@@ -360,151 +439,124 @@ public class TicketCompraData {
             rs.close();
             ps.close();
             
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al listar tickets por comprador: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                "Error al listar tickets por comprador: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
         
         return tickets;
     }
     
-   
-    public List<TicketCompra> listarTodosTickets() {
-        List<TicketCompra> tickets = new ArrayList<>();
-        String query = "SELECT * FROM ticketcompra";
+
+    
+   public List<Comprador> listarCompradoresPorFechaFuncion(LocalDate fecha) {
+    List<Comprador> compradores = new ArrayList<>();
+    String query = "SELECT DISTINCT c.* FROM comprador c " +
+                   "JOIN ticketcompra tc ON c.idComprador = tc.idComprador " +
+                   "WHERE DATE(tc.fechaFuncion) = ? " +
+                   "ORDER BY c.nombre";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setDate(1, java.sql.Date.valueOf(fecha));
+        ResultSet rs = ps.executeQuery();
         
-        try {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Comprador comprador = new Comprador();
+            comprador.setIdComprador(rs.getInt("idComprador"));
+            comprador.setNombre(rs.getString("nombre"));
+            comprador.setDni(rs.getInt("dni"));
+            comprador.setPassword(rs.getString("password"));
+            comprador.setMedioDePago(rs.getString("medioDePago"));
             
-            while (rs.next()) {
-                TicketCompra ticket = new TicketCompra();
-                ticket.setIdTicket(rs.getInt("idTicket"));
-                ticket.setFechaCompra(rs.getDate("fechaCompra").toLocalDate());
-                ticket.setFechaFuncion(rs.getTimestamp("fechaFuncion").toLocalDateTime());
-                ticket.setMonto(rs.getDouble("monto"));
-                
-                Comprador comprador = new Comprador();
-                comprador.setIdComprador(rs.getInt("idComprador"));
-                ticket.setComprador(comprador);
-                
-                int idDetalle = rs.getInt("idDetalleTicket");
-                if (!rs.wasNull()) {
-                    DetalleTicket detalle = new DetalleTicket();
-                    detalle.setIdDetalleTicket(idDetalle);
-                    ticket.setDetalleticket(detalle);
-                }
-                
-                tickets.add(ticket);
+         
+            java.sql.Date fechaNacSQL = rs.getDate("fechaNac");
+            if (fechaNacSQL != null) {
+                comprador.setFechaNac(fechaNacSQL.toLocalDate());
             }
             
-            rs.close();
-            ps.close();
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al listar todos los tickets: " + e.getMessage());
+            compradores.add(comprador);
         }
         
-        return tickets;
-    }
-  
-    public List<Comprador> listarCompradoresPorFechaFuncion(LocalDate fechaFuncion) {
-        List<Comprador> compradores = new ArrayList<>();
+        rs.close();
+        ps.close();
         
-        String query = "SELECT DISTINCT c.* FROM comprador c " +
-                       "INNER JOIN ticketcompra t ON c.idComprador = t.idComprador " +
-                       "WHERE DATE(t.fechaFuncion) = ?";
-        
-        try {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setDate(1, Date.valueOf(fechaFuncion));
-            
-            ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()) {
-                Comprador comprador = new Comprador();
-                comprador.setIdComprador(rs.getInt("idComprador"));
-                comprador.setDni(rs.getInt("dni"));
-                comprador.setNombre(rs.getString("nombre"));
-                comprador.setPassword(rs.getString("password"));
-                comprador.setMedioDePago(rs.getString("medioDePago"));
-                comprador.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
-                
-                compradores.add(comprador);
-            }
-            
-            rs.close();
-            ps.close();
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, 
-                "Error al listar compradores por fecha: " + e.getMessage());
-        }
-        
-        return compradores;
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null,
+            "Error al listar compradores: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
     
- 
+    return compradores;
+}
+    
+
+    
     public double obtenerTotalVentasPorRango(LocalDate fechaInicio, LocalDate fechaFin) {
         double total = 0.0;
-        
         String query = "SELECT SUM(monto) as total FROM ticketcompra " +
                        "WHERE fechaCompra BETWEEN ? AND ?";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setDate(1, Date.valueOf(fechaInicio));
-            ps.setDate(2, Date.valueOf(fechaFin));
-            
+            ps.setDate(1, java.sql.Date.valueOf(fechaInicio));
+            ps.setDate(2, java.sql.Date.valueOf(fechaFin));
             ResultSet rs = ps.executeQuery();
             
-            if(rs.next()) {
+            if (rs.next()) {
                 total = rs.getDouble("total");
             }
             
             rs.close();
             ps.close();
             
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, 
-                "Error al obtener total de ventas: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                "Error al obtener total de ventas: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
         
         return total;
     }
     
-  
+
+    
     public int contarTicketsPorPeliculaYFecha(int idPelicula, LocalDate fechaInicio, LocalDate fechaFin) {
         int cantidad = 0;
-        
-        String query = "SELECT COUNT(t.idTicket) as total " +
-                       "FROM ticketcompra t " +
-                       "INNER JOIN detalleticket dt ON t.idDetalleTicket = dt.idDetalleTicket " +
-                       "INNER JOIN funcion f ON dt.idFuncion = f.idFuncion " +
-                       "WHERE f.idPelicula = ? " +
-                       "AND t.fechaCompra BETWEEN ? AND ?";
+        String query = "SELECT COUNT(*) as total FROM ticketcompra tc " +
+                       "JOIN detalleticket dt ON tc.idDetalleTicket = dt.idDetalleTicket " +
+                       "JOIN funcion f ON dt.idFuncion = f.idFuncion " +
+                       "WHERE f.idPelicula = ? AND tc.fechaCompra BETWEEN ? AND ?";
         
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, idPelicula);
-            ps.setDate(2, Date.valueOf(fechaInicio));
-            ps.setDate(3, Date.valueOf(fechaFin));
-            
+            ps.setDate(2, java.sql.Date.valueOf(fechaInicio));
+            ps.setDate(3, java.sql.Date.valueOf(fechaFin));
             ResultSet rs = ps.executeQuery();
             
-            if(rs.next()) {
+            if (rs.next()) {
                 cantidad = rs.getInt("total");
             }
             
             rs.close();
             ps.close();
             
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, 
-                "Error al contar tickets: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                "Error al contar tickets: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
         
         return cantidad;
     }
-    
-  
 }

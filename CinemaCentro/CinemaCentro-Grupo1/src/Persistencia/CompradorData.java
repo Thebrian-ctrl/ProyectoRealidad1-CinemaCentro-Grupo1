@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -67,40 +68,33 @@ public class CompradorData {
       
   }
   
-  //--------------------buscar comprador por dni 
+
   
-  public Comprador buscarComprador(int dni){
+ public Comprador buscarComprador(int dni){
         Comprador c = null;
-        String query = "SELECT * FROM comprador WHERE dni = ?";
-        try {
-            PreparedStatement ps= conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-             ps.setInt(1, dni);
-            ResultSet rs = ps.executeQuery();
-            
-            
-            
-            
-            if(rs.next()) {
-                c = new Comprador();
-                c.setIdComprador(rs.getInt("idComprador"));
-                c.setDni(rs.getInt("dni"));
-                c.setNombre(rs.getString("nombre"));
-                c.setPassword(rs.getString("password"));
-                c.setMedioDePago(rs.getString("medioDePago"));
-                c.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró el comprador con DNI " + dni);
-            }
+    String query = "SELECT * FROM comprador WHERE dni = ?";
+    try {
+        PreparedStatement ps= conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, dni);
+        ResultSet rs = ps.executeQuery();
         
-        
-        
-        
-        }catch(Exception e){
-             JOptionPane.showMessageDialog(null, "Error al buscar el Comprador");
-            
+        if(rs.next()) {
+            c = new Comprador();
+            c.setIdComprador(rs.getInt("idComprador"));
+            c.setDni(rs.getInt("dni"));
+            c.setNombre(rs.getString("nombre"));
+            c.setPassword(rs.getString("password"));
+            c.setMedioDePago(rs.getString("medioDePago"));
+            c.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
+        } else {
+         
+            System.out.println("⚠️ No se encontró comprador con DNI: " + dni);
         }
-        return c;
-  }
+    } catch(Exception e){
+        JOptionPane.showMessageDialog(null, "Error al buscar el Comprador: " + e.getMessage());
+    }
+    return c;
+ }
   
   
   
@@ -190,31 +184,40 @@ public class CompradorData {
         return compradores;
     }
   
-  
-    public Comprador buscarCompradorPorId(int idComprador){
-        Comprador c = null;
-        String query = "SELECT * FROM comprador WHERE idComprador = ?";
-        try {
-            PreparedStatement ps= conn.prepareStatement(query);
-            ps.setInt(1, idComprador);
-            ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()) {
-                c = new Comprador();
-                c.setIdComprador(rs.getInt("idComprador"));
-                c.setDni(rs.getInt("dni"));
-                c.setNombre(rs.getString("nombre"));
-                c.setPassword(rs.getString("password"));
-                c.setMedioDePago(rs.getString("medioDePago"));
-                c.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró el comprador con ID " + idComprador);
+  public Comprador buscarCompradorPorId(int idComprador) {
+    Comprador comprador = null;
+    String query = "SELECT * FROM comprador WHERE idComprador = ?";  
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, idComprador);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            comprador = new Comprador();
+            comprador.setIdComprador(rs.getInt("idComprador"));
+            comprador.setDni(rs.getInt("dni"));
+            comprador.setNombre(rs.getString("nombre"));
+            comprador.setPassword(rs.getString("password"));
+            comprador.setMedioDePago(rs.getString("medioDePago"));
+           
+            java.sql.Date fechaNacSQL = rs.getDate("fechaNacimiento");
+            if (fechaNacSQL != null) {
+                comprador.setFechaNac(fechaNacSQL.toLocalDate());
             }
-        }catch(Exception e){
-             JOptionPane.showMessageDialog(null, "Error al buscar el Comprador por ID: " + e.getMessage());
         }
-        return c;
-  }
+        
+        rs.close();
+        ps.close();
+        
+    } catch (SQLException e) {
+        System.out.println("Error al buscar comprador por ID: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    return comprador;
+}
+   
   
   
 

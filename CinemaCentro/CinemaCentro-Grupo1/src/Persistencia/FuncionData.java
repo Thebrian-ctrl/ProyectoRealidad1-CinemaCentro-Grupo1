@@ -694,5 +694,46 @@ public List<Pelicula> listarPeliculasPorSalaYHorario(int idSala, LocalDate fecha
            JOptionPane.showMessageDialog(null, "Error al actualizar precio: " + e.getMessage());
        }
    }
-
+public Funcion buscarFuncionPorId(int idFuncion) {
+    Funcion funcion = null;
+    String query = "SELECT * FROM funcion WHERE idFuncion = ?";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, idFuncion);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            funcion = new Funcion();
+            funcion.setIdFuncion(rs.getInt("idFuncion"));
+            funcion.setIdioma(rs.getString("idioma"));
+            funcion.setEs3d(rs.getBoolean("es3d"));
+            funcion.setSubtitulado(rs.getBoolean("subtitulado"));
+            funcion.setHoraInicio(rs.getTimestamp("horarioInicio").toLocalDateTime());
+            funcion.setHoraFin(rs.getTimestamp("horarioFin").toLocalDateTime());
+            funcion.setPrecio(rs.getDouble("precio"));
+            
+        
+            int idPelicula = rs.getInt("idPelicula");
+            PeliculaData peliculaData = new PeliculaData();
+            Pelicula pelicula = peliculaData.buscarPeliculaPorId(idPelicula);
+            funcion.setPelicula(pelicula);
+            
+          
+            int idSala = rs.getInt("idSala");
+            SalaData salaData = new SalaData();
+            Sala sala = salaData.buscarSala(idSala);
+            funcion.setSalaProyeccion(sala);
+        }
+        
+        rs.close();
+        ps.close();
+        
+    } catch (SQLException e) {
+        System.out.println("Error al buscar función por ID: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    return funcion;
+}
 }

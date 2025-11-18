@@ -243,73 +243,85 @@ public class VistaInformes extends javax.swing.JInternalFrame {
         generarEstadisticas();
     }
 
-    private void generarEstadisticas() {
-        List<TicketCompra> todosTickets = ticketData.listarTodosTickets();
+   private void generarEstadisticas() {
+    List<TicketCompra> todosTickets = ticketData.listarTodosTickets();
 
-        if (todosTickets.isEmpty()) {
-            TextoArea.setText(" No hay datos suficientes para generar estadísticas.");
-            return;
+    if (todosTickets.isEmpty()) {
+        TextoArea.setText("No hay datos suficientes para generar estadísticas.");
+        return;
+    }
+
+    Map<String, Integer> ticketsPorPeli = new HashMap<>();
+    Map<String, Double> recaudacionPorPeli = new HashMap<>();
+
+    for (TicketCompra ticket : todosTickets) {
+   
+        if (ticket.getDetalleticket() != null
+                && ticket.getDetalleticket().getFuncion() != null
+                && ticket.getDetalleticket().getFuncion().getPelicula() != null) {
+
+            String titulo = ticket.getDetalleticket().getFuncion().getPelicula().getTitulo();
+
+            ticketsPorPeli.put(titulo,
+                    ticketsPorPeli.getOrDefault(titulo, 0) + 1);
+
+            recaudacionPorPeli.put(titulo,
+                    recaudacionPorPeli.getOrDefault(titulo, 0.0) + ticket.getMonto());
+        }
+    }
+
+
+    if (ticketsPorPeli.isEmpty()) {
+        TextoArea.setText("No hay datos suficientes para generar estadísticas.\n\n" +
+                "Los tickets no tienen información completa de películas.");
+        return;
+    }
+
+    List<Map.Entry<String, Integer>> ranking = new java.util.ArrayList<>(ticketsPorPeli.entrySet());
+    ranking.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+
+    StringBuilder reporte = new StringBuilder();
+    reporte.append("══════════════════════════════════════════\n");
+    reporte.append("        PELÍCULAS MÁS VISTAS\n");
+    reporte.append("══════════════════════════════════════════\n\n");
+
+    int posicion = 1;
+    for (Map.Entry<String, Integer> entry : ranking) {
+        String titulo = entry.getKey();
+        int cantTickets = entry.getValue();
+        double recaudacion = recaudacionPorPeli.get(titulo);
+
+        String medalla = "";
+        if (posicion == 1) {
+            medalla = "";
+        } else if (posicion == 2) {
+            medalla = "";
+        } else if (posicion == 3) {
+            medalla = "";
+        } else {
+            medalla = "  ";
         }
 
-        Map<String, Integer> ticketsPorPeli = new HashMap<>();
-        Map<String, Double> recaudacionPorPeli = new HashMap<>();
+        reporte.append(medalla).append(" #").append(posicion).append(" - ").append(titulo).append("\n");
+        reporte.append("    Tickets vendidos: ").append(cantTickets).append("\n");
+        reporte.append("    Recaudado: $").append(String.format("%.2f", recaudacion)).append("\n\n");
 
-        for (TicketCompra ticket : todosTickets) {
-            if (ticket.getDetalleticket() != null
-                    && ticket.getDetalleticket().getFuncion() != null) {
+        posicion++;
+    }
 
-                String titulo = ticket.getDetalleticket().getFuncion().getPelicula().getTitulo();
 
-                ticketsPorPeli.put(titulo,
-                        ticketsPorPeli.getOrDefault(titulo, 0) + 1);
+    reporte.append("         TOTALES GENERALES\n");
+    reporte.append("══════════════════════════════════════════\n");
+    reporte.append("   Total Tickets: ").append(todosTickets.size()).append("\n");
 
-                recaudacionPorPeli.put(titulo,
-                        recaudacionPorPeli.getOrDefault(titulo, 0.0) + ticket.getMonto());
-            }
-        }
+    double totalRecaudado = todosTickets.stream()
+            .mapToDouble(TicketCompra::getMonto)
+            .sum();
+    reporte.append("   Total Recaudado: $").append(String.format("%.2f", totalRecaudado)).append("\n");
+    reporte.append("══════════════════════════════════════════\n");
 
-        List<Map.Entry<String, Integer>> ranking = new java.util.ArrayList<>(ticketsPorPeli.entrySet());
-        ranking.sort((a, b) -> b.getValue().compareTo(a.getValue()));
-
-        StringBuilder reporte = new StringBuilder();
-        reporte.append("     PELÍCULAS MÁS VISTAS \n");
-        reporte.append("═══════════════════════════════════════════════════\n\n");
-
-        int posicion = 1;
-        for (Map.Entry<String, Integer> entry : ranking) {
-            String titulo = entry.getKey();
-            int cantTickets = entry.getValue();
-            double recaudacion = recaudacionPorPeli.get(titulo);
-
-            String medalla = "";
-            if (posicion == 1) {
-                medalla = "";
-            } else if (posicion == 2) {
-                medalla = "";
-            } else if (posicion == 3) {
-                medalla = "";
-            } else {
-                medalla = "  ";
-            }
-
-            reporte.append(medalla).append(" #").append(posicion).append(" - ").append(titulo).append("\n");
-            reporte.append("    Tickets vendidos: ").append(cantTickets).append("\n");
-            reporte.append("    Recaudado: $").append(String.format("%.2f", recaudacion)).append("\n\n");
-
-            posicion++;
-        }
-
-        reporte.append(" TOTALES GENERALES:\n");
-        reporte.append("   Total Tickets: ").append(todosTickets.size()).append("\n");
-
-        double totalRecaudado = todosTickets.stream()
-                .mapToDouble(TicketCompra::getMonto)
-                .sum();
-        reporte.append("   Total Recaudado: $").append(String.format("%.2f", totalRecaudado)).append("\n");
-        reporte.append("═══════════════════════════════════════════════════\n");
-
-        TextoArea.setText(reporte.toString());
-        TextoArea.setCaretPosition(0);
+    TextoArea.setText(reporte.toString());
+    TextoArea.setCaretPosition(0);
 
     }//GEN-LAST:event_jButtonEstadisticasActionPerformed
 
