@@ -6,16 +6,25 @@
 package Vistas;
 
 import javax.swing.*;
-import java.util.*;
-import javax.swing.DefaultListModel;
-import java.time.LocalDateTime;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import javax.swing.border.TitledBorder;
+
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Cursor;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+
+import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+
+
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 import Modelo.Comprador;
@@ -24,7 +33,8 @@ import Modelo.Funcion;
 import Modelo.Lugar;
 import Modelo.Sala;
 import Modelo.DetalleTicket; 
-import Modelo.TicketCompra;   
+import Modelo.TicketCompra;
+
 
 import Persistencia.PeliculaData;
 import Persistencia.FuncionData;
@@ -61,86 +71,116 @@ public class CompraTicket extends javax.swing.JInternalFrame {
    
     public CompraTicket(Comprador comprador) {
         initComponents();
+        
         this.compradorActual = comprador;
-        inicializar();
-        aplicarEstilos();
+     
+          inicializar();
+             aplicarEstilos();
     
         
     
 }
-private void aplicarEstilos() {
+ private void aplicarEstilos() {
   
-    Color colorPrimario = new Color(41, 128, 185);      
-    Color colorSecundario = new Color(52, 73, 94);      
-    Color colorExito = new Color(39, 174, 96);         
-    Color colorPeligro = new Color(231, 76, 60);        
-    Color colorFondo = new Color(236, 240, 241);        
+  
+    Color ROJO_CINE = new Color(220, 20, 60);        
+    Color NEGRO_CINE = new Color(30, 30, 30);        
+    Color DORADO_CINE = new Color(255, 215, 0);     
+    Color VERDE_DISPONIBLE = new Color(34, 139, 34); 
+    Color GRIS_OCUPADO = new Color(128, 128, 128);   
+    Color BLANCO = Color.WHITE;
     
- 
-    jPanel1.setBackground(Color.WHITE);
+  
+    jPanel1.setBackground(BLANCO);
     jPanel1.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createLineBorder(colorPrimario, 2),
+        BorderFactory.createLineBorder(ROJO_CINE, 3),
         BorderFactory.createEmptyBorder(20, 20, 20, 20)
     ));
     
-  
-    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
-    jLabel1.setForeground(colorPrimario);
+ 
+    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 28));
+    jLabel1.setForeground(ROJO_CINE);
+    jLabel1.setText("COMPRA DE ENTRADAS");
     
    
-    Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 14);
+    Font fuenteLabel = new Font("Segoe UI", Font.BOLD, 15);
     jLabelPelicula.setFont(fuenteLabel);
+    jLabelPelicula.setForeground(NEGRO_CINE);
+    jLabelPelicula.setText(" Seleccione Película:");
+    
     jLabelFuncion.setFont(fuenteLabel);
-    jLabel2.setFont(new Font("Segoe UI", Font.BOLD, 16));
-    jLabel2.setForeground(colorSecundario);
+    jLabelFuncion.setForeground(NEGRO_CINE);
+    jLabelFuncion.setText("Seleccione Función:");
+    
+    jLabel2.setFont(new Font("Segoe UI", Font.BOLD, 18));
+    jLabel2.setForeground(ROJO_CINE);
+    jLabel2.setText(" INFORMACIÓN DE LA FUNCIÓN");
+    
     jLabelCantEntradas.setFont(fuenteLabel);
+    jLabelCantEntradas.setForeground(NEGRO_CINE);
+    jLabelCantEntradas.setText(" Cantidad de Entradas:");
+    
     jLabelSelecAsientos.setFont(fuenteLabel);
+    jLabelSelecAsientos.setForeground(NEGRO_CINE);
+    jLabelSelecAsientos.setText("Selección de Asientos:");
     
-  
+    jLabel3.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+    jLabel3.setForeground(new Color(100, 100, 100));
+    jLabel3.setText(" Mantenga presionada CTRL para seleccionar múltiples asientos");
+    
+    
     jLabelPrecio.setFont(new Font("Segoe UI", Font.BOLD, 16));
-    jLabelPrecio.setForeground(colorPrimario);
+    jLabelPrecio.setForeground(NEGRO_CINE);
     
-    jLabelTotal.setFont(new Font("Segoe UI", Font.BOLD, 20));
-    jLabelTotal.setForeground(colorExito);
+    jLabelTotal.setFont(new Font("Segoe UI", Font.BOLD, 24));
+    jLabelTotal.setForeground(ROJO_CINE);
+    jLabelTotal.setText(" TOTAL: $0.00");
     
-
-    jComboBox1.setFont(fuenteLabel);
+   
+    Font fuenteCombo = new Font("Segoe UI", Font.PLAIN, 14);
+    jComboBox1.setFont(fuenteCombo);
     jComboBox1.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createLineBorder(colorPrimario, 1),
+        BorderFactory.createLineBorder(ROJO_CINE, 2),
         BorderFactory.createEmptyBorder(5, 10, 5, 10)
     ));
     
-    jComboBox2.setFont(fuenteLabel);
+    jComboBox2.setFont(fuenteCombo);
     jComboBox2.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createLineBorder(colorPrimario, 1),
+        BorderFactory.createLineBorder(ROJO_CINE, 2),
         BorderFactory.createEmptyBorder(5, 10, 5, 10)
     ));
     
-
-    jList2.setFont(fuenteLabel);
-    jList2.setSelectionBackground(colorPrimario);
-    jList2.setSelectionForeground(Color.WHITE);
-    jList2.setBorder(BorderFactory.createLineBorder(colorPrimario, 1));
+   
+    jList2.setFont(fuenteCombo);
+    jList2.setSelectionBackground(DORADO_CINE);
+    jList2.setSelectionForeground(NEGRO_CINE);
+    jList2.setBorder(BorderFactory.createLineBorder(ROJO_CINE, 2));
     
-  
-    jSpinField1.setFont(fuenteLabel);
+   
+    jSpinField1.setFont(fuenteCombo);
     
-  
-    configurarBoton(BtnComprar, colorExito, Color.WHITE, new Font("Segoe UI", Font.BOLD, 14));
-    configurarBoton(BtnCancelar, colorPeligro, Color.WHITE, new Font("Segoe UI", Font.BOLD, 14));
-    configurarBoton(BtnLimpiar, colorSecundario, Color.WHITE, new Font("Segoe UI", Font.BOLD, 14));
+ 
+    configurarBoton(BtnComprar, VERDE_DISPONIBLE, BLANCO, new Font("Segoe UI", Font.BOLD, 15));
+    BtnComprar.setText(" COMPRAR");
     
-    Color colorSalir = new Color(52, 73, 94); 
-    configurarBoton(jButtonSalir, colorSalir, Color.WHITE, new Font("Segoe UI", Font.BOLD, 14));
-    agregarEfectoHover(jButtonSalir, colorSalir, new Color(44, 62, 80));
+    configurarBoton(BtnCancelar, ROJO_CINE, BLANCO, new Font("Segoe UI", Font.BOLD, 15));
+    BtnCancelar.setText(" CANCELAR");
     
-
-    agregarEfectoHover(BtnComprar, colorExito, new Color(46, 204, 113));
-    agregarEfectoHover(BtnCancelar, colorPeligro, new Color(192, 57, 43));
-    agregarEfectoHover(BtnLimpiar, colorSecundario, new Color(44, 62, 80));
-}
-
-private void configurarBoton(JButton boton, Color colorFondo, Color colorTexto, Font fuente) {
+    configurarBoton(BtnLimpiar, new Color(52, 152, 219), BLANCO, new Font("Segoe UI", Font.BOLD, 15));
+    BtnLimpiar.setText(" LIMPIAR");
+    
+   configurarBoton(jButtonSalir, GRIS_OCUPADO, BLANCO, new Font("Segoe UI", Font.BOLD, 15));
+jButtonSalir.setText(" FINALIZAR");
+    
+    
+    agregarEfectoHover(BtnComprar, VERDE_DISPONIBLE, new Color(46, 204, 113));
+    agregarEfectoHover(BtnCancelar, ROJO_CINE, new Color(255, 50, 90));
+    agregarEfectoHover(BtnLimpiar, new Color(52, 152, 219), new Color(41, 128, 185));
+    agregarEfectoHover(jButtonSalir, GRIS_OCUPADO, new Color(90, 90, 90));
+   
+ }
+ 
+ private void configurarBoton(JButton boton, Color colorFondo, Color colorTexto, Font fuente) {
     boton.setFont(fuente);
     boton.setBackground(colorFondo);
     boton.setForeground(colorTexto);
@@ -163,9 +203,6 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
             boton.setBackground(colorNormal);
         }
     });
-    
-    
-
 }
 private void cargarPeliculas() {
     jComboBox1.removeAllItems();
@@ -218,19 +255,23 @@ private void cargarPeliculas() {
         jLabelCantEntradas = new javax.swing.JLabel();
         jLabelSelecAsientos = new javax.swing.JLabel();
         jSpinField1 = new com.toedter.components.JSpinField();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
-        jLabelPrecio = new javax.swing.JLabel();
         jLabelTotal = new javax.swing.JLabel();
         BtnCancelar = new javax.swing.JButton();
         BtnComprar = new javax.swing.JButton();
         BtnLimpiar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButtonSalir = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jComboMedioPago = new javax.swing.JComboBox<>();
+        jLabelPrecio = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList<>();
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("COMPRA DE ENTRADAS");
 
+        jLabelPelicula.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabelPelicula.setText("Seleccione Pelicula:");
 
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
@@ -239,6 +280,7 @@ private void cargarPeliculas() {
             }
         });
 
+        jLabelFuncion.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabelFuncion.setText("Seleccione Funcion:");
 
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
@@ -247,15 +289,14 @@ private void cargarPeliculas() {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel2.setText("INFORMACION DE LA FUNCION ");
 
+        jLabelCantEntradas.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabelCantEntradas.setText("Cantidad de Entradas");
 
+        jLabelSelecAsientos.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabelSelecAsientos.setText("Seleccion de Asientos");
-
-        jScrollPane3.setViewportView(jList2);
-
-        jLabelPrecio.setText("Precio por entrada: $10.000");
 
         jLabelTotal.setText("TOTAL: ");
 
@@ -289,6 +330,20 @@ private void cargarPeliculas() {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel4.setText("Medio de pago:");
+
+        jComboMedioPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione medio de pago", "Efectivo", "Tarjeta de Debito", "Tarjeta de Credito", "Mercado Pago" }));
+        jComboMedioPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboMedioPagoActionPerformed(evt);
+            }
+        });
+
+        jLabelPrecio.setText("PRECIO");
+
+        jScrollPane1.setViewportView(jList2);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -296,37 +351,57 @@ private void cargarPeliculas() {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelPelicula)
-                            .addComponent(jLabelFuncion)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabelCantEntradas)
-                            .addComponent(jLabelSelecAsientos)
-                            .addComponent(jLabelPrecio)
-                            .addComponent(jLabelTotal)
-                            .addComponent(BtnCancelar))
+                        .addGap(264, 264, 264)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
+                                .addGap(190, 190, 190)
+                                .addComponent(BtnCancelar))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(157, 157, 157)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelSelecAsientos)
+                                    .addComponent(jLabelCantEntradas)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(149, 149, 149)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelPelicula)
+                                            .addComponent(jLabelFuncion))
+                                        .addGap(58, 58, 58))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(60, 60, 60)))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
                                 .addComponent(BtnComprar)
-                                .addGap(87, 87, 87)
+                                .addGap(92, 92, 92)
                                 .addComponent(BtnLimpiar)
-                                .addGap(76, 76, 76)
+                                .addGap(80, 80, 80)
                                 .addComponent(jButtonSalir))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox1, 0, 194, Short.MAX_VALUE)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jSpinField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel3))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(171, 171, 171)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(52, Short.MAX_VALUE))
+                                .addGap(79, 79, 79)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jComboMedioPago, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(26, 26, 26)
+                                .addComponent(jLabel3))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(95, 95, 95)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jComboBox1, 0, 268, Short.MAX_VALUE)
+                                        .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel2)
+                                    .addComponent(jSpinField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(17, 17, 17)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelTotal)
+                                    .addComponent(jLabelPrecio))))))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -341,45 +416,51 @@ private void cargarPeliculas() {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelFuncion)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabelCantEntradas))
-                    .addComponent(jSpinField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabelSelecAsientos)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(41, 41, 41)
-                .addComponent(jLabelPrecio)
-                .addGap(18, 18, 18)
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSpinField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelCantEntradas))
+                        .addGap(37, 37, 37)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelSelecAsientos)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(126, 126, 126)
+                        .addComponent(jLabel3)
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabelPrecio)))
+                .addGap(6, 6, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboMedioPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(26, 26, 26)
                 .addComponent(jLabelTotal)
-                .addGap(48, 48, 48)
+                .addGap(66, 66, 66)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnCancelar)
                     .addComponent(BtnComprar)
                     .addComponent(BtnLimpiar)
                     .addComponent(jButtonSalir))
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(33, 33, 33)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(36, Short.MAX_VALUE))
         );
@@ -456,23 +537,55 @@ private void cargarPeliculas() {
                 JOptionPane.WARNING_MESSAGE);
         return;
     }
+   if (jComboMedioPago.getSelectedIndex() <= 0) {
+    JOptionPane.showMessageDialog(this,
+            "Por favor seleccione un medio de pago",
+            "Medio de pago no seleccionado",
+            JOptionPane.WARNING_MESSAGE);
+    return;
+}
+
+String medioPago = jComboMedioPago.getSelectedItem().toString();
+
+
+if (medioPago.equals("Tarjeta de Debito") || medioPago.equals("Tarjeta de Credito")) {
+    double montoTotal = funcionSeleccionada.getPrecio() * lugaresSeleccionados.size();
+    
+    DialogoPagoTarjeta dialogo = new DialogoPagoTarjeta(null, medioPago, montoTotal);
+    dialogo.setVisible(true);
     
   
-    double subtotal = funcionSeleccionada.getPrecio() * lugaresSeleccionados.size();
-    int confirmacion = JOptionPane.showConfirmDialog(this,
-            "¿Confirmar la compra?\n\n" +
-            "Película: " + funcionSeleccionada.getPelicula().getTitulo() + "\n" +
-            "Función: " + funcionSeleccionada.getHoraInicio() + "\n" +
-            "Asientos: " + lugaresSeleccionados.size() + "\n" +
-            "Total: $" + String.format("%.2f", subtotal),
-            "Confirmar Compra",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
-    
-    if (confirmacion != JOptionPane.YES_OPTION) {
-        return;
+    if (!dialogo.isPagoAceptado()) {
+        JOptionPane.showMessageDialog(this,
+                " Pago cancelado\n\nLa compra no se realizó.",
+                "Pago Cancelado",
+                JOptionPane.WARNING_MESSAGE);
+        return; 
     }
     
+
+    JOptionPane.showMessageDialog(this,
+            " Pago procesado exitosamente\n\nProcesando su compra...",
+            "Pago Exitoso",
+            JOptionPane.INFORMATION_MESSAGE);
+}
+
+
+double subtotal = funcionSeleccionada.getPrecio() * lugaresSeleccionados.size();
+int confirmacion = JOptionPane.showConfirmDialog(this,
+        "¿Confirmar la compra?\n\n" +
+        "Película: " + funcionSeleccionada.getPelicula().getTitulo() + "\n" +
+        "Función: " + funcionSeleccionada.getHoraInicio() + "\n" +
+        "Asientos: " + lugaresSeleccionados.size() + "\n" +
+        "Medio de pago: " + medioPago + "\n" +
+        "Total: $" + String.format("%.2f", subtotal),
+        "Confirmar Compra",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE);
+
+if (confirmacion != JOptionPane.YES_OPTION) {
+    return;
+}
   
     try {
       
@@ -528,7 +641,7 @@ private void cargarPeliculas() {
             resumen.append("  • Fila ").append(l.getFila())
                    .append(" - Asiento ").append(l.getNum()).append("\n");
         }
-        
+        resumen.append("Medio de pago: ").append(medioPago).append("\n\n");
         resumen.append("\nCantidad: ").append(lugaresSeleccionados.size()).append(" entrada(s)\n");
         resumen.append("Precio unitario: $").append(String.format("%.2f", funcionSeleccionada.getPrecio())).append("\n");
         resumen.append("\n═══════════════════════════════\n");
@@ -575,18 +688,26 @@ private void cargarPeliculas() {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
-     int confirmacion = JOptionPane.showConfirmDialog(this,
-        "¿Está seguro que desea salir?\n\nSe perderán los datos no guardados.",
-        "Confirmar Salida",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.QUESTION_MESSAGE);
+    int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Desea realizar otra compra?",
+            "Nueva Compra",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
     
     if (confirmacion == JOptionPane.YES_OPTION) {
       
+        limpiarFormulario();
+        cargarPeliculas();
+    } else {
+
         this.dispose();
     
     }
     }//GEN-LAST:event_jButtonSalirActionPerformed
+
+    private void jComboMedioPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboMedioPagoActionPerformed
+        
+    }//GEN-LAST:event_jComboMedioPagoActionPerformed
 
     
     private void limpiarFormulario() {
@@ -594,7 +715,6 @@ private void cargarPeliculas() {
         jComboBox2.removeAllItems();
         modeloLista.clear();
         jSpinField1.setValue(1);
-        jLabelPrecio.setText("Precio por entrada: $10.0000");
         jLabelTotal.setText("TOTAL: $0.00");
         lugaresSeleccionados.clear();
         funcionSeleccionada = null;
@@ -646,9 +766,11 @@ private void cargarPeliculas() {
     private javax.swing.JButton jButtonSalir;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboMedioPago;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelCantEntradas;
     private javax.swing.JLabel jLabelFuncion;
     private javax.swing.JLabel jLabelPelicula;
@@ -657,7 +779,7 @@ private void cargarPeliculas() {
     private javax.swing.JLabel jLabelTotal;
     private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane1;
     private com.toedter.components.JSpinField jSpinField1;
     // End of variables declaration//GEN-END:variables
 
@@ -856,7 +978,52 @@ private void cargarLugares() {
             JOptionPane.ERROR_MESSAGE);
         funcionSeleccionada = null;
     }
+      agregarLeyendaColores();
+
+
 }
+private void agregarLeyendaColores() {
+    JPanel panelLeyenda = new JPanel();
+    panelLeyenda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 10));
+    panelLeyenda.setBackground(Color.WHITE);
+    panelLeyenda.setBorder(BorderFactory.createTitledBorder(
+        BorderFactory.createLineBorder(new Color(220, 20, 60), 2),
+        "Leyenda de Asientos",
+        javax.swing.border.TitledBorder.CENTER,
+        javax.swing.border.TitledBorder.DEFAULT_POSITION,
+        new Font("Segoe UI", Font.BOLD, 14),
+        new Color(220, 20, 60)
+    ));
+    
+    
+    JButton btnDisponible = new JButton("  Disponible  ");
+    btnDisponible.setBackground(new Color(34, 139, 34));
+    btnDisponible.setForeground(Color.WHITE);
+    btnDisponible.setFont(new Font("Segoe UI", Font.BOLD, 12));
+    btnDisponible.setEnabled(false);
+    btnDisponible.setFocusPainted(false);
+    
+
+    JButton btnSeleccionado = new JButton("  ⭐ Seleccionado  ");
+    btnSeleccionado.setBackground(new Color(255, 215, 0));
+    btnSeleccionado.setForeground(Color.BLACK);
+    btnSeleccionado.setFont(new Font("Segoe UI", Font.BOLD, 12));
+    btnSeleccionado.setEnabled(false);
+    btnSeleccionado.setFocusPainted(false);
+    
+  
+    JButton btnOcupado = new JButton("   Ocupado  ");
+    btnOcupado.setBackground(new Color(128, 128, 128));
+    btnOcupado.setForeground(Color.WHITE);
+    btnOcupado.setFont(new Font("Segoe UI", Font.BOLD, 12));
+    btnOcupado.setEnabled(false);
+    btnOcupado.setFocusPainted(false);
+    
+    panelLeyenda.add(btnDisponible);
+    panelLeyenda.add(btnSeleccionado);
+    panelLeyenda.add(btnOcupado);
+}
+
 
 private void seleccionarLugares() {
     lugaresSeleccionados.clear();
