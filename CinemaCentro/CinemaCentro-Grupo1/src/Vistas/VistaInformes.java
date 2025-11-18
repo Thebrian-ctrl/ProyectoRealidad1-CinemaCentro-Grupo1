@@ -9,6 +9,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Cursor;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 
 public class VistaInformes extends javax.swing.JInternalFrame {
 
@@ -20,11 +25,87 @@ public class VistaInformes extends javax.swing.JInternalFrame {
     public VistaInformes() {
         initComponents();
         inicializar();
+        aplicarEstilos();
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
     }
+ 
+private void aplicarEstilos() {
+    Color ROJO_CINE = new Color(220, 20, 60);
+    Color NEGRO_CINE = new Color(30, 30, 30);
+    Color DORADO_CINE = new Color(255, 215, 0);
+    Color VERDE = new Color(34, 139, 34);
+    Color AZUL = new Color(52, 152, 219);
+    
+    jPanel1.setBackground(Color.WHITE);
+    jPanel1.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(ROJO_CINE, 3),
+        BorderFactory.createEmptyBorder(15, 15, 15, 15)
+    ));
+    
+    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 28));
+    jLabel1.setForeground(ROJO_CINE);
+    jLabel1.setText(" INFORMES Y REPORTES");
+    
+    TextoArea.setFont(new Font("Consolas", Font.PLAIN, 13));
+    TextoArea.setBackground(new Color(245, 245, 245));
+    TextoArea.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(ROJO_CINE, 2),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+    TextoArea.setEditable(false);
+    
+    configurarBoton(jButtonFecha, AZUL, Color.WHITE);
+    jButtonFecha.setText(" Por Fecha");
+    configurarBoton(jButtonPelicula, VERDE, Color.WHITE);
+    jButtonPelicula.setText(" Por Película");
+    configurarBoton(jButtonCompradores, new Color(156, 39, 176), Color.WHITE);
+    jButtonCompradores.setText(" Compradores");
+    configurarBoton(jButtonEstadisticas, DORADO_CINE, NEGRO_CINE);
+    jButtonEstadisticas.setText(" Estadísticas");
+    configurarBoton(jButtonLimpiar, new Color(128, 128, 128), Color.WHITE);
+    jButtonLimpiar.setText(" Limpiar");
+    configurarBoton(jButtonCerrar, ROJO_CINE, Color.WHITE);
+    jButtonCerrar.setText(" Cerrar");
+    
+    agregarEfectoHover(jButtonFecha, AZUL, new Color(41, 128, 185));
+    agregarEfectoHover(jButtonPelicula, VERDE, new Color(46, 204, 113));
+    agregarEfectoHover(jButtonCompradores, new Color(156, 39, 176), new Color(142, 68, 173));
+    agregarEfectoHover(jButtonEstadisticas, DORADO_CINE, new Color(255, 235, 59));
+    agregarEfectoHover(jButtonLimpiar, new Color(128, 128, 128), new Color(90, 90, 90));
+    agregarEfectoHover(jButtonCerrar, ROJO_CINE, new Color(255, 50, 90));
+}
+
+private void configurarBoton(JButton boton, Color colorFondo, Color colorTexto) {
+    boton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+    boton.setBackground(colorFondo);
+    boton.setForeground(colorTexto);
+    boton.setFocusPainted(false);
+    boton.setBorderPainted(false);
+    boton.setOpaque(true);
+    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    boton.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorFondo.darker(), 1),
+        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+    ));
+}
+
+private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHover) {
+    boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorHover);
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorNormal);
+        }
+    });
+}
+
+    
+   
+
 
     private void inicializar() {
         ticketData = new TicketCompraData();
