@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.util.ArrayList; 
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 public class TicketCompraData {
     
-    private final Connection conn;
+   private final Connection conn;
     
     public TicketCompraData() {
         conn = MyConexion.buscarConexion();
@@ -149,25 +150,72 @@ public class TicketCompraData {
     
     
     public void anularTicket (int idTicket) {
-     String query = "DELETE FROM ticketcompra WHERE idTicket = ?";
+    String queryBuscar = "SELECT idDetalleTicket FROM ticketcompra WHERE idTicket = ?";
+    Integer idDetalleTicket = null;
+    
+    try {
+        PreparedStatement psBuscar = conn.prepareStatement(queryBuscar);
+        psBuscar.setInt(1, idTicket);
+        ResultSet rs = psBuscar.executeQuery();
+        
+        if (rs.next()) {
+            idDetalleTicket = rs.getInt("idDetalleTicket");
+        }
+        
+        rs.close();
+        psBuscar.close();
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al buscar el ticket: " + e.getMessage());
+        e.printStackTrace();
+        return;
+    }
+    
+
+    String queryTicket = "DELETE FROM ticketcompra WHERE idTicket = ?";
+    
+    try {
+        PreparedStatement psTicket = conn.prepareStatement(queryTicket);
+        psTicket.setInt(1, idTicket);
+        
+        int filasAfectadas = psTicket.executeUpdate();
+        
+        if (filasAfectadas > 0) {
+            System.out.println("✅ TicketCompra eliminado: ID " + idTicket);
+        }
+        
+        psTicket.close();
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al eliminar el ticket: " + e.getMessage());
+        e.printStackTrace();
+        return;
+    }
+    
+ 
+    if (idDetalleTicket != null) {
+        String queryDetalle = "DELETE FROM detalleticket WHERE idDetalleTicket = ?";
         
         try {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, idTicket);
+            PreparedStatement psDetalle = conn.prepareStatement(queryDetalle);
+            psDetalle.setInt(1, idDetalleTicket);
             
-            int eliminado = ps.executeUpdate();
+            int filasAfectadas = psDetalle.executeUpdate();
             
-            if (eliminado == 1) {
-                JOptionPane.showMessageDialog(null, "Ticket anulado correctamente");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró ticket con ese ID");
+            if (filasAfectadas > 0) {
+                System.out.println("✅ DetalleTicket eliminado: ID " + idDetalleTicket);
             }
             
-            ps.close ();
-         
-       } catch (Exception e) {
-           JOptionPane.showMessageDialog(null, "Error al anular el ticket" + e.getMessage());
-       }
+            psDetalle.close();
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar el detalle: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    JOptionPane.showMessageDialog(null, "Ticket anulado correctamente");
+
     }
     
 
@@ -357,6 +405,105 @@ public class TicketCompraData {
         }
         
         return tickets;
+    }
+  
+    public List<Comprador> listarCompradoresPorFechaFuncion(LocalDate fechaFuncion) {
+        List<Comprador> compradores = new ArrayList<>();
+        
+        String query = "SELECT DISTINCT c.* FROM comprador c " +
+                       "INNER JOIN ticketcompra t ON c.idComprador = t.idComprador " +
+                       "WHERE DATE(t.fechaFuncion) = ?";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setDate(1, Date.valueOf(fechaFuncion));
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                Comprador comprador = new Comprador();
+                comprador.setIdComprador(rs.getInt("idComprador"));
+                comprador.setDni(rs.getInt("dni"));
+                comprador.setNombre(rs.getString("nombre"));
+                comprador.setPassword(rs.getString("password"));
+                comprador.setMedioDePago(rs.getString("medioDePago"));
+                comprador.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
+                
+                compradores.add(comprador);
+            }
+            
+            rs.close();
+            ps.close();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, 
+                "Error al listar compradores por fecha: " + e.getMessage());
+        }
+        
+        return compradores;
+    }
+    
+ 
+    public double obtenerTotalVentasPorRango(LocalDate fechaInicio, LocalDate fechaFin) {
+        double total = 0.0;
+        
+        String query = "SELECT SUM(monto) as total FROM ticketcompra " +
+                       "WHERE fechaCompra BETWEEN ? AND ?";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setDate(1, Date.valueOf(fechaInicio));
+            ps.setDate(2, Date.valueOf(fechaFin));
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()) {
+                total = rs.getDouble("total");
+            }
+            
+            rs.close();
+            ps.close();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, 
+                "Error al obtener total de ventas: " + e.getMessage());
+        }
+        
+        return total;
+    }
+    
+  
+    public int contarTicketsPorPeliculaYFecha(int idPelicula, LocalDate fechaInicio, LocalDate fechaFin) {
+        int cantidad = 0;
+        
+        String query = "SELECT COUNT(t.idTicket) as total " +
+                       "FROM ticketcompra t " +
+                       "INNER JOIN detalleticket dt ON t.idDetalleTicket = dt.idDetalleTicket " +
+                       "INNER JOIN funcion f ON dt.idFuncion = f.idFuncion " +
+                       "WHERE f.idPelicula = ? " +
+                       "AND t.fechaCompra BETWEEN ? AND ?";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, idPelicula);
+            ps.setDate(2, Date.valueOf(fechaInicio));
+            ps.setDate(3, Date.valueOf(fechaFin));
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()) {
+                cantidad = rs.getInt("total");
+            }
+            
+            rs.close();
+            ps.close();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, 
+                "Error al contar tickets: " + e.getMessage());
+        }
+        
+        return cantidad;
     }
     
   

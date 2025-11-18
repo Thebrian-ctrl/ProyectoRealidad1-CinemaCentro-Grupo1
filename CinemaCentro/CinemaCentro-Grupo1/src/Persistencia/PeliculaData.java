@@ -15,13 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author arceb
- */
+
 public class PeliculaData {
     
-    private final Connection conn;
+     private final Connection conn;
     
     public PeliculaData (){
         conn = MyConexion.buscarConexion();
@@ -247,7 +244,7 @@ public class PeliculaData {
         int actualizadas = ps.executeUpdate();
         ps.close();
         
-        return actualizadas; // ✅ Retornar cantidad de filas actualizadas
+        return actualizadas; 
         
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, 
@@ -319,6 +316,88 @@ public class PeliculaData {
     
     return peliculas;
 }
+   
+ 
+   public List<Object[]> obtenerPeliculasMasVistas(int limite) {
+       List<Object[]> estadisticas = new ArrayList<>();
+       
+       String query = "SELECT p.idPelicula, p.titulo, p.genero, p.rutaImagen, " +
+                      "COUNT(DISTINCT t.idTicket) as totalTickets, " +
+                      "SUM(dt.cantidad) as totalEntradas, " +
+                      "SUM(dt.subtotal) as recaudacion " +
+                      "FROM pelicula p " +
+                      "INNER JOIN funcion f ON p.idPelicula = f.idPelicula " +
+                      "INNER JOIN detalleticket dt ON f.idFuncion = dt.idFuncion " +
+                      "INNER JOIN ticketcompra t ON dt.idDetalleTicket = t.idDetalleTicket " +
+                      "WHERE p.cartelera = true " +
+                      "GROUP BY p.idPelicula, p.titulo, p.genero, p.rutaImagen " +
+                      "ORDER BY totalEntradas DESC " +
+                      "LIMIT ?";
+       
+       try {
+           PreparedStatement ps = conn.prepareStatement(query);
+           ps.setInt(1, limite);
+           
+           ResultSet rs = ps.executeQuery();
+           
+           while(rs.next()) {
+               Object[] fila = new Object[7];
+               fila[0] = rs.getInt("idPelicula");
+               fila[1] = rs.getString("titulo");
+               fila[2] = rs.getString("genero");
+               fila[3] = rs.getString("rutaImagen");
+               fila[4] = rs.getInt("totalTickets");
+               fila[5] = rs.getInt("totalEntradas");
+               fila[6] = rs.getDouble("recaudacion");
+               
+               estadisticas.add(fila);
+           }
+           
+           ps.close();
+           rs.close();
+           
+       } catch (Exception e) {
+           JOptionPane.showMessageDialog(null, 
+               "Error al obtener películas más vistas: " + e.getMessage());
+       }
+       
+       return estadisticas;
+   }
+   
+  
+   public List<Pelicula> listarTodasPeliculas() {
+       List<Pelicula> peliculas = new ArrayList<>();
+       String query = "SELECT * FROM pelicula ORDER BY titulo";
+       
+       try {
+           PreparedStatement ps = conn.prepareStatement(query);
+           ResultSet rs = ps.executeQuery();
+           
+           while(rs.next()) {
+               Pelicula peli = new Pelicula();
+               peli.setIdPelicula(rs.getInt("idPelicula"));
+               peli.setTitulo(rs.getString("titulo"));
+               peli.setDirector(rs.getString("director"));
+               peli.setActores(rs.getString("actores"));
+               peli.setOrigen(rs.getString("origen"));
+               peli.setGenero(rs.getString("genero"));
+               peli.setEstreno(rs.getDate("estreno").toLocalDate());
+               peli.setCartelera(rs.getBoolean("cartelera"));
+               peli.setRutaImagen(rs.getString("rutaImagen"));
+               
+               peliculas.add(peli);
+           }
+           
+           ps.close();
+           rs.close();
+           
+       } catch (Exception e) {
+           JOptionPane.showMessageDialog(null, 
+               "Error al listar todas las películas: " + e.getMessage());
+       }
+       
+       return peliculas;
+   }
    
     
     

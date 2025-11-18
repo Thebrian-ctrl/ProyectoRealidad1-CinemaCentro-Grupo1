@@ -21,6 +21,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JTextField;
 
 /**
  *
@@ -34,12 +40,113 @@ public class PantallaPeliculas extends javax.swing.JInternalFrame {
 
     public PantallaPeliculas() {
         initComponents();
+        aplicarEstilos ();
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        
     }
+private void aplicarEstilos() {
+   
+    Color colorPrimario = new Color(41, 128, 185);      
+    Color colorSecundario = new Color(52, 73, 94);      
+    Color colorExito = new Color(39, 174, 96);          
+    Color colorPeligro = new Color(231, 76, 60);        
+    Color colorAdvertencia = new Color(243, 156, 18);   
+    Color colorInfo = new Color(52, 152, 219);          
+    Color colorMorado = new Color(155, 89, 182);        
+    
+  
+    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
+    jLabel1.setForeground(colorPrimario);
+    
 
+    if (labelTitulo != null) {
+        labelTitulo.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        labelTitulo.setForeground(colorSecundario);
+    }
+    
+    Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 14);
+    jlabelTitulo.setFont(fuenteLabel);
+    jlabelDirector.setFont(fuenteLabel);
+    jLabelActores.setFont(fuenteLabel);
+    jLabelOrigen.setFont(fuenteLabel);
+    jLabelGenero.setFont(fuenteLabel);
+    jLabelCartelera.setFont(fuenteLabel);
+    
+
+    configurarTextField(jtfTitulo, colorPrimario);
+    configurarTextField(jtfDirector, colorSecundario);
+    configurarTextField(jtfActores, colorInfo);
+    configurarTextField(jtfOrigen, colorAdvertencia);
+    configurarTextField(jtfGenero, colorMorado);
+    
+ 
+    jdchooseEstreno.setFont(fuenteLabel);
+    jdchooseEstreno.setBorder(BorderFactory.createLineBorder(colorPrimario, 2));
+    
+    
+    jRadioButtonCartelera.setFont(new Font("Segoe UI", Font.BOLD, 13));
+    jRadioButtonCartelera.setFocusPainted(false);
+    jRadioButtonCartelera.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    jRadioButtonCartelera.setForeground(colorExito);
+    
+
+    jLabelImagen.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorSecundario, 2),
+        BorderFactory.createEmptyBorder(5, 5, 5, 5)
+    ));
+    jLabelImagen.setBackground(new Color(236, 240, 241));
+    jLabelImagen.setOpaque(true);
+    
+  
+    configurarBoton(jbGuardar2, colorExito, Color.WHITE);
+    configurarBoton(jButtonBuscar, colorInfo, Color.WHITE);
+    configurarBoton(jbActualizar, colorAdvertencia, Color.WHITE);
+    configurarBoton(jbSeleccionarArchivo, colorMorado, Color.WHITE);
+    configurarBoton(jButtonCerrar, colorPeligro, Color.WHITE);
+    
+   
+    agregarEfectoHover(jbGuardar2, colorExito, new Color(46, 204, 113));
+    agregarEfectoHover(jButtonBuscar, colorInfo, new Color(41, 128, 185));
+    agregarEfectoHover(jbActualizar, colorAdvertencia, new Color(211, 84, 0));
+    agregarEfectoHover(jbSeleccionarArchivo, colorMorado, new Color(142, 68, 173));
+    agregarEfectoHover(jButtonCerrar, colorPeligro, new Color(192, 57, 43));
+}
+
+private void configurarTextField(JTextField textField, Color colorBorde) {
+    textField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    textField.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorBorde, 2),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+}
+
+private void configurarBoton(JButton boton, Color colorFondo, Color colorTexto) {
+    boton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+    boton.setBackground(colorFondo);
+    boton.setForeground(colorTexto);
+    boton.setFocusPainted(false);
+    boton.setBorderPainted(false);
+    boton.setOpaque(true);
+    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    boton.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorFondo.darker(), 1),
+        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+    ));
+}
+
+private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHover) {
+    boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorHover);
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorNormal);
+        }
+    });
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

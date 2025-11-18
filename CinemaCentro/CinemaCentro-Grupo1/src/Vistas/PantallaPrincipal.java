@@ -66,6 +66,7 @@ private void diseñoPrincipal() {
         btnAdministrar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jButtonProximosEstrenos = new javax.swing.JButton();
+        jButtonConsultas = new javax.swing.JButton();
         jmenuBar = new javax.swing.JMenuBar();
         jmPeliculas = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -78,10 +79,9 @@ private void diseñoPrincipal() {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,18 +109,31 @@ private void diseñoPrincipal() {
             }
         });
 
+        jButtonConsultas.setText("Consultas");
+        jButtonConsultas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonConsultasActionPerformed(evt);
+            }
+        });
+
         jDesktopPane1.setLayer(btnComprar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnAdministrar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jButtonProximosEstrenos, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jButtonConsultas, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(jButtonProximosEstrenos)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(jButtonProximosEstrenos))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addComponent(jButtonConsultas)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(191, 191, 191)
@@ -136,11 +149,14 @@ private void diseñoPrincipal() {
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAdministrar, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnComprar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonProximosEstrenos, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
+                        .addComponent(jButtonConsultas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonProximosEstrenos)))
                 .addGap(24, 24, 24))
         );
 
@@ -220,6 +236,14 @@ private void diseñoPrincipal() {
         });
         jMenu1.add(jMenuItem6);
 
+        jMenuItem4.setText("Actualizar Precios");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
         jmenuBar.add(jMenu1);
 
         jMenu2.setText("Informes");
@@ -233,18 +257,6 @@ private void diseñoPrincipal() {
         jMenu2.add(jMenuItem3);
 
         jmenuBar.add(jMenu2);
-
-        jMenu3.setText("Consultas");
-
-        jMenuItem4.setText("Sala y horario");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem4);
-
-        jmenuBar.add(jMenu3);
 
         setJMenuBar(jmenuBar);
 
@@ -331,19 +343,6 @@ private void diseñoPrincipal() {
 
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-       ModificarTicket modificar = new ModificarTicket ();
-       modificar.setVisible (true);
-       jDesktopPane1.add(modificar);
-       
-       try {
-           modificar.setMaximum(true);
-       } catch (Exception e) {
-           
-       }
-       
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
-
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
   ModificarTicket modificar = new ModificarTicket();
     modificar.setVisible(true);
@@ -387,6 +386,31 @@ private void diseñoPrincipal() {
         pe.setVisible(true);
         jDesktopPane1.add(pe);
     }//GEN-LAST:event_jButtonProximosEstrenosActionPerformed
+
+    private void jButtonConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultasActionPerformed
+     VistaConsultas vistaConsultas = new VistaConsultas();
+    jDesktopPane1.add(vistaConsultas);
+    vistaConsultas.setVisible(true);
+    
+
+    try {
+        vistaConsultas.setMaximum(true);
+    } catch (java.beans.PropertyVetoException e) {
+       
+    }
+    }//GEN-LAST:event_jButtonConsultasActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+       VistaActualizarPrecios vistaPrecios = new VistaActualizarPrecios();
+    jDesktopPane1.add(vistaPrecios);
+    vistaPrecios.setVisible(true);
+    
+    try {
+        vistaPrecios.setMaximum(true);
+    } catch (java.beans.PropertyVetoException e) {
+       
+    }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
 
     public static void main(String args[]) {
@@ -437,12 +461,12 @@ private void diseñoPrincipal() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdministrar;
     private javax.swing.JButton btnComprar;
+    private javax.swing.JButton jButtonConsultas;
     private javax.swing.JButton jButtonProximosEstrenos;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuItem jMenuFuncion;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;

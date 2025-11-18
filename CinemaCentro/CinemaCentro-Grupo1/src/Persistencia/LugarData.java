@@ -31,34 +31,42 @@ public class LugarData {
     public void guardarLugar(Lugar lugar) {
         String query = "INSERT INTO Lugar (fila, num, estado, idFuncion) VALUES(?, ?, ?, ?)";
 
-        try {
-            PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+    try {
+        PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            ps.setString(1, String.valueOf(lugar.getFila()));
-            ps.setInt(2, lugar.getNum());
-            ps.setBoolean(3, lugar.isEstado());
-            
-            if (lugar.getFuncion() != null) {
-                ps.setInt(4, lugar.getFuncion().getIdFuncion());
-            } else {
-                ps.setNull(4, Types.INTEGER);
-            }
-
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-
-            if (rs.next()) {
-                lugar.setIdLugar(rs.getInt(1));
-                JOptionPane.showMessageDialog(null, "Lugar guardado correctamente");
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al guardar el Lugar");
-            }
+        ps.setString(1, String.valueOf(lugar.getFila()));
+        ps.setInt(2, lugar.getNum());
+        ps.setBoolean(3, lugar.isEstado());
+        
+      
+        if (lugar.getFuncion() != null && lugar.getFuncion().getIdFuncion() > 0) {
+            ps.setInt(4, lugar.getFuncion().getIdFuncion());
+        } else {
+            JOptionPane.showMessageDialog(null, 
+                "Error: No se puede guardar un lugar sin función válida");
             ps.close();
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla...: " + e.getMessage());
+            return;
         }
+
+        ps.executeUpdate();
+
+        ResultSet rs = ps.getGeneratedKeys();
+
+        if (rs.next()) {
+            lugar.setIdLugar(rs.getInt(1));
+         
+        } else {
+            System.out.println("Error al guardar el Lugar");
+        }
+        
+        ps.close();
+        rs.close();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al guardar lugar: " + e.getMessage());
+        e.printStackTrace();
+    }
 
     }
 

@@ -174,45 +174,43 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
     
 
 }
+private void cargarPeliculas() {
+    jComboBox1.removeAllItems();
+    peliculas = peliculaData.listarPeliculasCartelera();
+    
+    for (Pelicula p : peliculas) {
+        jComboBox1.addItem(p.getTitulo());
+    }
+}
    
      private void inicializar() {
          
-          
-         peliculaData = new PeliculaData();
-        funcionData = new FuncionData();
-        lugarData = new LugarData();
-        compradorData = new CompradorData();
-        ticketData = new TicketCompraData();
-        detalleData = new DetalleTicketData();
-        
-         lugaresSeleccionados = new ArrayList<>();
-        modeloLista = new DefaultListModel<>();
-        jList2.setModel(modeloLista);
-        
-        
-         jSpinField1.setMinimum(1);
-        jSpinField1.setMaximum(10);
-        jSpinField1.setValue(1);
-        
-          cargarPeliculas();
-          jComboBox1.addActionListener(e -> cargarFunciones());
-        jComboBox2.addActionListener(e -> cargarLugares());
-        jList2.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                seleccionarLugares();
-            }
-        });
-       
-     }
-     
-      private void cargarPeliculas() {
-        jComboBox1.removeAllItems();
-        peliculas = peliculaData.listarPeliculasCartelera();
-        
-        for (Pelicula p : peliculas) {
-            jComboBox1.addItem(p.getTitulo());
+  peliculaData = new PeliculaData();
+    funcionData = new FuncionData();
+    lugarData = new LugarData();
+    compradorData = new CompradorData();
+    ticketData = new TicketCompraData();
+    detalleData = new DetalleTicketData();
+    
+    lugaresSeleccionados = new ArrayList<>();
+    modeloLista = new DefaultListModel<>();
+    jList2.setModel(modeloLista);
+    
+    jSpinField1.setMinimum(1);
+    jSpinField1.setMaximum(10);
+    jSpinField1.setValue(1);
+    
+    cargarPeliculas();
+    
+ 
+    jComboBox1.addActionListener(e -> cargarFunciones());
+    jComboBox2.addActionListener(e -> cargarLugares());
+    jList2.addListSelectionListener(e -> {
+        if (!e.getValueIsAdjusting()) {
+            seleccionarLugares();
         }
-    }
+    });
+     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -419,111 +417,144 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
     
     private void BtnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnComprarActionPerformed
 
+   if (compradorActual == null) {
+        JOptionPane.showMessageDialog(this,
+                "Debe iniciar sesión para realizar una compra.\n" +
+                "Por favor, regístrese o inicie sesión primero.",
+                "Sin Comprador",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+  
+    if (jComboBox1.getSelectedIndex() < 0) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor seleccione una película",
+                "Película no seleccionada",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+
+    if (jComboBox2.getSelectedIndex() < 0 || funcionSeleccionada == null) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor seleccione una función",
+                "Función no seleccionada",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+ 
+    if (lugaresSeleccionados.isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor seleccione al menos un asiento",
+                "Sin asientos seleccionados",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+   
+    int cantidadSpin = jSpinField1.getValue();
+    if (lugaresSeleccionados.size() != cantidadSpin) {
+        JOptionPane.showMessageDialog(this,
+                "Debe seleccionar exactamente " + cantidadSpin + " asiento(s).\n" +
+                "Actualmente tiene " + lugaresSeleccionados.size() + " seleccionado(s).",
+                "Cantidad incorrecta",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+  
+    double subtotal = funcionSeleccionada.getPrecio() * lugaresSeleccionados.size();
+    int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Confirmar la compra?\n\n" +
+            "Película: " + funcionSeleccionada.getPelicula().getTitulo() + "\n" +
+            "Función: " + funcionSeleccionada.getHoraInicio() + "\n" +
+            "Asientos: " + lugaresSeleccionados.size() + "\n" +
+            "Total: $" + String.format("%.2f", subtotal),
+            "Confirmar Compra",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+    
+    if (confirmacion != JOptionPane.YES_OPTION) {
+        return;
+    }
+    
+ 
     try {
       
-        if (jComboBox1.getSelectedIndex() < 0) {
-            JOptionPane.showMessageDialog(this, "Seleccione una película");
-            return;
-        }
+        DetalleTicket primerDetalle = null;
         
-     
-        if (jComboBox2.getSelectedIndex() < 0) {
-            JOptionPane.showMessageDialog(this, "Seleccione una función");
-            return;
-        }
-        
-     
-        int cantidad = jSpinField1.getValue();
-        if (cantidad <= 0) {
-            JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0");
-            return;
-        }
- 
-        if (lugaresSeleccionados.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe seleccionar al menos un asiento.\n\n" +
-                "IMPORTANTE: Mantenga presionada la tecla CTRL\n" +
-                "para seleccionar múltiples asientos.");
-            return;
-        }
-        
-    
-        if (lugaresSeleccionados.size() != cantidad) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe seleccionar exactamente " + cantidad + " asiento(s).\n" +
-                "Actualmente tiene " + lugaresSeleccionados.size() + " seleccionado(s).\n\n" +
-                "TIP: Use CTRL + Click para seleccionar múltiples asientos.");
-            return;
-        }
-        
-      
-        double subtotal = funcionSeleccionada.getPrecio() * cantidad;
-        
-      
-        Lugar lugarPrincipal = lugaresSeleccionados.get(0);
-        
-   
-        DetalleTicket detalle = new DetalleTicket(
-            funcionSeleccionada,
-            lugarPrincipal,
-            cantidad,
-            subtotal
-        );
-        
-     
-        detalleData.guardarDetalleTicket(detalle);
-        
-     
-        TicketCompra ticket = new TicketCompra(
-            LocalDate.now(),
-            funcionSeleccionada.getHoraInicio(),
-            subtotal,
-            compradorActual,
-            detalle
-        );
-        
-    
-        ticketData.guardarTicketCompra(ticket);
-    
         for (Lugar lugar : lugaresSeleccionados) {
-            lugarData.darBajaLugar(lugar.getIdLugar());
+          
+            DetalleTicket detalle = new DetalleTicket();
+            detalle.setFuncion(funcionSeleccionada);
+            detalle.setLugar(lugar);
+            detalle.setCantidad(1);
+            detalle.setSubtotal(funcionSeleccionada.getPrecio());
+            
+      
+            detalleData.guardarDetalleTicket(detalle);
+            
+         
+            if (primerDetalle == null) {
+                primerDetalle = detalle;
+            }
+            
+          
+            lugar.setEstado(false);
+            lugarData.actualizarLugar(lugar);
         }
         
-   
+     
+        TicketCompra ticket = new TicketCompra();
+        ticket.setFechaCompra(LocalDate.now());
+        ticket.setFechaFuncion(funcionSeleccionada.getHoraInicio());
+        ticket.setMonto(subtotal);
+        ticket.setComprador(compradorActual);
+        ticket.setDetalleticket(primerDetalle); 
+        
+
+        ticketData.guardarTicketCompra(ticket);
+        
+  
         StringBuilder resumen = new StringBuilder();
-        resumen.append("¡COMPRA EXITOSA!\n\n");
-        resumen.append("Ticket #").append(ticket.getIdTicket()).append("\n");
-        resumen.append("═══════════════════════════════\n");
+ 
+        resumen.append("     ✅ COMPRA EXITOSA\n");
+        resumen.append("═══════════════════════════════\n\n");
+        resumen.append("Ticket #").append(ticket.getIdTicket()).append("\n\n");
         resumen.append("Comprador: ").append(compradorActual.getNombre()).append("\n");
-        resumen.append("DNI: ").append(compradorActual.getDni()).append("\n");
-        resumen.append("───────────────────────────────\n");
+        resumen.append("DNI: ").append(compradorActual.getDni()).append("\n\n");
         resumen.append("Película: ").append(funcionSeleccionada.getPelicula().getTitulo()).append("\n");
-        resumen.append("Función: ").append(funcionSeleccionada.getHoraInicio().format(
-            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n");
+        resumen.append("Función: ").append(funcionSeleccionada.getHoraInicio()).append("\n");
         resumen.append("Sala: ").append(funcionSeleccionada.getSalaProyeccion().getNroSala()).append("\n");
-        resumen.append("Formato: ").append(funcionSeleccionada.isEs3d() ? "3D" : "2D").append("\n");
-        resumen.append("───────────────────────────────\n");
-        resumen.append("Asientos:\n");
+        resumen.append("Tipo: ").append(funcionSeleccionada.isEs3d() ? "3D" : "2D").append("\n");
+        resumen.append("Idioma: ").append(funcionSeleccionada.getIdioma()).append("\n\n");
+        
+        resumen.append("Asientos comprados:\n");
         for (Lugar l : lugaresSeleccionados) {
             resumen.append("  • Fila ").append(l.getFila())
                    .append(" - Asiento ").append(l.getNum()).append("\n");
         }
-        resumen.append("───────────────────────────────\n");
-        resumen.append("Cantidad: ").append(cantidad).append(" entrada(s)\n");
+        
+        resumen.append("\nCantidad: ").append(lugaresSeleccionados.size()).append(" entrada(s)\n");
         resumen.append("Precio unitario: $").append(String.format("%.2f", funcionSeleccionada.getPrecio())).append("\n");
-        resumen.append("TOTAL: $").append(String.format("%.2f", subtotal)).append("\n");
+        resumen.append("\n═══════════════════════════════\n");
+        resumen.append("TOTAL PAGADO: $").append(String.format("%.2f", subtotal)).append("\n");
         resumen.append("═══════════════════════════════\n");
         
         JOptionPane.showMessageDialog(this, resumen.toString(), 
             "Compra Exitosa", JOptionPane.INFORMATION_MESSAGE);
         
-     
+       
         limpiarFormulario();
         
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, 
-            "Error al procesar la compra: " + e.getMessage(),
-            "Error", JOptionPane.ERROR_MESSAGE);
+            "❌ Error al procesar la compra: " + e.getMessage() + "\n\n" +
+            "Por favor, intente nuevamente o contacte al administrador.",
+            "Error en la Compra", 
+            JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
     
 
@@ -561,18 +592,9 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
         JOptionPane.QUESTION_MESSAGE);
     
     if (confirmacion == JOptionPane.YES_OPTION) {
-             javax.swing.JDesktopPane escritorio = this.getDesktopPane();
-        
       
         this.dispose();
-        
     
-        if (escritorio != null) {
-            javax.swing.JInternalFrame[] frames = escritorio.getAllFrames();
-            for (javax.swing.JInternalFrame frame : frames) {
-                frame.dispose();
-            }
-        }
     }
     }//GEN-LAST:event_jButtonSalirActionPerformed
 
@@ -588,7 +610,44 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
         funcionSeleccionada = null;
     }
   
+    public void dispose() {
+   
+    System.out.println("=== CERRANDO COMPRA TICKET ===");
     
+    try {
+     
+        if (jComboBox1 != null && jComboBox1.getActionListeners().length > 0) {
+            for (java.awt.event.ActionListener al : jComboBox1.getActionListeners()) {
+                jComboBox1.removeActionListener(al);
+            }
+        }
+        
+        if (jComboBox2 != null && jComboBox2.getActionListeners().length > 0) {
+            for (java.awt.event.ActionListener al : jComboBox2.getActionListeners()) {
+                jComboBox2.removeActionListener(al);
+            }
+        }
+        
+   
+        if (modeloLista != null) {
+            modeloLista.clear();
+        }
+        
+        if (lugaresSeleccionados != null) {
+            lugaresSeleccionados.clear();
+        }
+        
+        funcionSeleccionada = null;
+        
+    } catch (Exception e) {
+        System.out.println("Error al limpiar: " + e.getMessage());
+    }
+    
+    System.out.println("=== COMPRA TICKET CERRADO ===");
+    
+  
+    super.dispose();
+}
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCancelar;
@@ -613,31 +672,74 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
     // End of variables declaration//GEN-END:variables
 
  private void cargarFunciones() {
-    jComboBox2.removeAllItems();
-    
-    if (jComboBox1.getSelectedIndex() < 0) {
-        return;
+     
+    java.awt.event.ActionListener[] listeners = jComboBox2.getActionListeners();
+    for (java.awt.event.ActionListener listener : listeners) {
+        jComboBox2.removeActionListener(listener);
     }
     
+  
+    jComboBox2.removeAllItems();
+    modeloLista.clear();
+    funcionSeleccionada = null;
+    
+    if (jComboBox1.getSelectedIndex() < 0) {
+        System.out.println("No hay película seleccionada");
+        
+     
+        for (java.awt.event.ActionListener listener : listeners) {
+            jComboBox2.addActionListener(listener);
+        }
+        return;
+    }
 
     String tituloSeleccionado = (String) jComboBox1.getSelectedItem();
+    
+    System.out.println("=== CARGANDO FUNCIONES ===");
+    System.out.println("Película seleccionada: " + tituloSeleccionado);
     
    
     funciones = funcionData.listarFuncion();
     
+    System.out.println("Total de funciones en BD: " + funciones.size());
     
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     
+    int funcionesEncontradas = 0;
+    
     for (Funcion f : funciones) {
-        if (f.getPelicula().getTitulo().equals(tituloSeleccionado)) {
+        if (f.getPelicula() != null && 
+            f.getPelicula().getTitulo() != null &&
+            f.getPelicula().getTitulo().equals(tituloSeleccionado)) {
+            
             String formato3d = f.isEs3d() ? "3D" : "2D";
             String formatoSub = f.isSubtitulado() ? "SUB" : "DUB";
             String texto = f.getHoraInicio().format(formatter) + " - " + 
                           formato3d + " " + formatoSub + " - Sala " + 
                           f.getSalaProyeccion().getNroSala();
+            
             jComboBox2.addItem(texto);
+            funcionesEncontradas++;
+            
+            System.out.println("Función agregada: " + texto + " (ID: " + f.getIdFuncion() + ")");
         }
     }
+    
+
+    for (java.awt.event.ActionListener listener : listeners) {
+        jComboBox2.addActionListener(listener);
+    }
+    
+    System.out.println("Funciones encontradas para '" + tituloSeleccionado + "': " + funcionesEncontradas);
+    
+    if (funcionesEncontradas == 0) {
+        JOptionPane.showMessageDialog(this,
+            "No hay funciones disponibles para la película '" + tituloSeleccionado + "'",
+            "Sin funciones",
+            JOptionPane.WARNING_MESSAGE);
+    }
+    
+    System.out.println("=== CARGA DE FUNCIONES COMPLETADA ===");
 }
 
 private void cargarLugares() {
@@ -645,64 +747,125 @@ private void cargarLugares() {
     System.out.println("=== INICIANDO CARGA DE LUGARES ===");
     modeloLista.clear();
     
+    
     if (jComboBox2.getSelectedIndex() < 0) {
-        System.out.println("ERROR: No hay función seleccionada");
+        System.out.println("ERROR: No hay función seleccionada en el combo");
+        funcionSeleccionada = null;
+        jLabelPrecio.setText("Precio por entrada: $0.00");
+        jLabelTotal.setText("TOTAL: $0.00");
         return;
     }
     
  
+    if (jComboBox1.getSelectedIndex() < 0) {
+        System.out.println("ERROR: No hay película seleccionada");
+        funcionSeleccionada = null;
+        return;
+    }
+    
+    
+    if (funciones == null || funciones.isEmpty()) {
+        System.out.println("ERROR: Lista de funciones vacía");
+        JOptionPane.showMessageDialog(this, 
+            "No hay funciones disponibles. Por favor seleccione otra película.",
+            "Sin funciones",
+            JOptionPane.WARNING_MESSAGE);
+        funcionSeleccionada = null;
+        return;
+    }
+    
     int indiceFuncion = jComboBox2.getSelectedIndex();
     String tituloSeleccionado = (String) jComboBox1.getSelectedItem();
     
     System.out.println("Función seleccionada (índice): " + indiceFuncion);
     System.out.println("Película: " + tituloSeleccionado);
     
-   
+ 
     int contador = 0;
     funcionSeleccionada = null;
     
     for (Funcion f : funciones) {
-        if (f.getPelicula().getTitulo().equals(tituloSeleccionado)) {
+        if (f.getPelicula() != null && 
+            f.getPelicula().getTitulo() != null &&
+            f.getPelicula().getTitulo().equals(tituloSeleccionado)) {
+            
             if (contador == indiceFuncion) {
                 funcionSeleccionada = f;
-                System.out.println("Función encontrada - ID: " + f.getIdFuncion());
+                System.out.println("✅ Función encontrada - ID: " + f.getIdFuncion());
                 break;
             }
             contador++;
         }
     }
     
+   
     if (funcionSeleccionada == null) {
-        System.out.println("ERROR: No se encontró la función");
-        JOptionPane.showMessageDialog(this, "Error al cargar la función");
+        System.out.println(" ERROR: No se encontró la función");
+        JOptionPane.showMessageDialog(this, 
+            "Error al cargar la función seleccionada.\n" +
+            "Por favor intente nuevamente.",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
         return;
     }
     
-  
-    List<Lugar> lugaresDisponibles = lugarData.buscarLugaresPorFuncion(
-        funcionSeleccionada.getIdFuncion()
-    );
-    
-    System.out.println("Lugares disponibles encontrados: " + lugaresDisponibles.size());
-    
-    if (lugaresDisponibles.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "No hay lugares disponibles para esta función");
-        return;
-    }
  
-    for (Lugar lugar : lugaresDisponibles) {
-        String texto = "Fila " + lugar.getFila() + " - Asiento " + lugar.getNum();
-        modeloLista.addElement(texto);
-        System.out.println("Lugar agregado: " + texto);
+    if (funcionSeleccionada.getIdFuncion() <= 0) {
+        System.out.println(" ERROR: La función no tiene ID válido");
+        JOptionPane.showMessageDialog(this, 
+            "La función seleccionada no tiene un ID válido.",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        funcionSeleccionada = null;
+        return;
     }
-
-    jLabelPrecio.setText("Precio por entrada: $" + 
-        String.format("%.2f", funcionSeleccionada.getPrecio()));
-  
-    actualizarTotal();
     
-    System.out.println("=== CARGA COMPLETADA ===");
+    try {
+      
+        List<Lugar> lugaresDisponibles = lugarData.buscarLugaresPorFuncion(
+            funcionSeleccionada.getIdFuncion()
+        );
+        
+        System.out.println("Lugares disponibles encontrados: " + lugaresDisponibles.size());
+        
+     
+        if (lugaresDisponibles.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                " NO HAY LUGARES DISPONIBLES\n\n" +
+                "Todos los asientos están ocupados para esta función.\n" +
+                "Por favor seleccione otro horario.",
+                "Sin lugares disponibles",
+                JOptionPane.WARNING_MESSAGE);
+            jLabelPrecio.setText("Precio: $" + String.format("%.2f", funcionSeleccionada.getPrecio()));
+            jLabelTotal.setText("TOTAL: $0.00 (SIN LUGARES)");
+            return;
+        }
+        
+      
+        for (Lugar lugar : lugaresDisponibles) {
+            String texto = "Fila " + lugar.getFila() + " - Asiento " + lugar.getNum();
+            modeloLista.addElement(texto);
+            System.out.println("Lugar agregado: " + texto);
+        }
 
+  
+        jLabelPrecio.setText("Precio por entrada: $" + 
+            String.format("%.2f", funcionSeleccionada.getPrecio()));
+        
+     
+        actualizarTotal();
+        
+        System.out.println("=== CARGA COMPLETADA EXITOSAMENTE ===");
+        
+    } catch (Exception e) {
+        System.out.println(" ERROR en carga de lugares: " + e.getMessage());
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, 
+            "Error al cargar los lugares:\n" + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        funcionSeleccionada = null;
+    }
 }
 
 private void seleccionarLugares() {

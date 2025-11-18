@@ -7,22 +7,22 @@ package Vistas;
 
 import Modelo.Funcion;
 import Modelo.Lugar;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Cursor;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import Persistencia.DetalleTicketData;
 import Persistencia.FuncionData;
 import Persistencia.LugarData;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import java.util.List;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 
-/**
- *
- * @author Usuario
- */
+
 public class VistaDetalleTicket extends javax.swing.JInternalFrame {
     
  private DetalleTicketData detalleData;
@@ -39,8 +39,111 @@ public class VistaDetalleTicket extends javax.swing.JInternalFrame {
     public VistaDetalleTicket() {
         initComponents();
          inicializar();
+         aplicarEstilos ();
+         setClosable(true);
+    setIconifiable(true);
+    setMaximizable(true);
+    setResizable(true);
     }
+    private void aplicarEstilos() {
+  
+    Color colorPrimario = new Color(41, 128, 185);    
+    Color colorSecundario = new Color(52, 73, 94);     
+    Color colorExito = new Color(39, 174, 96);         
+    Color colorPeligro = new Color(231, 76, 60);       
+    Color colorAdvertencia = new Color(243, 156, 18);   
+    Color colorInfo = new Color(52, 152, 219);          
+    Color colorMorado = new Color(155, 89, 182);       
     
+ 
+    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
+    jLabel1.setForeground(colorPrimario);
+    
+  
+    Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 14);
+    jLabel2.setFont(fuenteLabel);
+    jLabel3.setFont(fuenteLabel);
+    jLabel4.setFont(fuenteLabel);
+    jLabel5.setFont(fuenteLabel);
+    jLabel6.setFont(fuenteLabel);
+    jLabel7.setFont(fuenteLabel);
+    
+   
+    configurarTextField(jTextField1, colorSecundario);
+    configurarTextField(jTextFieldSubtotal, colorExito);
+    
+
+    configurarComboBox(jComboBoxFuncion, colorPrimario);
+    configurarComboBox(jComboBoxLugar, colorInfo);
+    
+   
+    jSpinnerCantidad.setFont(fuenteLabel);
+    ((JSpinner.DefaultEditor) jSpinnerCantidad.getEditor()).getTextField().setBorder(
+        BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(colorAdvertencia, 2),
+            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        )
+    );
+    ((JSpinner.DefaultEditor) jSpinnerCantidad.getEditor()).getTextField().setFont(fuenteLabel);
+    
+
+    configurarBoton(jButtonNuevo, colorInfo, Color.WHITE);
+    configurarBoton(jButtonGuardar, colorExito, Color.WHITE);
+    configurarBoton(jButtonBuscar, colorPrimario, Color.WHITE);
+    configurarBoton(jButtonActualizar, colorAdvertencia, Color.WHITE);
+    configurarBoton(jButtonEliminar, colorPeligro, Color.WHITE);
+    configurarBoton(jButtonSalir, colorSecundario, Color.WHITE);
+    
+
+    agregarEfectoHover(jButtonNuevo, colorInfo, new Color(41, 128, 185));
+    agregarEfectoHover(jButtonGuardar, colorExito, new Color(46, 204, 113));
+    agregarEfectoHover(jButtonBuscar, colorPrimario, new Color(52, 152, 219));
+    agregarEfectoHover(jButtonActualizar, colorAdvertencia, new Color(211, 84, 0));
+    agregarEfectoHover(jButtonEliminar, colorPeligro, new Color(192, 57, 43));
+    agregarEfectoHover(jButtonSalir, colorSecundario, new Color(44, 62, 80));
+}
+
+private void configurarTextField(JTextField textField, Color colorBorde) {
+    textField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    textField.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorBorde, 2),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+}
+
+private void configurarComboBox(JComboBox comboBox, Color colorBorde) {
+    comboBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    comboBox.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorBorde, 2),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+    comboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
+}
+
+private void configurarBoton(JButton boton, Color colorFondo, Color colorTexto) {
+    boton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+    boton.setBackground(colorFondo);
+    boton.setForeground(colorTexto);
+    boton.setFocusPainted(false);
+    boton.setBorderPainted(false);
+    boton.setOpaque(true);
+    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    boton.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorFondo.darker(), 1),
+        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+    ));
+}
+
+private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHover) {
+    boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorHover);
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorNormal);
+        }
+    });
+}
  private void inicializar() {
         detalleData = new DetalleTicketData();
         funcionData = new FuncionData();

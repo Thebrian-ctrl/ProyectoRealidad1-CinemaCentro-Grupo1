@@ -5,91 +5,138 @@
  */
 package Vistas;
 
-import Modelo.*;
-import Persistencia.*;
+
+import Modelo.Comprador;
+import Modelo.DetalleTicket;
+import Modelo.Lugar;
+import Modelo.TicketCompra;
+import Persistencia.CompradorData;
+import Persistencia.DetalleTicketData;
+import Persistencia.LugarData;
+import Persistencia.TicketCompraData;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import java.time.format.DateTimeFormatter;
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.JTextField;
 
-/**
- *
- * @author camila biarnes
- */
+
+
 public class AnularTicket extends javax.swing.JInternalFrame {
+    
+    
 
-    private TicketCompraData ticketData;
-    private CompradorData compradorData;
-    private LugarData lugarData;
-    private DetalleTicketData detalleData;
-
-    private TicketCompra ticketActual;
-    private DateTimeFormatter formatter;
+ private TicketCompraData ticketData;
+private DetalleTicketData detalleData;
+private LugarData lugarData;
+private CompradorData compradorData;
+private TicketCompra ticketActual;
 
     public AnularTicket() {
         initComponents();
-        setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
-        setResizable(true);
-        inicializar();
-        aplicarEstilos();
-    }
+    inicializar();
+    aplicarEstilos();
+}
 
-    private void inicializar() {
-
-        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        ticketData = new TicketCompraData();
-        compradorData = new CompradorData();
-        lugarData = new LugarData();
-        detalleData = new DetalleTicketData();
-
-        jtaInfoTicket.setEditable(false);
-        jButtonAnular.setEnabled(false);
-
-        limpiarCampos();
+private void inicializar() {
+    ticketData = new TicketCompraData();
+    detalleData = new DetalleTicketData();
+    lugarData = new LugarData();
+    compradorData = new CompradorData();
+    
+    setClosable(true);
+    setIconifiable(true);
+    setMaximizable(true);
+    setResizable(true);
+     aplicarEstilos();
+    jtaInfoTicket.setEditable(false);
+    jtaInfoTicket.setText("Ingrese un ID de ticket y presione 'Buscar'");
 
     }
 
-    private void aplicarEstilos() {
-        Color colorPrimario = new Color(41, 128, 185);
-        Color colorPeligro = new Color(231, 76, 60);
-        Color colorSecundario = new Color(149, 165, 166);
+   private void aplicarEstilos() {
+   
+    Color colorPrimario = new Color(41, 128, 185);
+    Color colorSecundario = new Color(52, 73, 94);
+    Color colorExito = new Color(39, 174, 96);
+    Color colorPeligro = new Color(231, 76, 60);
+    Color colorAdvertencia = new Color(243, 156, 18);
+    
+  
+    jPanel1.setBackground(Color.WHITE);
+    jPanel1.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorPeligro, 2),
+        BorderFactory.createEmptyBorder(20, 20, 20, 20)
+    ));
+    
+   
+    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
+    jLabel1.setForeground(colorPeligro);
+    
+   
+    Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 14);
+    jLabel2.setFont(fuenteLabel);
+    jLabel3.setFont(fuenteLabel);
+    jLabel4.setFont(fuenteLabel);
+    
+   
+    configurarTextField(jtfIdTicket, colorPrimario);
+    configurarTextField(jtaMotivo, colorAdvertencia);
+    
 
-        jPanel1.setBackground(Color.WHITE);
-        jPanel1.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(colorPrimario, 2),
-                BorderFactory.createEmptyBorder(20, 20, 20, 20)
-        ));
+    jtaInfoTicket.setFont(new Font("Consolas", Font.PLAIN, 12));
+    jtaInfoTicket.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorSecundario, 1),
+        BorderFactory.createEmptyBorder(10, 10, 10, 10)
+    ));
+    
+ 
+    configurarBoton(jButtonBuscar, colorPrimario, Color.WHITE);
+    configurarBoton(jButtonAnular, colorPeligro, Color.WHITE);
+    configurarBoton(jButtonLimpiar, colorSecundario, Color.WHITE);
+    configurarBoton(jButtonSalir, new Color(149, 165, 166), Color.WHITE);
+    
+ 
+    agregarEfectoHover(jButtonBuscar, colorPrimario, new Color(52, 152, 219));
+    agregarEfectoHover(jButtonAnular, colorPeligro, new Color(192, 57, 43));
+    agregarEfectoHover(jButtonLimpiar, colorSecundario, new Color(44, 62, 80));
+    agregarEfectoHover(jButtonSalir, new Color(149, 165, 166), new Color(127, 140, 141));
+}
 
-        jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        jLabel1.setForeground(colorPrimario);
+private void configurarTextField(JTextField textField, Color colorBorde) {
+    textField.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+    textField.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorBorde, 2),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+}
 
-        Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 14);
-        jLabel2.setFont(fuenteLabel);
-        jLabel3.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        jLabel4.setFont(fuenteLabel);
+private void configurarBoton(JButton boton, Color colorFondo, Color colorTexto) {
+    boton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+    boton.setBackground(colorFondo);
+    boton.setForeground(colorTexto);
+    boton.setFocusPainted(false);
+    boton.setBorderPainted(false);
+    boton.setOpaque(true);
+    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    boton.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorFondo.darker(), 1),
+        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+    ));
+}
 
-        jtfIdTicket.setFont(fuenteLabel);
-        jtaInfoTicket.setFont(new Font("Consolas", Font.PLAIN, 12));
-        jtaMotivo.setFont(fuenteLabel);
-
-        configurarBoton(jButtonBuscar, colorPrimario);
-        configurarBoton(jButtonAnular, colorPeligro);
-        configurarBoton(jButtonLimpiar, colorSecundario);
-        configurarBoton(jButtonSalir, new Color(52, 73, 94));
-    }
-
-    private void configurarBoton(JButton boton, Color colorFondo) {
-        boton.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        boton.setBackground(colorFondo);
-        boton.setForeground(Color.WHITE);
-        boton.setFocusPainted(false);
-        boton.setBorderPainted(false);
-        boton.setOpaque(true);
-        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
+private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHover) {
+    boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorHover);
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorNormal);
+        }
+    });
+}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -237,243 +284,209 @@ public class AnularTicket extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
-        try {
-            if (jtfIdTicket.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Ingrese el ID del ticket a buscar",
-                        "Campo vacío",
-                        JOptionPane.WARNING_MESSAGE);
-                jtfIdTicket.requestFocus();
-                return;
-            }
-
-            int id;
-            try {
-                id = Integer.parseInt(jtfIdTicket.getText().trim());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this,
-                        "El ID debe ser un número válido",
-                        "ID inválido",
-                        JOptionPane.ERROR_MESSAGE);
-                jtfIdTicket.requestFocus();
-                return;
-            }
-
-            if (id <= 0) {
-                JOptionPane.showMessageDialog(this,
-                        "El ID debe ser un número positivo",
-                        "ID inválido",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            ticketActual = ticketData.buscarTickerporId(id);
-
-            if (ticketActual == null) {
-                JOptionPane.showMessageDialog(this,
-                        "No se encontró ningún ticket con el ID: " + id,
-                        "Ticket no encontrado",
-                        JOptionPane.INFORMATION_MESSAGE);
-                limpiarCampos();
-                return;
-            }
-
-            Comprador comp = null;
-            if (ticketActual.getComprador() != null) {
-                comp = compradorData.buscarComprador(
-                        ticketActual.getComprador().getIdComprador()
-                );
-            }
-
-            DetalleTicket detalle = null;
-            if (ticketActual.getDetalleticket() != null) {
-                detalle = detalleData.buscarDetalleTicket(
-                        ticketActual.getDetalleticket().getIdDetalleTicket()
-                );
-            }
-
-            StringBuilder info = new StringBuilder();
-            info.append("       INFORMACIÓN DEL TICKET #").append(id).append("\n");
-            info.append("═══════════════════════════════════════════════\n\n");
-
-            info.append("📋 DATOS DEL TICKET:\n");
-            info.append("   • ID Ticket: #").append(ticketActual.getIdTicket()).append("\n");
-
-            if (ticketActual.getFechaCompra() != null) {
-                info.append("   • Fecha Compra: ").append(ticketActual.getFechaCompra()).append("\n");
-            }
-
-            if (ticketActual.getFechaFuncion() != null && formatter != null) {
-                info.append("   • Fecha Función: ").append(
-                        ticketActual.getFechaFuncion().format(formatter)).append("\n");
-            }
-
-            info.append("   • Monto Total: $").append(
-                    String.format("%.2f", ticketActual.getMonto())).append("\n\n");
-
-            info.append(" COMPRADOR:\n");
-            if (comp != null) {
-                info.append("   • Nombre: ").append(comp.getNombre()).append("\n");
-                info.append("   • DNI: ").append(comp.getDni()).append("\n");
-                info.append("   • Medio de Pago: ").append(comp.getMedioDePago()).append("\n\n");
-            } else {
-                info.append("   • Información no disponible\n\n");
-            }
-
-            if (detalle != null && detalle.getFuncion() != null) {
-                info.append(" FUNCIÓN:\n");
-
-                if (detalle.getFuncion().getPelicula() != null) {
-                    info.append("   • Película: ").append(
-                            detalle.getFuncion().getPelicula().getTitulo()).append("\n");
-                }
-
-                if (detalle.getFuncion().getSalaProyeccion() != null) {
-                    info.append("   • Sala: ").append(
-                            detalle.getFuncion().getSalaProyeccion().getNroSala()).append("\n");
-                }
-
-                info.append("   • Formato: ").append(
-                        detalle.getFuncion().isEs3d() ? "3D" : "2D").append("\n\n");
-
-                if (detalle.getLugar() != null) {
-                    info.append(" ASIENTO:\n");
-                    info.append("   • Fila: ").append(detalle.getLugar().getFila()).append("\n");
-                    info.append("   • Número: ").append(detalle.getLugar().getNum()).append("\n");
-                }
-            }
-
-            info.append("═══════════════════════════════════════════════\n");
-
-            jtaInfoTicket.setText(info.toString());
-            jtaInfoTicket.setCaretPosition(0);
-            jButtonAnular.setEnabled(true);
-
+      if (jtfIdTicket.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor ingrese el ID del ticket",
+                "Campo vacío",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    try {
+    
+        int idTicket = Integer.parseInt(jtfIdTicket.getText().trim());
+        
+    
+        ticketActual = ticketData.buscarTickerporId(idTicket);
+        
+   
+        if (ticketActual == null) {
             JOptionPane.showMessageDialog(this,
-                    "Ticket encontrado correctamente",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al buscar el ticket:\n" + e.getMessage(),
-                    "Error",
+                    "No se encontró ningún ticket con el ID " + idTicket,
+                    "Ticket no encontrado",
                     JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            jtaInfoTicket.setText("No se encontró el ticket #" + idTicket);
+            return;
         }
+        
+      
+        Comprador comp = compradorData.buscarCompradorPorId(
+                ticketActual.getComprador().getIdComprador());
+        
+    
+        StringBuilder info = new StringBuilder();
+        info.append("         INFORMACIÓN DEL TICKET\n");
+        info.append("═══════════════════════════════════════════\n\n");
+        info.append("Ticket #").append(ticketActual.getIdTicket()).append("\n\n");
+        info.append("Comprador: ").append(comp != null ? comp.getNombre() : "N/A").append("\n");
+        info.append("DNI: ").append(comp != null ? comp.getDni() : "N/A").append("\n\n");
+        info.append("Fecha Compra: ").append(ticketActual.getFechaCompra()).append("\n");
+        info.append("Fecha Función: ").append(ticketActual.getFechaFuncion()).append("\n");
+        info.append("Monto: $").append(String.format("%.2f", ticketActual.getMonto())).append("\n\n");
+        
+    
+        if (ticketActual.getDetalleticket() != null) {
+            DetalleTicket detalle = detalleData.buscarDetalleTicket(
+                    ticketActual.getDetalleticket().getIdDetalleTicket());
+            
+            if (detalle != null && detalle.getLugar() != null) {
+                info.append("Asiento: Fila ").append(detalle.getLugar().getFila())
+                    .append(" - Número ").append(detalle.getLugar().getNum()).append("\n");
+            }
+        }
+        
 
+        info.append("Presione 'Anular' para eliminar este ticket\n");
+        info.append("═══════════════════════════════════════════");
+        
+        jtaInfoTicket.setText(info.toString());
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "El ID ingresado no es válido.\n" +
+                "Por favor ingrese solo números.",
+                "Error de formato",
+                JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al buscar el ticket: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jButtonAnularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnularActionPerformed
-        try {
-            if (ticketActual == null) {
-                JOptionPane.showMessageDialog(this,
-                        "Primero debe buscar un ticket",
-                        "Búsqueda requerida",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            String motivo = jtaMotivo.getText().trim();
-
-            if (motivo.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe ingresar un motivo para la anulación",
-                        "Motivo requerido",
-                        JOptionPane.WARNING_MESSAGE);
-                jtaMotivo.requestFocus();
-                return;
-            }
-
-            if (motivo.length() < 10) {
-                JOptionPane.showMessageDialog(this,
-                        "El motivo debe tener al menos 10 caracteres",
-                        "Motivo muy corto",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            int confirmacion = JOptionPane.showConfirmDialog(this,
-                    " ADVERTENCIA \n\n"
-                    + "¿Está seguro de anular el Ticket #" + ticketActual.getIdTicket() + "?\n\n"
-                    + "Esta acción:\n"
-                    + "  • Liberará el/los asiento(s) asociado(s)\n"
-                    + "  • Eliminará el registro de compra\n"
-                    + "  • NO se puede deshacer\n\n"
-                    + "Motivo: " + (motivo.length() > 50 ? motivo.substring(0, 50) + "..." : motivo),
-                    "Confirmar Anulación",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE);
-
-            if (confirmacion != JOptionPane.YES_OPTION) {
-                return;
-            }
-
-            if (ticketActual.getDetalleticket() != null) {
-                DetalleTicket detalle = detalleData.buscarDetalleTicket(
-                        ticketActual.getDetalleticket().getIdDetalleTicket()
-                );
-
-                if (detalle != null && detalle.getLugar() != null) {
-                    lugarData.darAltaLugar(detalle.getLugar().getIdLugar());
+       if (ticketActual == null) {
+        JOptionPane.showMessageDialog(this,
+                "Primero debe buscar un ticket usando el botón 'Buscar'",
+                "Sin ticket seleccionado",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+ 
+    if (jtaMotivo.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor ingrese el motivo de la anulación",
+                "Motivo vacío",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+   
+    if (jtaMotivo.getText().trim().length() < 10) {
+        JOptionPane.showMessageDialog(this,
+                "El motivo debe tener al menos 10 caracteres",
+                "Motivo muy corto",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    try {
+     
+        Comprador comp = compradorData.buscarCompradorPorId(
+                ticketActual.getComprador().getIdComprador());
+        
+    
+        StringBuilder confirmacion = new StringBuilder();
+        confirmacion.append("Va a ANULAR el siguiente ticket:\n\n");
+        confirmacion.append("Ticket #").append(ticketActual.getIdTicket()).append("\n");
+        confirmacion.append("Comprador: ").append(comp != null ? comp.getNombre() : "N/A").append("\n");
+        confirmacion.append("Fecha Función: ").append(ticketActual.getFechaFuncion()).append("\n");
+        confirmacion.append("Monto: $").append(String.format("%.2f", ticketActual.getMonto())).append("\n");
+        confirmacion.append("═══════════════════════════════════════════\n\n");
+        confirmacion.append("Motivo: ").append(jtaMotivo.getText().trim()).append("\n\n");
+        confirmacion.append("⚠️ ESTA ACCIÓN NO SE PUEDE DESHACER ⚠️\n\n");
+        confirmacion.append("Los asientos serán liberados automáticamente.\n\n");
+        confirmacion.append("¿Está seguro de anular este ticket?");
+        
+        int opcion = JOptionPane.showConfirmDialog(this,
+                confirmacion.toString(),
+                "Confirmar Anulación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+        
+        if (opcion != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+     
+        if (ticketActual.getDetalleticket() != null) {
+            DetalleTicket detalle = detalleData.buscarDetalleTicket(
+                    ticketActual.getDetalleticket().getIdDetalleTicket());
+            
+            if (detalle != null && detalle.getLugar() != null) {
+           
+                Lugar lugar = lugarData.buscarLugarPorId(detalle.getLugar().getIdLugar());
+                if (lugar != null) {
+                    lugar.setEstado(true);
+                    lugarData.actualizarLugar(lugar);
                 }
             }
-
-            ticketData.anularTicket(ticketActual.getIdTicket());
-
-            JOptionPane.showMessageDialog(this,
-                    " TICKET ANULADO EXITOSAMENTE\n\n"
-                    + "Ticket #" + ticketActual.getIdTicket() + "\n"
-                    + "Monto: $" + String.format("%.2f", ticketActual.getMonto()) + "\n\n"
-                    + "El asiento ha sido liberado para nuevas ventas.",
-                    "Anulación Exitosa",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            limpiarCampos();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al anular el ticket:\n" + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
         }
+        
+   
+        ticketData.anularTicket(ticketActual.getIdTicket());
+        
+     
+        JOptionPane.showMessageDialog(this,
+                " Ticket anulado exitosamente!\n\n" +
+                "Ticket #" + ticketActual.getIdTicket() + " ha sido eliminado.\n" +
+                "Motivo: " + jtaMotivo.getText().trim() + "\n\n" +
+                "Los asientos han sido liberados y están disponibles.",
+                "Anulación Exitosa",
+                JOptionPane.INFORMATION_MESSAGE);
+        
+    
+        limpiarFormulario();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "❌ Error al anular el ticket:\n" + e.getMessage() + "\n\n" +
+                "Por favor, intente nuevamente o contacte al administrador.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
 
     }//GEN-LAST:event_jButtonAnularActionPerformed
 
     private void jButtonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimpiarActionPerformed
-        int confirmacion = JOptionPane.showConfirmDialog(this,
-                "¿Desea limpiar todos los campos?",
-                "Confirmar Limpieza",
-                JOptionPane.YES_NO_OPTION);
-
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            limpiarCampos();
-            JOptionPane.showMessageDialog(this,
-                    "Campos limpiados correctamente",
-                    "Información",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
+        int opcion = JOptionPane.showConfirmDialog(this,
+            "¿Desea limpiar todos los campos?",
+            "Confirmar Limpieza",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+    
+    if (opcion == JOptionPane.YES_OPTION) {
+        limpiarFormulario();
+        JOptionPane.showMessageDialog(this,
+                "Formulario limpiado correctamente",
+                "Información",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+        
     }//GEN-LAST:event_jButtonLimpiarActionPerformed
 
     private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
-        int confirmacion = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro que desea salir?",
-                "Confirmar Salida",
-                JOptionPane.YES_NO_OPTION);
-
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            this.dispose();
-        }
+       int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Está seguro que desea salir?",
+            "Confirmar Salida",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+    
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        this.dispose();
     }//GEN-LAST:event_jButtonSalirActionPerformed
-    private void limpiarCampos() {
-        jtfIdTicket.setText("");
-        jtaInfoTicket.setText("Ingrese un ID de ticket y presione Buscar.");
-        jtaMotivo.setText("");
-        ticketActual = null;
-        jButtonAnular.setEnabled(false);
-        jtfIdTicket.requestFocus();
     }
+    
+    private void limpiarFormulario() {
+    jtfIdTicket.setText("");
+    jtaMotivo.setText("");
+    jtaInfoTicket.setText("Ingrese un ID de ticket y presione 'Buscar'");
+    ticketActual = null;
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAnular;

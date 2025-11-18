@@ -5,16 +5,21 @@
  */
 package Vistas;
 
-import Modelo.*;
-import Persistencia.*;
-import javax.swing.JOptionPane;
+import Modelo.Comprador;
+import Modelo.TicketCompra;
+import Persistencia.CompradorData;
+import Persistencia.TicketCompraData;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
-/**
- *
- * @author camila biarnes
- */
+
 public class ModificarTicket extends javax.swing.JInternalFrame {
 
     private TicketCompraData ticketData;
@@ -23,6 +28,7 @@ public class ModificarTicket extends javax.swing.JInternalFrame {
 
     public ModificarTicket() {
         initComponents();
+        aplicarEstilos();
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -32,6 +38,84 @@ public class ModificarTicket extends javax.swing.JInternalFrame {
         AreaInfo.setEditable(false);
     }
 
+    private void aplicarEstilos() {
+   
+    Color colorPrimario = new Color(41, 128, 185);
+    Color colorSecundario = new Color(52, 73, 94);
+    Color colorExito = new Color(39, 174, 96);
+    Color colorPeligro = new Color(231, 76, 60);
+    Color colorAdvertencia = new Color(243, 156, 18);
+    
+  
+    jPanel1.setBackground(Color.WHITE);
+    jPanel1.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorPrimario, 2),
+        BorderFactory.createEmptyBorder(20, 20, 20, 20)
+    ));
+    
+   
+    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
+    jLabel1.setForeground(colorPrimario);
+    
+  
+    Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 14);
+    jtfIdTicket.setFont(fuenteLabel);
+    jLabel3.setFont(fuenteLabel);
+    jLabel4.setFont(fuenteLabel);
+    jLabel5.setFont(fuenteLabel);
+    
+  
+    configurarTextField(jTextField1, colorPrimario);
+    configurarTextField(AreaInfo, colorSecundario);
+    configurarTextField(jtfMonto, colorPrimario);
+    
+   
+    jFecha.setFont(fuenteLabel);
+    jFecha.setBorder(BorderFactory.createLineBorder(colorPrimario, 2));
+    
+   
+    configurarBoton(jbBuscar, colorPrimario, Color.WHITE);
+    configurarBoton(jbModificar, colorExito, Color.WHITE);
+    configurarBoton(jbCancelar, colorPeligro, Color.WHITE);
+    
+  
+    agregarEfectoHover(jbBuscar, colorPrimario, new Color(52, 152, 219));
+    agregarEfectoHover(jbModificar, colorExito, new Color(46, 204, 113));
+    agregarEfectoHover(jbCancelar, colorPeligro, new Color(192, 57, 43));
+}
+
+private void configurarTextField(JTextField textField, Color colorBorde) {
+    textField.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+    textField.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorBorde, 2),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+}
+
+private void configurarBoton(JButton boton, Color colorFondo, Color colorTexto) {
+    boton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+    boton.setBackground(colorFondo);
+    boton.setForeground(colorTexto);
+    boton.setFocusPainted(false);
+    boton.setBorderPainted(false);
+    boton.setOpaque(true);
+    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    boton.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorFondo.darker(), 1),
+        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+    ));
+}
+
+private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHover) {
+    boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorHover);
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorNormal);
+        }
+    });
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -213,41 +297,117 @@ public class ModificarTicket extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbBuscarActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
-     try {
-            if (ticketActual == null) {
-                JOptionPane.showMessageDialog(this, "Primero busque un ticket");
-                return;
-            }
+      if (ticketActual == null) {
+        JOptionPane.showMessageDialog(this,
+                "Primero debe buscar un ticket usando el botón 'Buscar'",
+                "Sin ticket seleccionado",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
 
-            if (jFecha.getDate() == null || jtfMonto.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Complete todos los campos");
-                return;
-            }
-
-            LocalDate nuevaFecha = jFecha.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault()).toLocalDate();
-            double nuevoMonto = Double.parseDouble(jtfMonto.getText());
-
-            int confirm = JOptionPane.showConfirmDialog(this,
-                    "¿Confirma la modificación del ticket?",
-                    "Confirmar",
-                    JOptionPane.YES_NO_OPTION);
-
-            if (confirm == JOptionPane.YES_OPTION) {
-                ticketData.modificarTicket(
-                        ticketActual.getIdTicket(),
-                        nuevaFecha,
-                        nuevoMonto
-                );
-
-                limpiar();
-            }
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Monto inválido");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    if (jFecha.getDate() == null) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor seleccione una nueva fecha para la función",
+                "Fecha no seleccionada",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+  
+    if (jtfMonto.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor ingrese el nuevo monto",
+                "Monto vacío",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    try {
+      
+        double nuevoMonto = Double.parseDouble(jtfMonto.getText().trim());
+        
+    
+        if (nuevoMonto <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "El monto debe ser mayor a cero",
+                    "Monto inválido",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        
+  
+        LocalDate nuevaFecha = jFecha.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate();
+        
+       
+        if (nuevaFecha.isBefore(LocalDate.now())) {
+            int opcion = JOptionPane.showConfirmDialog(this,
+                    "La fecha seleccionada es anterior a hoy.\n" +
+                    "¿Está seguro de continuar?",
+                    "Fecha en el pasado",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+            
+            if (opcion != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+        
+ 
+        StringBuilder resumen = new StringBuilder();
+        resumen.append("Va a modificar el ticket #").append(ticketActual.getIdTicket()).append("\n\n");
+        resumen.append("DATOS ACTUALES:\n");
+        resumen.append("  Fecha Función: ").append(ticketActual.getFechaFuncion()).append("\n");
+        resumen.append("  Monto: $").append(String.format("%.2f", ticketActual.getMonto())).append("\n\n");
+        resumen.append("NUEVOS DATOS:\n");
+        resumen.append("  Fecha Función: ").append(nuevaFecha).append("\n");
+        resumen.append("  Monto: $").append(String.format("%.2f", nuevoMonto)).append("\n\n");
+        resumen.append("¿Confirma la modificación?");
+        
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                resumen.toString(),
+                "Confirmar Modificación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+   
+        ticketData.modificarTicket(
+                ticketActual.getIdTicket(),
+                nuevaFecha,
+                nuevoMonto
+        );
+        
+      
+        JOptionPane.showMessageDialog(this,
+                " Ticket modificado exitosamente!\n\n" +
+                "Ticket #" + ticketActual.getIdTicket() + "\n" +
+                "Nueva fecha: " + nuevaFecha + "\n" +
+                "Nuevo monto: $" + String.format("%.2f", nuevoMonto),
+                "Modificación Exitosa",
+                JOptionPane.INFORMATION_MESSAGE);
+        
+      
+        limpiar();
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "El monto ingresado no es válido.\n" +
+                "Por favor ingrese solo números (ejemplo: 5000.00)",
+                "Error de formato",
+                JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                " Error al modificar el ticket:\n" + e.getMessage() + "\n\n" +
+                "Por favor, intente nuevamente o contacte al administrador.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
 
     }//GEN-LAST:event_jbModificarActionPerformed
 

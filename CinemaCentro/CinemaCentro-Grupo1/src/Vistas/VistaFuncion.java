@@ -48,6 +48,7 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
     private Color COLOR_FONDO = new Color(236, 240, 241);
 
     FuncionData funcionData = new FuncionData();
+  
 
     PeliculaData peliData = new PeliculaData();
     List<Pelicula> listaPelicula = peliData.listarPeliculasCartelera();
@@ -532,227 +533,232 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
 
     private void jButtonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearActionPerformed
         // TODO add your handling code here:
-        try {
-
-            if (jComboPeliculas.getSelectedItem() == null || jComboPeliculas.getSelectedIndex() < 0) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe seleccionar una película",
-                        "Campo obligatorio",
-                        JOptionPane.WARNING_MESSAGE);
-                jComboPeliculas.requestFocus();
-                return;
-            }
-
-            if (jtfIdioma.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe ingresar el idioma",
-                        "Campo obligatorio",
-                        JOptionPane.WARNING_MESSAGE);
-                jtfIdioma.requestFocus();
-                return;
-            }
-
-            String idioma = jtfIdioma.getText().trim();
-            if (!idioma.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                JOptionPane.showMessageDialog(this,
-                        "El idioma solo puede contener letras",
-                        "Idioma inválido",
-                        JOptionPane.ERROR_MESSAGE);
-                jtfIdioma.requestFocus();
-                return;
-            }
-
-            if (jdcHoraInicio.getDate() == null) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe seleccionar una fecha para la función",
-                        "Campo obligatorio",
-                        JOptionPane.WARNING_MESSAGE);
-                jdcHoraInicio.requestFocus();
-                return;
-            }
-
-            if (jComboBoxSala.getSelectedItem() == null || jComboBoxSala.getSelectedIndex() < 0) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe seleccionar una sala",
-                        "Campo obligatorio",
-                        JOptionPane.WARNING_MESSAGE);
-                jComboBoxSala.requestFocus();
-                return;
-            }
-
-            if (jTextFieldPrecio.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe ingresar el precio",
-                        "Campo obligatorio",
-                        JOptionPane.WARNING_MESSAGE);
-                jTextFieldPrecio.requestFocus();
-                return;
-            }
-
-            double precio;
-            try {
-                precio = Double.parseDouble(jTextFieldPrecio.getText().trim());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this,
-                        "El precio debe ser un número válido",
-                        "Precio inválido",
-                        JOptionPane.ERROR_MESSAGE);
-                jTextFieldPrecio.requestFocus();
-                jTextFieldPrecio.selectAll();
-                return;
-            }
-
-            if (precio <= 0) {
-                JOptionPane.showMessageDialog(this,
-                        "El precio debe ser mayor a cero",
-                        "Precio inválido",
-                        JOptionPane.ERROR_MESSAGE);
-                jTextFieldPrecio.requestFocus();
-                jTextFieldPrecio.selectAll();
-                return;
-            }
-
-            if (precio > 100000) {
-                JOptionPane.showMessageDialog(this,
-                        "El precio parece demasiado alto\n"
-                        + "¿Está seguro del valor ingresado?",
-                        "Verificar precio",
-                        JOptionPane.WARNING_MESSAGE);
-            }
-
-            Date fechaSeleccionada = jdcHoraInicio.getDate();
-            LocalDate fecha = fechaSeleccionada.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-
-            int horaInicio = (Integer) jSpinnerHora.getValue();
-            int minutoInicio = (Integer) jSpinnerMinutos.getValue();
-            int horaFin = (Integer) jSpinnerHoraFin.getValue();
-            int minutoFin = (Integer) jSpinnerMinutosFin.getValue();
-
-            LocalDateTime inicio = LocalDateTime.of(fecha, java.time.LocalTime.of(horaInicio, minutoInicio));
-            LocalDateTime fin = LocalDateTime.of(fecha, java.time.LocalTime.of(horaFin, minutoFin));
-
-            if (inicio.isBefore(LocalDateTime.now())) {
-                JOptionPane.showMessageDialog(this,
-                        "No puede crear funciones en el pasado",
-                        "Fecha inválida",
-                        JOptionPane.ERROR_MESSAGE);
-                jdcHoraInicio.requestFocus();
-                return;
-            }
-
-            if (fin.isBefore(inicio) || fin.equals(inicio)) {
-                JOptionPane.showMessageDialog(this,
-                        "La hora de fin debe ser posterior a la hora de inicio",
-                        "Horarios inválidos",
-                        JOptionPane.ERROR_MESSAGE);
-                jSpinnerHoraFin.requestFocus();
-                return;
-            }
-
-            long minutos = java.time.Duration.between(inicio, fin).toMinutes();
-            if (minutos < 30) {
-                JOptionPane.showMessageDialog(this,
-                        "La función debe durar al menos 30 minutos",
-                        "Duración muy corta",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            if (minutos > 300) {
-                int confirmacion = JOptionPane.showConfirmDialog(this,
-                        "La función dura " + minutos + " minutos (" + (minutos / 60) + " horas)\n"
-                        + "¿Está seguro de esta duración?",
-                        "Duración muy larga",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
-
-                if (confirmacion != JOptionPane.YES_OPTION) {
-                    return;
-                }
-            }
-
-            Sala sala = (Sala) jComboBoxSala.getSelectedItem();
-            boolean es3d = jRadioButton3d.isSelected();
-
-            if (es3d && !sala.isApto3d()) {
-                JOptionPane.showMessageDialog(this,
-                        "La sala seleccionada no está habilitada para 3D\n\n"
-                        + "Sala: " + sala.getNroSala() + " - No apta para 3D",
-                        "Sala incompatible",
-                        JOptionPane.ERROR_MESSAGE);
-                jRadioButton3d.setSelected(false);
-                return;
-            }
-
-            FuncionData funcionData = new FuncionData();
-            List<Funcion> funcionesExistentes = funcionData.listarFuncionesPorFecha(fecha);
-
-            for (Funcion f : funcionesExistentes) {
-                if (f.getSalaProyeccion().getIdSala() == sala.getIdSala()) {
-
-                    if ((inicio.isBefore(f.getHoraFin()) && fin.isAfter(f.getHoraInicio()))) {
-                        JOptionPane.showMessageDialog(this,
-                                "Conflicto de horarios detectado:\n\n"
-                                + "Ya existe una función de \"" + f.getPelicula().getTitulo() + "\"\n"
-                                + "en la Sala " + sala.getNroSala() + "\n"
-                                + "Horario: " + f.getHoraInicio().format(DateTimeFormatter.ofPattern("HH:mm"))
-                                + " - " + f.getHoraFin().format(DateTimeFormatter.ofPattern("HH:mm")),
-                                "Conflicto de horarios",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                }
-            }
-
-            Pelicula pelicula = (Pelicula) jComboPeliculas.getSelectedItem();
-
-            int confirmacion = JOptionPane.showConfirmDialog(this,
-                    "¿Confirmar creación de función?\n\n"
-                    + "Película: " + pelicula.getTitulo() + "\n"
-                    + "Fecha: " + fecha + "\n"
-                    + "Horario: " + horaInicio + ":" + String.format("%02d", minutoInicio)
-                    + " - " + horaFin + ":" + String.format("%02d", minutoFin) + "\n"
-                    + "Sala: " + sala.getNroSala() + "\n"
-                    + "Formato: " + (es3d ? "3D" : "2D") + "\n"
-                    + "Idioma: " + idioma + "\n"
-                    + "Precio: $" + precio,
-                    "Confirmar creación",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-
-            if (confirmacion != JOptionPane.YES_OPTION) {
-                return;
-            }
-
-            Funcion funcion = new Funcion();
-            funcion.setPelicula(pelicula);
-            funcion.setIdioma(idioma);
-            funcion.setEs3d(es3d);
-            funcion.setSubtitulado(jRadioButtonSub.isSelected());
-            funcion.setHoraInicio(inicio);
-            funcion.setHoraFin(fin);
-            funcion.setSalaProyeccion(sala);
-            funcion.setPrecio(precio);
-
-            funcionData.guardarFuncion(funcion);
-
+       try {
+      
+        if (jComboPeliculas.getSelectedIndex() < 0) {
             JOptionPane.showMessageDialog(this,
-                    "Función creada exitosamente\n\n"
-                    + "Se crearon automáticamente los lugares disponibles",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            limpiarCampos();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al crear la función:\n" + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+                    "Por favor seleccione una película",
+                    "Película no seleccionada",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
         }
+        
+       
+        if (jComboBoxSala.getSelectedIndex() < 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor seleccione una sala",
+                    "Sala no seleccionada",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+     
+        if (jtfIdioma.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor ingrese el idioma de la función",
+                    "Idioma vacío",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+       
+        if (jdcHoraInicio.getDate() == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor seleccione la fecha de inicio",
+                    "Fecha no seleccionada",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+     
+        if (jTextFieldPrecio.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor ingrese el precio",
+                    "Precio vacío",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+      
+        double precio = Double.parseDouble(jTextFieldPrecio.getText().trim());
+        
+     
+        if (precio <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "El precio debe ser mayor a cero",
+                    "Precio inválido",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+      
+        Pelicula peliculaSelec = (Pelicula) jComboPeliculas.getSelectedItem();
+        Sala salaSelec = (Sala) jComboBoxSala.getSelectedItem();
+        String idioma = jtfIdioma.getText().trim();
+        boolean es3d = jRadioButton3d.isSelected();
+        boolean subtitulado = jRadioButtonSub.isSelected();
+        
+     
+        LocalDate fechaInicio = jdcHoraInicio.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate();
+        
+        int horaInicio = (Integer) jSpinnerHora.getValue();
+        int minutosInicio = (Integer) jSpinnerMinutos.getValue();
+        
+        LocalDateTime horaInicioCompleta = LocalDateTime.of(
+                fechaInicio.getYear(),
+                fechaInicio.getMonth(),
+                fechaInicio.getDayOfMonth(),
+                horaInicio,
+                minutosInicio
+        );
+        
+     
+        int horaFin = (Integer) jSpinnerHoraFin.getValue();
+        int minutosFin = (Integer) jSpinnerMinutosFin.getValue();
+        
+        LocalDateTime horaFinCompleta = LocalDateTime.of(
+                fechaInicio.getYear(),
+                fechaInicio.getMonth(),
+                fechaInicio.getDayOfMonth(),
+                horaFin,
+                minutosFin
+        );
+        
+      
+        if (horaFinCompleta.isBefore(horaInicioCompleta)) {
+            horaFinCompleta = horaFinCompleta.plusDays(1);
+        }
+        
+     
+        if (horaFinCompleta.isBefore(horaInicioCompleta) || horaFinCompleta.equals(horaInicioCompleta)) {
+            JOptionPane.showMessageDialog(this,
+                    "La hora de fin debe ser posterior a la hora de inicio",
+                    "Horarios inválidos",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+       
+        if (horaInicioCompleta.isBefore(LocalDateTime.now())) {
+            int opcion = JOptionPane.showConfirmDialog(this,
+                    "La fecha/hora de inicio es en el pasado.\n" +
+                    "¿Está seguro de continuar?",
+                    "Fecha en el pasado",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+            
+            if (opcion != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+        
+       
+        if (es3d && !salaSelec.isApto3d()) {
+            JOptionPane.showMessageDialog(this,
+                    "La sala " + salaSelec.getNroSala() + " NO es apta para funciones 3D.\n" +
+                    "Por favor seleccione otra sala o desmaque la opción 3D.",
+                    "Sala no apta para 3D",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+     
+        long duracionMinutos = java.time.Duration.between(horaInicioCompleta, horaFinCompleta).toMinutes();
+        
+        if (duracionMinutos < 30) {
+            JOptionPane.showMessageDialog(this,
+                    "La duración de la función debe ser al menos 30 minutos",
+                    "Duración muy corta",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if (duracionMinutos > 300) {
+            JOptionPane.showMessageDialog(this,
+                    "La duración de la función no puede superar las 5 horas",
+                    "Duración muy larga",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+    
+        StringBuilder confirmacion = new StringBuilder();
+        confirmacion.append("¿Confirmar creación de función?\n\n");
+        confirmacion.append("═══════════════════════════════════════\n");
+        confirmacion.append("Película: ").append(peliculaSelec.getTitulo()).append("\n");
+        confirmacion.append("Sala: ").append(salaSelec.getNroSala()).append("\n");
+        confirmacion.append("Idioma: ").append(idioma).append("\n");
+        confirmacion.append("Tipo: ").append(es3d ? "3D" : "2D").append("\n");
+        confirmacion.append("Subtitulada: ").append(subtitulado ? "Sí" : "No").append("\n");
+        confirmacion.append("Inicio: ").append(horaInicioCompleta.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n");
+        confirmacion.append("Fin: ").append(horaFinCompleta.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n");
+        confirmacion.append("Duración: ").append(duracionMinutos).append(" minutos\n");
+        confirmacion.append("Precio: $").append(String.format("%.2f", precio)).append("\n");
+        confirmacion.append("═══════════════════════════════════════\n\n");
+        confirmacion.append("Se crearán automáticamente ").append(salaSelec.getCapacidad()).append(" lugares.");
+        
+        int opcion = JOptionPane.showConfirmDialog(this,
+                confirmacion.toString(),
+                "Confirmar Función",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        
+        if (opcion != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+      
+        
+        System.out.println("=== GUARDANDO NUEVA FUNCIÓN ===");
+        System.out.println("Película ID: " + peliculaSelec.getIdPelicula());
+        System.out.println("Sala ID: " + salaSelec.getIdSala());
+        
+    
+        Funcion nuevaFuncion = new Funcion();
+        nuevaFuncion.setPelicula(peliculaSelec);
+        nuevaFuncion.setSalaProyeccion(salaSelec);
+        nuevaFuncion.setIdioma(idioma);
+        nuevaFuncion.setEs3d(es3d);
+        nuevaFuncion.setSubtitulado(subtitulado);
+        nuevaFuncion.setHoraInicio(horaInicioCompleta);
+        nuevaFuncion.setHoraFin(horaFinCompleta);
+        nuevaFuncion.setPrecio(precio);
+        
+ 
+        funcionData.guardarFuncion(nuevaFuncion);
+        
+        System.out.println("Función guardada con ID: " + nuevaFuncion.getIdFuncion());
+        System.out.println("=== GUARDADO COMPLETADO ===");
+        
+    
+        JOptionPane.showMessageDialog(this,
+                " Función creada exitosamente!\n\n" +
+                "ID Función: " + nuevaFuncion.getIdFuncion() + "\n" +
+                "Película: " + peliculaSelec.getTitulo() + "\n" +
+                "Sala: " + salaSelec.getNroSala() + "\n" +
+                "Horario: " + horaInicioCompleta.format(DateTimeFormatter.ofPattern("dd/MM HH:mm")) + "\n" +
+                "Lugares creados: " + salaSelec.getCapacidad(),
+                "Función Guardada",
+                JOptionPane.INFORMATION_MESSAGE);
+        
+       
+        limpiarFormulario();
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Error en el formato del precio.\n" +
+                "Por favor ingrese solo números (ejemplo: 5000.00)",
+                "Error de formato",
+                JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "❌ Error al guardar la función:\n" + e.getMessage() + "\n\n" +
+                "Por favor, intente nuevamente o contacte al administrador.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
 
 
     }//GEN-LAST:event_jButtonCrearActionPerformed
@@ -920,7 +926,20 @@ public class VistaFuncion extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jButtonEliminarActionPerformed
 
-
+private void limpiarFormulario() {
+    jTextFieldID.setText("");
+    jComboPeliculas.setSelectedIndex(-1);
+    jComboBoxSala.setSelectedIndex(-1);
+    jtfIdioma.setText("");
+    jRadioButton3d.setSelected(false);
+    jRadioButtonSub.setSelected(false);
+    jdcHoraInicio.setDate(null);
+    jSpinnerHora.setValue(0);
+    jSpinnerMinutos.setValue(0);
+    jSpinnerHoraFin.setValue(0);
+    jSpinnerMinutosFin.setValue(0);
+    jTextFieldPrecio.setText("");
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonActualizar;
     private javax.swing.JButton jButtonBuscar;

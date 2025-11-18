@@ -11,7 +11,14 @@ import Persistencia.FuncionData;
 import Persistencia.SalaData;
 import java.util.List;
 import javax.swing.JOptionPane;
-
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 /**
  *
  * @author paula
@@ -21,8 +28,103 @@ public class vistaSala extends javax.swing.JInternalFrame {
  
     public vistaSala() {
         initComponents();
+         setClosable(true);
+    setIconifiable(true);
+    setMaximizable(true);
+    setResizable(true);
+        aplicarEstilos ();
     }
+private void aplicarEstilos() {
+   
+    Color colorPrimario = new Color(41, 128, 185);      
+    Color colorSecundario = new Color(52, 73, 94);      
+    Color colorExito = new Color(39, 174, 96);         
+    Color colorPeligro = new Color(231, 76, 60);       
+    Color colorAdvertencia = new Color(243, 156, 18);   
+    Color colorInfo = new Color(52, 152, 219);         
+    
+   
+    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
+    jLabel1.setForeground(colorPrimario);
+    
 
+    Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 14);
+    jLabel2.setFont(fuenteLabel);
+    jLabel3.setFont(fuenteLabel);
+    jLabel4.setFont(fuenteLabel);
+    jLabel5.setFont(fuenteLabel);
+    jLabel6.setFont(fuenteLabel);
+    
+  
+    configurarTextField(jTextID, colorSecundario);
+    configurarTextField(jTextNroSala, colorPrimario);
+    
+   
+    jCapacidad.setFont(fuenteLabel);
+    ((JSpinner.DefaultEditor) jCapacidad.getEditor()).getTextField().setBorder(
+        BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(colorPrimario, 2),
+            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        )
+    );
+    
+ 
+    configurarRadioButton(jRadio3d, colorInfo);
+    configurarRadioButton(jRadioEstado, colorExito);
+    
+    
+    configurarBoton(jBCrear, colorExito, Color.WHITE);
+    configurarBoton(jBuscar, colorInfo, Color.WHITE);
+    configurarBoton(jBActualizar, colorAdvertencia, Color.WHITE);
+    configurarBoton(jBEliminar, colorPeligro, Color.WHITE);
+    configurarBoton(jBSalir, colorSecundario, Color.WHITE);
+    
+    
+    agregarEfectoHover(jBCrear, colorExito, new Color(46, 204, 113));
+    agregarEfectoHover(jBuscar, colorInfo, new Color(41, 128, 185));
+    agregarEfectoHover(jBActualizar, colorAdvertencia, new Color(211, 84, 0));
+    agregarEfectoHover(jBEliminar, colorPeligro, new Color(192, 57, 43));
+    agregarEfectoHover(jBSalir, colorSecundario, new Color(44, 62, 80));
+}
+
+private void configurarTextField(JTextField textField, Color colorBorde) {
+    textField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    textField.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorBorde, 2),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+}
+
+private void configurarRadioButton(JRadioButton radioButton, Color colorFondo) {
+    radioButton.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+    radioButton.setFocusPainted(false);
+    radioButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+}
+
+private void configurarBoton(JButton boton, Color colorFondo, Color colorTexto) {
+    boton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+    boton.setBackground(colorFondo);
+    boton.setForeground(colorTexto);
+    boton.setFocusPainted(false);
+    boton.setBorderPainted(false);
+    boton.setOpaque(true);
+    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    boton.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(colorFondo.darker(), 1),
+        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+    ));
+}
+
+private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHover) {
+    boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorHover);
+        }
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            boton.setBackground(colorNormal);
+        }
+    });
+}
    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
