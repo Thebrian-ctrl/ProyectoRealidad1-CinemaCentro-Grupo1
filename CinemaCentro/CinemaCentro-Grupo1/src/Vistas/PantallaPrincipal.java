@@ -1,5 +1,5 @@
-
 package Vistas;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Cursor;
@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import Persistencia.*;
 import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author franco
@@ -15,25 +16,22 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName());
 
- 
     public PantallaPrincipal() {
         initComponents();
-       diseñoPrincipal();
-          PeliculaData peliData = new PeliculaData();
-    peliData.actualizarCarteleraPorFecha();
-         jmenuBar.setVisible(false);
-    btnAdministrar.setText("Activar Administración");
+        diseñoPrincipal();
+        PeliculaData peliData = new PeliculaData();
+        peliData.actualizarCarteleraPorFecha();
+        jmenuBar.setVisible(false);
+        btnAdministrar.setText("Activar Administración");
     }
-private void diseñoPrincipal() {
-   
 
-        jDesktopPane1.setBackground(Color.WHITE); 
+    private void diseñoPrincipal() {
 
-    
-        estilizarBoton(btnComprar, new Color(40, 167, 69)); 
-        
-     
-        estilizarBoton(btnAdministrar, new Color(110, 110, 110)); 
+        jDesktopPane1.setBackground(Color.WHITE);
+
+        estilizarBoton(btnComprar, new Color(40, 167, 69));
+
+        estilizarBoton(btnAdministrar, new Color(110, 110, 110));
 
     }
 
@@ -46,7 +44,6 @@ private void diseñoPrincipal() {
         boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         boton.setOpaque(true);
 
-       
         boton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 boton.setBackground(colorBase.darker());
@@ -57,6 +54,7 @@ private void diseñoPrincipal() {
             }
         });
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -275,23 +273,22 @@ private void diseñoPrincipal() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
-        jDesktopPane1.removeAll();
-        jDesktopPane1.repaint();
         InicioDeSesion sesion = new InicioDeSesion();
-        sesion.setVisible(true);
         jDesktopPane1.add(sesion);
+        sesion.setVisible(true);
+        sesion.toFront();
 
     }//GEN-LAST:event_btnComprarActionPerformed
 
     private void btnAdministrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdministrarActionPerformed
         // TODO add your handling code here:
         if (jmenuBar.isVisible()) {
-        jmenuBar.setVisible(false);
-        btnAdministrar.setText("Activar Administración");
-    } else {
-        jmenuBar.setVisible(true);
-        btnAdministrar.setText("Ocultar Administración");
-    }
+            jmenuBar.setVisible(false);
+            btnAdministrar.setText("Activar Administración");
+        } else {
+            jmenuBar.setVisible(true);
+            btnAdministrar.setText("Ocultar Administración");
+        }
     }//GEN-LAST:event_btnAdministrarActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -324,59 +321,59 @@ private void diseñoPrincipal() {
     }//GEN-LAST:event_jMenuSalaActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-    VistaDetalleTicket dticket = new VistaDetalleTicket();
-    dticket.setVisible(true);
-    jDesktopPane1.add(dticket);       
+        VistaDetalleTicket dticket = new VistaDetalleTicket();
+        dticket.setVisible(true);
+        jDesktopPane1.add(dticket);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-    VistaInformes informes = new VistaInformes();
-    informes.setVisible(true);
-    jDesktopPane1.add(informes);
-    
-    try {
-        informes.setMaximum(true); 
-    } catch (Exception e) {
-     
-    }
+        VistaInformes informes = new VistaInformes();
+        informes.setVisible(true);
+        jDesktopPane1.add(informes);
+
+        try {
+            informes.setMaximum(true);
+        } catch (Exception e) {
+
+        }
 
 
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-  ModificarTicket modificar = new ModificarTicket();
-    modificar.setVisible(true);
-    jDesktopPane1.add(modificar);
-    
-    try {
-        modificar.setMaximum(true);
-    } catch (Exception e) {
-      
-    }
+        ModificarTicket modificar = new ModificarTicket();
+        modificar.setVisible(true);
+        jDesktopPane1.add(modificar);
+
+        try {
+            modificar.setMaximum(true);
+        } catch (Exception e) {
+
+        }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItemActualizarCarteleraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemActualizarCarteleraActionPerformed
-    jMenuItemActualizarCartelera.setText("Actualizar Cartelera");
-    jMenuItemActualizarCartelera.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            actualizarCartelera(evt);
-        }
-    });
-    jmPeliculas.add(jMenuItemActualizarCartelera);
-    
-    jmenuBar.add(jmPeliculas);
+        jMenuItemActualizarCartelera.setText("Actualizar Cartelera");
+        jMenuItemActualizarCartelera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarCartelera(evt);
+            }
+        });
+        jmPeliculas.add(jMenuItemActualizarCartelera);
+
+        jmenuBar.add(jmPeliculas);
     }//GEN-LAST:event_jMenuItemActualizarCarteleraActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-      AnularTicket anularTicket = new AnularTicket();
-    anularTicket.setVisible(true);
-    jDesktopPane1.add(anularTicket);
-    
-    try {
-        anularTicket.setMaximum(true);
-    } catch (Exception e) {
-        
-    }
+        AnularTicket anularTicket = new AnularTicket();
+        anularTicket.setVisible(true);
+        jDesktopPane1.add(anularTicket);
+
+        try {
+            anularTicket.setMaximum(true);
+        } catch (Exception e) {
+
+        }
 
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
@@ -388,74 +385,71 @@ private void diseñoPrincipal() {
     }//GEN-LAST:event_jButtonProximosEstrenosActionPerformed
 
     private void jButtonConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultasActionPerformed
-     VistaConsultas vistaConsultas = new VistaConsultas();
-    jDesktopPane1.add(vistaConsultas);
-    vistaConsultas.setVisible(true);
-    
+        VistaConsultas vistaConsultas = new VistaConsultas();
+        jDesktopPane1.add(vistaConsultas);
+        vistaConsultas.setVisible(true);
 
-    try {
-        vistaConsultas.setMaximum(true);
-    } catch (java.beans.PropertyVetoException e) {
-       
-    }
+        try {
+            vistaConsultas.setMaximum(true);
+        } catch (java.beans.PropertyVetoException e) {
+
+        }
     }//GEN-LAST:event_jButtonConsultasActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-       VistaActualizarPrecios vistaPrecios = new VistaActualizarPrecios();
-    jDesktopPane1.add(vistaPrecios);
-    vistaPrecios.setVisible(true);
-    
-    try {
-        vistaPrecios.setMaximum(true);
-    } catch (java.beans.PropertyVetoException e) {
-       
-    }
+        VistaActualizarPrecios vistaPrecios = new VistaActualizarPrecios();
+        jDesktopPane1.add(vistaPrecios);
+        vistaPrecios.setVisible(true);
+
+        try {
+            vistaPrecios.setMaximum(true);
+        } catch (java.beans.PropertyVetoException e) {
+
+        }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-
     public static void main(String args[]) {
-     
+
         java.awt.EventQueue.invokeLater(() -> new PantallaPrincipal().setVisible(true));
     }
-    
-    
- private void actualizarCartelera(java.awt.event.ActionEvent evt) {
-    try {
-        JOptionPane.showMessageDialog(this,
-            "Actualizando cartelera...\n\n" +
-            "Se marcarán como 'En Cartelera' todas las películas\n" +
-            "cuya fecha de estreno ya llegó.",
-            "Actualizar Cartelera",
-            JOptionPane.INFORMATION_MESSAGE);
-        
-        PeliculaData peliData = new PeliculaData();
-        int actualizadas = peliData.actualizarCarteleraPorFecha();
-        
-        if (actualizadas > 0) {
-            JOptionPane.showMessageDialog(this,
-                "Cartelera actualizada exitosamente!\n\n" +
-                "Se actualizaron " + actualizadas + " película(s)\n" +
-                "Fecha: " + java.time.LocalDate.now().format(
-                    java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                "Actualización Exitosa",
-                JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                "La cartelera ya está actualizada\n\n" +
-                "No hay películas nuevas para agregar a cartelera.",
-                "Sin Cambios",
-                JOptionPane.INFORMATION_MESSAGE);
-        }
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-            " Error al actualizar cartelera:\n" + e.getMessage(),
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
 
-}
+    private void actualizarCartelera(java.awt.event.ActionEvent evt) {
+        try {
+            JOptionPane.showMessageDialog(this,
+                    "Actualizando cartelera...\n\n"
+                    + "Se marcarán como 'En Cartelera' todas las películas\n"
+                    + "cuya fecha de estreno ya llegó.",
+                    "Actualizar Cartelera",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            PeliculaData peliData = new PeliculaData();
+            int actualizadas = peliData.actualizarCarteleraPorFecha();
+
+            if (actualizadas > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Cartelera actualizada exitosamente!\n\n"
+                        + "Se actualizaron " + actualizadas + " película(s)\n"
+                        + "Fecha: " + java.time.LocalDate.now().format(
+                                java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        "Actualización Exitosa",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "La cartelera ya está actualizada\n\n"
+                        + "No hay películas nuevas para agregar a cartelera.",
+                        "Sin Cambios",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    " Error al actualizar cartelera:\n" + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

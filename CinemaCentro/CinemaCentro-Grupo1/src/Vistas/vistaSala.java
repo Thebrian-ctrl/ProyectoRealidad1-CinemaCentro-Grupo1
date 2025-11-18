@@ -276,7 +276,7 @@ private void agregarEfectoHover(JButton boton, Color colorNormal, Color colorHov
                     .addComponent(jBActualizar)
                     .addComponent(jBEliminar)
                     .addComponent(jBSalir))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
